@@ -1,1 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
+/* Importar variáveis SCSS */
+@import 'variables';
+
+/* Temas Angular Material disponíveis */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+/* Estilos globais para layout com footer */
+html, body { 
+  height: 100%; 
+  margin: 0;
+}
+
+body { 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  display: flex;
+  flex-direction: column;
+}
+
+/* Garantir que o app-root ocupe toda a altura */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Classes utilitárias para layout */
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1;
+}

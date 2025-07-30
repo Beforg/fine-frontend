@@ -1,0 +1,14 @@
+<app-header></app-header>
+<div class="page-container">
+  <div class="content-wrapper">
+    <div class="login-container">
+  <div class="login-card">
+    <app-form-login
+  (formSubmit)="onLoginSubmit($event)"
+  (formCancel)="onLoginCancel()"
+  #loginForm>
+    </app-form-login>
+    </div>
+  </div>
+</div>
+  <app-footer></app-footer>

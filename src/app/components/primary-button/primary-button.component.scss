@@ -1,0 +1,113 @@
+// Importar variáveis
+@import '../../../variables';
+
+.primary-button {
+  font-weight: 500;
+  border-radius: $border_radius_medium;
+  transition: all $transition_normal;
+  
+  // Variantes de estilo
+  &--raised {
+    box-shadow: $sombra_leve;
+    
+    &:hover:not([disabled]) {
+      box-shadow: $sombra_media;
+    }
+  }
+  
+  &--flat {
+    // Botão plano colorido - sem sombra adicional
+    box-shadow: none;
+  }
+  
+  &--stroked {
+    // Botão outlined - bordas mais destacadas
+    border-width: 2px !important;
+    font-weight: 600;
+    
+    &:hover:not([disabled]) {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+  
+  &--basic {
+    // Botão básico - sem elevação nem cor de fundo
+    background-color: transparent;
+    
+    &:hover:not([disabled]) {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+  
+  // Tamanhos
+  &--small {
+    min-width: 80px;
+    height: 32px;
+    font-size: 12px;
+    padding: 0 12px;
+    
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  &--medium {
+    min-width: 120px;
+    height: 40px;
+    font-size: 14px;
+    padding: 0 16px;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  &--large {
+    min-width: 160px;
+    height: 48px;
+    font-size: 16px;
+    padding: 0 24px;
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  // Ícones
+  mat-icon {
+    margin-right: 8px;
+    
+    &.spinner {
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  // Texto com ícone
+  .with-icon {
+    display: flex;
+    align-items: center;
+  }
+  
+  // Estados gerais
+  &:hover:not([disabled]) {
+    transform: translateY(-1px);
+  }
+  
+  &[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+}
+
+// Animação do spinner
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

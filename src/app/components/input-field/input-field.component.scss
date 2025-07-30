@@ -1,0 +1,91 @@
+// Importar variáveis
+@import '../../../variables';
+
+.input-field {
+  width: 100%;
+  
+  // Tamanhos
+  &--small {
+    .mat-mdc-form-field-infix {
+      min-height: 40px;
+    }
+    
+    .mat-mdc-form-field-label {
+      font-size: 14px;
+    }
+    
+    input {
+      font-size: 14px;
+    }
+  }
+  
+  &--medium {
+    .mat-mdc-form-field-infix {
+      min-height: 48px;
+    }
+    
+    .mat-mdc-form-field-label {
+      font-size: 16px;
+    }
+    
+    input {
+      font-size: 16px;
+    }
+  }
+  
+  &--large {
+    .mat-mdc-form-field-infix {
+      min-height: 56px;
+    }
+    
+    .mat-mdc-form-field-label {
+      font-size: 18px;
+    }
+    
+    input {
+      font-size: 18px;
+    }
+  }
+}
+
+// Classe utilitária
+.full-width {
+  width: 100%;
+}
+
+// Ícone clicável
+.clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--mat-form-field-focus-color, #1976d2);
+  }
+}
+
+// Customizações adicionais
+.mat-mdc-form-field {
+  margin-bottom: 8px;
+  
+  // Bordas arredondadas para appearance outline
+  &.mat-form-field-appearance-outline {
+    .mat-mdc-form-field-outline {
+      border-radius: 8px;
+    }
+  }
+  
+  // Estados de erro
+  &.mat-form-field-invalid {
+    .mat-mdc-form-field-outline-thick {
+      border-color: #f44336;
+    }
+  }
+  
+  // Estados de foco
+  &.mat-focused {
+    .mat-mdc-form-field-outline-thick {
+      border-width: 2px;
+    }
+  }
+}

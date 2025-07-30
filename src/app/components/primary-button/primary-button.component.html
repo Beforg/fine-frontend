@@ -1,0 +1,55 @@
+<!-- Botão Raised (elevado) -->
+<button *ngIf="variant === 'raised'"
+  mat-raised-button
+  [color]="color"
+  [type]="type"
+  [disabled]="disabled || loading"
+  [class]="'primary-button primary-button--' + size + ' primary-button--' + variant"
+  (click)="onClick()">
+  
+  <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+  <mat-icon *ngIf="icon && !loading">{{ icon }}</mat-icon>
+  <span [class.with-icon]="icon || loading">{{ text }}</span>
+</button>
+
+<!-- Botão Flat (plano colorido) -->
+<button *ngIf="variant === 'flat'"
+  mat-flat-button
+  [color]="color"
+  [type]="type"
+  [disabled]="disabled || loading"
+  [class]="'primary-button primary-button--' + size + ' primary-button--' + variant"
+  (click)="onClick()">
+  
+  <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+  <mat-icon *ngIf="icon && !loading">{{ icon }}</mat-icon>
+  <span [class.with-icon]="icon || loading">{{ text }}</span>
+</button>
+
+<!-- Botão Stroked (outlined/contornado) -->
+<button *ngIf="variant === 'stroked'"
+  mat-stroked-button
+  [color]="color"
+  [type]="type"
+  [disabled]="disabled || loading"
+  [class]="'primary-button primary-button--' + size + ' primary-button--' + variant"
+  (click)="onClick()">
+  
+  <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+  <mat-icon *ngIf="icon && !loading">{{ icon }}</mat-icon>
+  <span [class.with-icon]="icon || loading">{{ text }}</span>
+</button>
+
+<!-- Botão Basic (básico sem elevação) -->
+<button *ngIf="variant === 'basic'"
+  mat-button
+  [color]="color"
+  [type]="type"
+  [disabled]="disabled || loading"
+  [class]="'primary-button primary-button--' + size + ' primary-button--' + variant"
+  (click)="onClick()">
+  
+  <mat-icon *ngIf="loading" class="spinner">refresh</mat-icon>
+  <mat-icon *ngIf="icon && !loading">{{ icon }}</mat-icon>
+  <span [class.with-icon]="icon || loading">{{ text }}</span>
+</button>
