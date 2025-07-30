@@ -17,8 +17,8 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 30px;
+      font-weight: 500;
       color: $texto_principal;
       margin: 0 0 8px 0;
 
@@ -63,6 +63,16 @@
     app-input-field {
       width: 100%;
     }
+
+    // centralizar os campos em telas menores
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-right: 20px;
+    }
+    
+
   }
 
   // Links do formulário
@@ -81,6 +91,17 @@
         color: darken($azul_principal, 10%);
       }
     }
+
+    @media (max-width: 480px) {
+      text-align: center;
+      margin-bottom: 16px;
+
+      .forgot-password-link {
+        display: block;
+        margin-bottom: 8px;
+      }
+    }
+
   }
 
   // Botões de ação

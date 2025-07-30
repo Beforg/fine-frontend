@@ -1,0 +1,10 @@
+<app-header></app-header>
+<div class="content-wrapper">
+  <div class="register-container">
+    <div class="register-card">
+      <app-form-register (formSubmit)="onRegisterSubmit($event)" (formCancel)="onRegisterCancel()" #registerForm>
+      </app-form-register>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>
