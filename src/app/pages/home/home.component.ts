@@ -7,10 +7,13 @@ import { PrimaryButtonComponent } from '../../components/primary-button/primary-
 import { InputFieldComponent } from '../../components/input-field/input-field.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { HeaderComponent } from "../../components/header/header.component";
+import { BarbeirosComponent } from "../../components/home/barbeiros/barbeiros.component";
+import { HeroSectionComponent } from "../../components/home/hero-section/hero-section.component";
+import { CardPsComponent } from "../../components/home/card-ps/card-ps.component";
 
 @Component({
   selector: 'app-home',
-  imports: [MatButtonModule, MatIconModule, FormsModule, PrimaryButtonComponent, InputFieldComponent, FooterComponent, HeaderComponent],
+  imports: [MatButtonModule, MatIconModule, FormsModule, FooterComponent, HeaderComponent, BarbeirosComponent, HeroSectionComponent, CardPsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

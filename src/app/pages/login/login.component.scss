@@ -64,8 +64,23 @@
       margin-bottom: 30px;
       font-size: 16px;
     }
-    
-    
+
+    .badge-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      mat-icon {
+        color: $texto_secundario;
+        margin-right: 8px;
+      }
+
+      span {
+        color: $texto_secundario;
+        font-size: 14px;
+      }
+    }
+
   }
   
   // Responsividade
