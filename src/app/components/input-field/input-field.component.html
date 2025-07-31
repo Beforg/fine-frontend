@@ -1,0 +1,44 @@
+<mat-form-field 
+  [appearance]="appearance"
+  [class]="'input-field input-field--' + size"
+  class="full-width">
+  
+  <!-- Label -->
+  <mat-label>{{ label }}</mat-label>
+  
+  <!-- Ícone de prefixo -->
+  <mat-icon matPrefix *ngIf="prefixIcon">{{ prefixIcon }}</mat-icon>
+  
+  <!-- Campo de entrada -->
+  <input 
+    matInput
+    [type]="getInputType()"
+    [placeholder]="placeholder"
+    [value]="value"
+    [disabled]="disabled"
+    [required]="required"
+    (input)="onInput($event)"
+    (focus)="onFocus()"
+    (blur)="onBlur()">
+  
+  <!-- Ícone de sufixo -->
+  <mat-icon 
+    matSuffix 
+    *ngIf="type === 'password' || suffixIcon"
+    [class.clickable]="type === 'password' || suffixIconClick.observed"
+    (click)="onSuffixIconClick()">
+    {{ getSuffixIcon() }}
+  </mat-icon>
+  
+  <!-- Hint (dica) -->
+  <mat-hint *ngIf="hint && !errorMessage">{{ hint }}</mat-hint>
+  
+  <!-- Mensagem de erro -->
+  <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+  
+</mat-form-field>
+
+<div class="error-message" *ngIf="errorMessage">
+  <mat-icon  class="error-icon">error</mat-icon>
+  <p>{{ errorMessage }}</p>
+</div>

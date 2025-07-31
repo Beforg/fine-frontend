@@ -1,0 +1,87 @@
+// Importar variáveis
+@import '../../../variables';
+
+.input-field {
+  width: 100%;
+  
+  // Tamanhos
+  &--small {
+    .mat-mdc-form-field-infix {
+      min-height: 40px;
+    }
+    
+    .mat-mdc-form-field-label {
+      font-size: 14px;
+    }
+    
+    input {
+      font-size: 14px;
+    }
+  }
+  
+  &--medium {
+    .mat-mdc-form-field-infix {
+      min-height: 48px;
+    }
+    
+    .mat-mdc-form-field-label {
+      font-size: 16px;
+    }
+    
+    input {
+      font-size: 16px;
+    }
+  }
+  
+  &--large {
+    .mat-mdc-form-field-infix {
+      min-height: 56px;
+    }
+    
+    .mat-mdc-form-field-label {
+      font-size: 18px;
+    }
+    
+    input {
+      font-size: 18px;
+    }
+  }
+}
+
+// Classe utilitária
+.full-width {
+  width: 100%;
+}
+
+// Ícone clicável
+.clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--mat-form-field-focus-color, #1976d2);
+  }
+}
+
+// Customizações adicionais
+.error-message {
+  display: flex;
+  text-align: center;
+
+  p {
+    margin: 0;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--mat-form-field-error-color, $vermelho_principal);
+  }
+  // quero colocar o iconme vermelho
+  .error-icon {
+    color: var(--mat-form-field-error-color, $vermelho_principal);
+    font-size: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+}
