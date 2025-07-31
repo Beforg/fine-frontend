@@ -14,7 +14,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll;
   
   // Overlay escuro para melhor legibilidade do texto
   &::before {
@@ -65,56 +65,7 @@
       font-size: 16px;
     }
     
-    .login-form {
-      text-align: left;
-      margin-bottom: 20px;
-      
-      app-input-field {
-        margin-bottom: 20px;
-        display: block;
-        width: 100%;
-      }
-    }
     
-    .login-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin: 30px 0 20px 0;
-      
-      app-primary-button {
-        width: 100%;
-        display: block;
-      }
-    }
-    
-    .login-info {
-      background-color: rgba(232, 245, 232, 0.9);
-      padding: 20px;
-      border-radius: 8px;
-      color: #2e7d32;
-      font-size: 14px;
-      margin-top: 20px;
-      border-left: 4px solid #4caf50;
-      text-align: left;
-      backdrop-filter: blur(5px);
-      
-      p {
-        margin-bottom: 10px;
-        color: #2e7d32;
-        font-weight: 500;
-      }
-      
-      ul {
-        margin: 0;
-        padding-left: 20px;
-        
-        li {
-          margin: 5px 0;
-          color: #388e3c;
-        }
-      }
-    }
   }
   
   // Responsividade
@@ -126,10 +77,6 @@
       
       h1 {
         font-size: 24px;
-      }
-      
-      .login-actions {
-        gap: 10px;
       }
     }
   }

@@ -20,13 +20,26 @@
   
   <!-- Navigation Links (desktop) -->
   <nav class="nav-links desktop-nav">
-    <a routerLink="/products" class="nav-link">Produtos</a>
-    <a routerLink="/services" class="nav-link">Serviços</a>
+    <a routerLink="/products" class="nav-link">
+      <mat-icon>shopping_bag</mat-icon>
+      Produtos
+    </a>
+    <a routerLink="/services" class="nav-link">
+      <mat-icon>content_cut</mat-icon>
+      Serviços
+    </a>
+    @if (isLoggedIn()) {
+      <a routerLink="/profile" class="nav-link">
+        <mat-icon>account_circle</mat-icon>
+        Minha Conta</a>
+     } @else {
     <a routerLink="/login" class="nav-link login-button">
       <mat-icon>login</mat-icon>
       Login
     </a>
+    }
   </nav>
+
   
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay" [class.open]="mobileMenuOpen" (click)="closeMobileMenu()"></div>

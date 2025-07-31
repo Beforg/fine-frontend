@@ -65,27 +65,23 @@
 }
 
 // Customizações adicionais
-.mat-mdc-form-field {
-  margin-bottom: 8px;
-  
-  // Bordas arredondadas para appearance outline
-  &.mat-form-field-appearance-outline {
-    .mat-mdc-form-field-outline {
-      border-radius: 8px;
-    }
+.error-message {
+  display: flex;
+  text-align: center;
+
+  p {
+    margin: 0;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--mat-form-field-error-color, $vermelho_principal);
+  }
+  // quero colocar o iconme vermelho
+  .error-icon {
+    color: var(--mat-form-field-error-color, $vermelho_principal);
+    font-size: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
   }
   
-  // Estados de erro
-  &.mat-form-field-invalid {
-    .mat-mdc-form-field-outline-thick {
-      border-color: #f44336;
-    }
-  }
-  
-  // Estados de foco
-  &.mat-focused {
-    .mat-mdc-form-field-outline-thick {
-      border-width: 2px;
-    }
-  }
 }

@@ -4,6 +4,8 @@ import { Observable, throwError, firstValueFrom } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { LoginFormData, LoginResponse, BackendLoginResponse } from '../interfaces/login-form.interface';
 import { environment } from '../../environments/environment';
+import { RegisterFormData } from '../interfaces/register-form.interface';
+import { BackendResponse } from '../interfaces/response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,11 @@ export class AuthService {
   
   private tokenKey = 'authToken';
   private userDataKey = 'userData';
+
+  headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
 
   constructor(private http: HttpClient) {
     console.log('🔧 AuthService inicializado com URL:', this.apiUrl);
@@ -24,19 +31,13 @@ export class AuthService {
   async login(credentials: LoginFormData): Promise<LoginResponse> {
     console.log('🔐 Tentando fazer login...', { login: credentials.login });
 
-    // Configurar headers para CORS e Content-Type
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-
     try {
       console.log('📤 Enviando requisição para:', `${this.apiUrl}/login`);
       console.log('📦 Dados:', credentials);
-      
+  
       // Fazendo requisição para o backend (resposta raw)
       const backendResponse = await firstValueFrom(
-        this.http.post<BackendLoginResponse>(`${this.apiUrl}/login`, credentials, { headers })
+        this.http.post<BackendLoginResponse>(`${this.apiUrl}/login`, credentials, { headers: this.headers })
           .pipe(
             catchError(this.handleError)
           )
@@ -80,57 +81,35 @@ export class AuthService {
       
     } catch (error) {
       console.error('❌ Erro no login:', error);
-      
-      // Trata erros específicos
-      if (error instanceof HttpErrorResponse) {
-        console.error('📊 Status do erro:', error.status);
-        console.error('📝 Mensagem do erro:', error.message);
-        console.error('🔍 Headers da resposta:', error.headers);
-        console.error('📄 Corpo da resposta:', error.error);
-        
-        if (error.status === 403) {
-          return {
-            success: false,
-            message: 'Acesso negado. Verifique suas credenciais ou entre em contato com o administrador.'
-          };
-        }
-        
-        if (error.status === 401) {
-          return {
-            success: false,
-            message: 'E-mail ou senha incorretos'
-          };
-        }
-        
-        if (error.status === 400) {
-          return {
-            success: false,
-            message: 'Dados inválidos. Verifique os campos.'
-          };
-        }
-        
-        if (error.status === 0) {
-          return {
-            success: false,
-            message: 'Erro de CORS ou servidor indisponível. Verifique se o backend está rodando.'
-          };
-        }
-        
-        if (error.status >= 500) {
-          return {
-            success: false,
-            message: 'Erro interno do servidor. Tente novamente mais tarde.'
-          };
-        }
-      }
-
       return {
         success: false,
-        message: 'Erro de conexão. Verifique sua internet.'
+        message: (error as HttpErrorResponse).error || 'Erro ao fazer login. Tente novamente mais tarde.',
       };
     }
   }
 
+  async register(credentials: RegisterFormData): Promise<BackendResponse> {
+    console.log('🔐 Tentando registrar usuário...', { email: credentials.email });
+
+    try {
+      console.log('📤 Enviando requisição para:', `${this.apiUrl}/register`);
+      console.log('📦 Dados:', credentials);
+      
+      const response = await firstValueFrom(
+        this.http.post<BackendResponse>(`${this.apiUrl}/cadastrar`, credentials, { headers: this.headers })
+          .pipe(catchError(this.handleError))
+      );
+
+      console.log('✅ Resposta do registro:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ Erro no registro:', error);
+      return {
+        message: (error as HttpErrorResponse).error.message || 'Erro ao registrar usuário. Tente novamente mais tarde.',
+        httpStatus: (error as HttpErrorResponse).error.httpStatus || "500"
+      };
+    }
+  }
   /**
    * Realiza logout do usuário
    */
@@ -235,25 +214,6 @@ export class AuthService {
     return throwError(() => error);
   }
 
-  /**
-   * Exemplo de método para refresh token (se necessário)
-   */
-  async refreshToken(): Promise<boolean> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<{ token: string }>(`${this.apiUrl}/auth/refresh`, {})
-      );
-
-      if (response.token) {
-        this.setToken(response.token);
-        return true;
-      }
-
-      return false;
-    } catch {
-      return false;
-    }
-  }
 
   /**
    * Obtém informações do usuário atual (decodifica do token)

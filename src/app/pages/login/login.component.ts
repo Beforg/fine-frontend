@@ -20,19 +20,13 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
   // Referência ao componente FormLogin
   @ViewChild('loginForm') formLoginComponent!: FormLoginComponent;
-
-  // Propriedades do formulário (para compatibilidade com código existente)
-  login: string = '';
-  senha: string = '';
-  loginError: string = '';
-  senhaError: string = '';
   
 
   constructor(private router: Router, private authService: AuthService) {}
 
   async onLoginSubmit(formData: LoginFormData): Promise<void> {
     console.log('🚀 Iniciando processo de login...', formData);
-    
+    this.formLoginComponent.setLoadingState(true);
     try {
       // Limpar erros anteriores
       this.formLoginComponent.clearErrors();

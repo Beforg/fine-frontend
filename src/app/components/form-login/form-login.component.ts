@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoginForm, LoginFormData, LoginFormErrors } from '../../interfaces/login-form.interface';
 import { InputFieldComponent } from '../input-field/input-field.component';
 import { PrimaryButtonComponent } from '../primary-button/primary-button.component';
+import { FormUtils } from '../../utils/form-utils';
 
 @Component({
   selector: 'app-form-login',
@@ -32,10 +33,9 @@ import { PrimaryButtonComponent } from '../primary-button/primary-button.compone
 export class FormLoginComponent implements OnInit, OnDestroy {
   // FormGroup tipado com interface customizada
   loginForm!: FormGroup<LoginForm>;
-  
   // Controle de estado
-  isLoading = false;
-  isSubmitted = false;
+  isLoading:boolean = false;
+  isSubmitted:boolean = false;
   
   // Erros de validação
   formErrors: LoginFormErrors = {};
@@ -82,68 +82,66 @@ export class FormLoginComponent implements OnInit, OnDestroy {
     }) as FormGroup<LoginForm>;
   }
 
-  /**
+  /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   *                           FormUtils Methods                            *
+   ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
    * Configura validação em tempo real
    */
-  private setupFormValidation(): void {
-    // Monitora mudanças no campo login
-    this.loginForm.get('login')?.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.isSubmitted) {
-          this.updateFieldError('login');
-        }
-      });
-
-    // Monitora mudanças no campo senha
-    this.loginForm.get('senha')?.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.isSubmitted) {
-          this.updateFieldError('senha');
-        }
-      });
+  private setupFormValidation(): void { //
+    FormUtils.setupFormValidation<LoginForm>(
+      this.loginForm,
+      () => this.isSubmitted,
+      (fieldName) => this.updateFieldError(fieldName as keyof LoginForm),
+      this.destroy$
+    );
   }
 
-  /**
-   * Atualiza erro de um campo específico
+  onSubmit(): void {
+    FormUtils.processFormSubmission(
+      this.loginForm,
+      () => { this.isSubmitted = true; },
+      () => this.updateAllFieldErrors(),
+      () => this.getFormData(),
+      (loading) => { this.isLoading = loading; },
+      (data) => this.formSubmit.emit(data)
+    )
+  }
+    
+  private updateAllFieldErrors(): void {
+    FormUtils.updateAllFieldErrors<LoginFormErrors>(
+      this.loginForm,
+      this.formErrors,
+      (fieldName) => this.updateFieldError(fieldName as keyof LoginForm)
+    );
+  }
+    
+  isFieldInvalid(fieldName: keyof LoginForm): boolean {
+    return FormUtils.isFieldInvalid(this.loginForm, fieldName, this.isSubmitted);
+  }  
+
+  /** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+   ** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
    */
-  private updateFieldError(fieldName: keyof LoginForm): void {
+
+  /**
+   * Retorna nome amigável do campo
+   */
+   private updateFieldError(fieldName: keyof LoginForm): void {
     const field = this.loginForm.get(fieldName);
     
     if (field?.errors && field.touched) {
-      this.formErrors[fieldName] = this.getFieldErrorMessage(fieldName, field.errors);
+      this.formErrors[fieldName] = FormUtils.getFieldErrorMessage(
+        fieldName, 
+        field.errors,
+        (name) => this.getFieldDisplayName(name)
+
+        // Sem função customizada - usa nomes padrão do FormUtils
+      );
     } else {
       delete this.formErrors[fieldName];
     }
   }
 
-  /**
-   * Retorna mensagem de erro para um campo
-   */
-  private getFieldErrorMessage(fieldName: string, errors: any): string {
-    if (errors['required']) {
-      return `${this.getFieldDisplayName(fieldName)} é obrigatório`;
-    }
-    
-    if (errors['login']) {
-      return 'E-mail deve ter um formato válido';
-    }
-    
-    if (errors['minlength']) {
-      return `${this.getFieldDisplayName(fieldName)} deve ter pelo menos ${errors['minlength'].requiredLength} caracteres`;
-    }
-    
-    if (errors['maxlength']) {
-      return `${this.getFieldDisplayName(fieldName)} deve ter no máximo ${errors['maxlength'].requiredLength} caracteres`;
-    }
-    
-    return `${this.getFieldDisplayName(fieldName)} é inválido`;
-  }
-
-  /**
-   * Retorna nome amigável do campo
-   */
   private getFieldDisplayName(fieldName: string): string {
     const fieldNames: Record<string, string> = {
       login: 'E-mail',
@@ -153,13 +151,6 @@ export class FormLoginComponent implements OnInit, OnDestroy {
     return fieldNames[fieldName] || fieldName;
   }
 
-  /**
-   * Getter para verificar se um campo é inválido
-   */
-  isFieldInvalid(fieldName: keyof LoginForm): boolean {
-    const field = this.loginForm.get(fieldName);
-    return !!(field?.errors && (field.dirty || field.touched || this.isSubmitted));
-  }
 
   /**
    * Getter para obter erro de um campo
@@ -167,40 +158,22 @@ export class FormLoginComponent implements OnInit, OnDestroy {
   getFieldError(fieldName: keyof LoginForm): string {
     return this.formErrors[fieldName] || '';
   }
-
-  /**
-   * Submete o formulário
-   */
-  onSubmit(): void {
-    this.isSubmitted = true;
-    
-    // Marca todos os campos como touched para mostrar erros
-    this.loginForm.markAllAsTouched();
-    
-    // Atualiza todos os erros
-    Object.keys(this.loginForm.controls).forEach(key => {
-      this.updateFieldError(key as keyof LoginForm);
-    });
-    
-    // Verifica se o formulário é válido
-    if (this.loginForm.valid) {
-      this.isLoading = true;
-      
-      // Emite os dados do formulário
-      const formData: LoginFormData = {
-        login: this.loginForm.value.login!,
-        senha: this.loginForm.value.senha!
-      };
-      
-      this.formSubmit.emit(formData);
-    }
-  }
+  
 
   /**
    * Cancela o formulário
    */
   onCancel(): void {
     this.formCancel.emit();
+  }
+  
+
+
+  private getFormData(): LoginFormData {
+    return {
+      login: this.loginForm.value.login!,
+      senha: this.loginForm.value.senha!
+    };
   }
 
   /**

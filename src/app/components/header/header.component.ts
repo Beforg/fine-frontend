@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +12,12 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+
+  constructor(private authService: AuthService) {}
+  isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
   imgHeader: string = '/assets/fine-logo.jpeg';
   mobileMenuOpen: boolean = false;
 

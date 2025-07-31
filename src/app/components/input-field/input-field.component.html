@@ -37,3 +37,8 @@
   <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
   
 </mat-form-field>
+
+<div class="error-message" *ngIf="errorMessage">
+  <mat-icon  class="error-icon">error</mat-icon>
+  <p>{{ errorMessage }}</p>
+</div>
