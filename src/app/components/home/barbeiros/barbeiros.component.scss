@@ -2,7 +2,7 @@
 
 .barbeiros-section {
   padding: 80px 5% 60px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: $branco_degrade_barbeiro;
   min-height: 100vh;
 
   .section-header {
@@ -12,7 +12,7 @@
     .section-title {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #2c3e50;
+      color: $azul_titulo_pagina;
       margin-bottom: 15px;
       position: relative;
 
@@ -24,14 +24,14 @@
         transform: translateX(-50%);
         width: 80px;
         height: 4px;
-        background: linear-gradient(90deg, #FFD700, #FFA500);
+        background: $azul_degrade_borda;
         border-radius: 2px;
       }
     }
 
     .section-subtitle {
       font-size: 1.2rem;
-      color: #6c757d;
+      color: $cinza_subtitle;
       font-weight: 400;
       margin-top: 20px;
     }
@@ -49,19 +49,19 @@
       background: white;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      box-shadow: $sombra_media;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
 
       &:hover {
         transform: translateY(-10px);
-        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        box-shadow: $sombra_forte;
       }
 
       .barbeiro-image-container {
         position: relative;
         height: 280px;
-        overflow: hidden;
+        overflow:visible;
 
         .barbeiro-image {
           width: 100%;
@@ -77,12 +77,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(
-              45deg,
-              rgba(0, 0, 0, 0.3) 0%,
-              rgba(0, 0, 0, 0.1) 50%,
-              rgba(255, 215, 0, 0.2) 100%
-            );
+            background: $bg_overlay_barbeiro;
           }
         }
 
@@ -94,13 +89,12 @@
           z-index: 3;
 
           .avatar-img {
-            width: 80px;
-            height: 80px;
+            width: 196px;
+            height: 200px;
             border-radius: 50%;
-            border: 4px solid white;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             object-fit: cover;
-            background: white;
+            background: $branco_principal;
           }
         }
       }
@@ -116,7 +110,7 @@
         .barbeiro-name {
           font-size: 1.5rem;
           font-weight: 600;
-          color: #2c3e50;
+          color: $azul_titulo_pagina;
           margin-bottom: 15px;
         }
 
@@ -127,12 +121,12 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #f8f9fa;
+            background: $branco_principal;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: 500;
-            color: #6c757d;
+            color: $cinza_subtitle;
 
             mat-icon {
               font-size: 16px;
@@ -144,8 +138,8 @@
         }
 
         .agendar-btn {
-          background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-          color: white;
+          background: $azul_degrade_borda;
+          color: $branco_principal;
           border: none;
           padding: 12px 30px;
           border-radius: 25px;

@@ -3,10 +3,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Barbeiro } from '../../../interfaces/entities.interface';
 import { BarbeiroService } from '../../../services/barbeiro.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-barbeiros',
-  imports: [MatIconModule, MatButtonModule],
+  imports: [MatIconModule, MatButtonModule, CommonModule],
   templateUrl: './barbeiros.component.html',
   styleUrl: './barbeiros.component.scss'
 })
