@@ -1,5 +1,4 @@
 export interface Barbeiro {
-[x: string]: any;
     id: number;
     nome: string;
     telefone: string;
@@ -7,4 +6,19 @@ export interface Barbeiro {
     corteRealizados: number;
     urlFoto: string;
     urlBackground: string;
+}
+
+export interface Produto {
+    id: number;
+    nome: string;
+    descricao: string;
+    preco: number;
+    urlFoto: string;
+}
+
+export interface Servico {
+    id: number;
+    nome: string;
+    descricao: string;
+    preco: number;
 }
