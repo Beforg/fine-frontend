@@ -13,7 +13,7 @@ export interface Produto {
     nome: string;
     descricao: string;
     preco: number;
-    urlFoto: string;
+    urlImagem: string;
 }
 
 export interface Servico {
