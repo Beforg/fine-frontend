@@ -14,6 +14,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif; 
   display: flex;
   flex-direction: column;
+  padding-top: 80px; /* Compensar altura do header fixo */
 }
 
 /* Garantir que o app-root ocupe toda a altura */
@@ -120,4 +121,20 @@ app-root {
 .mat-mdc-snack-bar-container {
   animation-duration: 0.3s !important;
   animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+/* =================================
+   RESPONSIVIDADE DO HEADER FIXO
+   ================================= */
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 70px; /* Altura do header menor em mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 60px; /* Altura ainda menor em mobile pequeno */
+  }
 }

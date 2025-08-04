@@ -29,9 +29,10 @@
       Serviços
     </a>
     @if (isLoggedIn()) {
-      <a routerLink="/profile" class="nav-link">
+      <button class="nav-link profile-button" (click)="togglePerfilCard()">
         <mat-icon>account_circle</mat-icon>
-        Minha Conta</a>
+        Meu Perfil
+      </button>
      } @else {
     <a routerLink="/login" class="nav-link login-button">
       <mat-icon>login</mat-icon>
@@ -54,9 +55,21 @@
       <mat-icon>content_cut</mat-icon>
       Serviços
     </a>
+    @if (isLoggedIn()) {
+      <a class="mobile-nav-link profile-button" (click)="togglePerfilCard(); closeMobileMenu()">
+        <mat-icon>account_circle</mat-icon>
+        Meu Perfil
+      </a>
+    } @else {
     <a routerLink="/login" class="mobile-nav-link login-button" (click)="closeMobileMenu()">
       <mat-icon>login</mat-icon>
       Login
     </a>
+  }
   </nav>
 </header>
+
+<!-- Perfil Card (quando logado) -->
+@if (perfilCardOpen && isLoggedIn()) {
+  <app-perfil-card (close)="closePerfilCard()"></app-perfil-card>
+}

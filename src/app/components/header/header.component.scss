@@ -11,9 +11,14 @@ $logo-size-mobile: 40px;
     justify-content: space-between;
     padding: 16px 32px; 
     background: $header_bg;
+    backdrop-filter: blur(10px);
     box-shadow: $sombra_leve;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
+    transition: all $transition_normal;
 
     .logo-section {
         display: flex;
@@ -75,7 +80,7 @@ $logo-size-mobile: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
-
+        padding-right: 25px;
         .nav-link {
             margin: 0 12px;
             text-decoration: none;
@@ -101,6 +106,24 @@ $logo-size-mobile: 40px;
             
             &:hover {
                 background-color: $azul_principal;
+                color: $branco_principal;
+            }
+            
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        .profile-button {
+            font-weight: bold;
+            color: $verde_principal;
+            border: 1px solid $verde_principal;
+            background: none;
+            
+            &:hover {
+                background-color: $verde_principal;
                 color: $branco_principal;
             }
             
@@ -179,6 +202,14 @@ $logo-size-mobile: 40px;
                 margin-top: 16px;
                 background-color: rgba(0, 123, 255, 0.1);
             }
+
+            &.profile-button {
+                font-weight: bold;
+                color: $verde_principal;
+                border-bottom: none;
+                margin-top: 16px;
+                background-color: rgba(40, 167, 69, 0.1);
+            }
         }
     }
 }
@@ -213,6 +244,7 @@ $logo-size-mobile: 40px;
         // Mostrar menu hambúrguer
         .mobile-menu-button {
             display: block;
+            padding-right: 10px;
         }
 
         // Esconder navegação desktop

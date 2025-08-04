@@ -1,0 +1,239 @@
+// Importar variáveis
+@import '../../../variables';
+
+.perfil-card-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $bg_overlay;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 80px 48px 32px 32px;
+  z-index: 1002;
+  animation: fadeIn 0.2s ease-out;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+.perfil-card {
+  background: $branco_principal;
+  border-radius: $border_radius_large;
+  box-shadow: $sombra_forte;
+  min-width: 400px;
+  margin-right: 50px;
+  max-width: 350px;
+  overflow: hidden;
+  animation: slideInDown 0.3s ease-out;
+
+  @keyframes slideInDown {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 15px 12px 15px;
+  background: $azul_degrade_borda;
+  color: $branco_principal;
+  position: relative;
+
+  .perfil-avatar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $branco_principal;
+    font-weight: 600;
+    font-size: 16px;
+    
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: $branco_principal;
+    }
+  }
+
+  .close-button {
+    color: $branco_principal;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      margin: 0;
+    }
+  }
+}
+
+.perfil-info {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid $input_border;
+
+  .user-name {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: $preto_principal;
+  }
+
+  .user-email {
+    margin: 0;
+    font-size: 14px;
+    color: $cinza_medio;
+    word-break: break-word;
+  }
+}
+
+.perfil-actions {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .action-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: $border_radius_medium;
+    text-transform: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all $transition_normal;
+    width: 100%;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &.profile-button {
+      color: $azul_principal;
+      background-color: rgba(0, 123, 255, 0.1);
+
+      &:hover {
+        background-color: rgba(0, 123, 255, 0.2);
+        transform: translateY(-1px);
+      }
+    }
+
+    &.logout-button {
+      color: $vermelho_principal;
+      background-color: rgba(220, 53, 69, 0.1);
+
+      &:hover {
+        background-color: rgba(220, 53, 69, 0.2);
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+// Responsividade para mobile
+@media (max-width: 768px) {
+  .perfil-card-overlay {
+    padding: 70px 24px 16px 16px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .perfil-card {
+    min-width: 280px;
+    max-width: 100%;
+    width: 100%;
+    margin-right: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-card-overlay {
+    padding: 60px 16px 12px 12px;
+  }
+
+  .perfil-header {
+    padding: 16px;
+
+    .perfil-avatar {
+      gap: 6px;
+      font-size: 14px;
+      
+      mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    .close-button {
+      width: 32px;
+      height: 32px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        margin: 0;
+      }
+    }
+  }
+
+  .perfil-info {
+    padding: 16px;
+
+    .user-name {
+      font-size: 16px;
+    }
+
+    .user-email {
+      font-size: 13px;
+    }
+  }
+
+  .perfil-actions {
+    padding: 12px;
+
+    .action-button {
+      padding: 10px 14px;
+      font-size: 13px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
