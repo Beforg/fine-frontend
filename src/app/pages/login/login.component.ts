@@ -24,33 +24,34 @@ export class LoginComponent {
 
   constructor(private router: Router, private authService: AuthService) {}
 
-  async onLoginSubmit(formData: LoginFormData): Promise<void> {
+  onLoginSubmit(formData: LoginFormData): void {
     console.log('🚀 Iniciando processo de login...', formData);
     this.formLoginComponent.setLoadingState(true);
-    try {
-      // Limpar erros anteriores
-      this.formLoginComponent.clearErrors();
-      
-      // Chamar serviço de autenticação
-      const response = await this.authService.login(formData);
-      
-      if (response.success) {
-        console.log('✅ Login bem-sucedido!');
-        // Sucesso - redirecionar para dashboard
-        this.router.navigate(['/dashboard']);
-      } else {
-        console.log('❌ Falha no login:', response.message);
-        // Erro - mostrar mensagem no formulário
-        this.formLoginComponent.setGeneralError(response.message || 'Erro ao fazer login');
+    
+    // Limpar erros anteriores
+    this.formLoginComponent.clearErrors();
+    
+    // Chamar serviço de autenticação
+    this.authService.login(formData).subscribe({
+      next: (response) => {
+        if (response.success) {
+          console.log('✅ Login bem-sucedido!');
+          // Sucesso - redirecionar para dashboard
+          this.router.navigate(['/dashboard']);
+        } else {
+          console.log('❌ Falha no login:', response.message);
+          // Erro - mostrar mensagem no formulário
+          this.formLoginComponent.setGeneralError(response.message || 'Erro ao fazer login');
+        }
+        this.formLoginComponent.setLoadingState(false);
+      },
+      error: (error) => {
+        console.error('💥 Erro inesperado no login:', error);
+        // Erro de rede ou inesperado
+        this.formLoginComponent.setGeneralError(error.message || 'Erro de conexão. Verifique sua internet.');
+        this.formLoginComponent.setLoadingState(false);
       }
-    } catch (error) {
-      console.error('💥 Erro inesperado no login:', error);
-      // Erro de rede ou inesperado
-      this.formLoginComponent.setGeneralError('Erro de conexão. Verifique sua internet.');
-    } finally {
-      // Parar loading no formulário
-      this.formLoginComponent.setLoadingState(false);
-    }
+    });
   }
 
   onLoginCancel(): void {
