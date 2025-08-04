@@ -3,14 +3,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PrimaryButtonComponent } from '../../components/primary-button/primary-button.component';
-import { InputFieldComponent } from '../../components/input-field/input-field.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { HeaderComponent } from "../../components/header/header.component";
+import { BarbeirosComponent } from "../../components/home/barbeiros/barbeiros.component";
+import { HeroSectionComponent } from "../../components/home/hero-section/hero-section.component";
+import { CatalogoPsComponent } from "../../components/home/catalogo-ps/catalogo-ps.component";
+import { SobreComponent } from "../../components/home/sobre/sobre.component";
 
 @Component({
   selector: 'app-home',
-  imports: [MatButtonModule, MatIconModule, FormsModule, PrimaryButtonComponent, InputFieldComponent, FooterComponent, HeaderComponent],
+  imports: [MatButtonModule, MatIconModule, FormsModule, FooterComponent, HeaderComponent, BarbeirosComponent, HeroSectionComponent, CatalogoPsComponent, SobreComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

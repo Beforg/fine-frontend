@@ -7,7 +7,10 @@ $branco_principal: #ffffff;
 $cinza_claro: #e4e4e4;
 $cinza_medio: #cfcfcf;
 $cinza_escuro: #666666;
-
+$azul_degrade_borda: linear-gradient(135deg,rgb(31, 31, 31), hsl(241, 86%, 14%));
+$branco_degrade_barbeiro: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+$cinza_subtitle: #6c757d;
+$azul_titulo_pagina: #2c3e50;
 // Cores de Destaque
 $vermelho_principal: #dc3545;
 $azul_principal: #1c39bb;
@@ -33,9 +36,14 @@ $bg_escuro: #000000;
 $bg_cinza_claro: #f8f9fa;
 $bg_overlay: rgba(0, 0, 0, 0.5);
 $bg_overlay_claro: rgba(0, 0, 0, 0.3);
+$bg_overlay_gradient: linear-gradient(135deg, rgba(18, 13, 43, 0.5), rgba(15, 15, 15, 0.3));
+$bg_overlay_barbeiro: linear-gradient(45deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(255, 215, 0, 0.2) 100%);
 
 // Cores para Componentes
-$header_bg: linear-gradient(135deg,#120d2b, #0f0f0f);
+$header_bg: linear-gradient(135deg,rgb(18, 13, 43), rgb(15, 15, 15));
 $footer_bg: linear-gradient(135deg, #0f0f0f, #120d2b);
 $card_bg: rgba(255, 255, 255, 0.95);
 $input_border: #cccccc;
@@ -52,7 +60,10 @@ $border_radius_small: 4px;
 $border_radius_medium: 8px;
 $border_radius_large: 12px;
 $border_radius_xl: 16px;
-
+$text_title_size: 64px;
+$text_subtitle_size: 36px;
+$text_body_size: 20px;
+$home_title: 72px;
 // Transições
 $transition_fast: 0.2s ease;
 $transition_normal: 0.3s ease;

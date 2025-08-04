@@ -1,236 +1,25 @@
 <app-header></app-header>
 <div class="page-container">
-  <div class="content-wrapper">
-    <div class="home-container">
-  <!-- Componente de botão personalizado -->
-  <section class="button-section">
-    <h2>Componente Botão Primário Personalizado</h2>
-    
-    <!-- Diferentes tamanhos -->
-    <div class="button-group">
-      <h3>Tamanhos</h3>
-      <app-primary-button 
-        text="Ir para Login" 
-        size="small"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Médio" 
-        size="medium"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Grande" 
-        size="large"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-    </div>
-
-    <!-- Com ícones -->
-    <div class="button-group">
-      <h3>Com Ícones</h3>
-      <app-primary-button 
-        text="Login" 
-        icon="login"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Salvar" 
-        icon="save"
-        (buttonClick)="onSaveClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Excluir" 
-        icon="delete"
-        (buttonClick)="onDeleteClick()">
-      </app-primary-button>
-    </div>
-
-    <!-- Estados -->
-    <div class="button-group">
-      <h3>Estados</h3>
-      <app-primary-button 
-        text="Normal"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Desabilitado"
-        [disabled]="true">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Carregando"
-        [loading]="true">
-      </app-primary-button>
-    </div>
-
-    <!-- Diferentes variantes (estilos) -->
-    <div class="button-group">
-      <h3>🎨 Variantes de Estilo</h3>
-      
-      <app-primary-button 
-        text="Raised (Elevado)"
-        variant="raised"
-        color="primary"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Outlined/Stroked"
-        variant="stroked"
-        color="primary"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Flat (Plano)"
-        variant="flat"
-        color="primary"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Basic (Básico)"
-        variant="basic"
-        color="primary"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-    </div>
-
-    <!-- Combinações de cores e variantes -->
-    <div class="button-group">
-      <h3>🌈 Outlined com Diferentes Cores</h3>
-      
-      <app-primary-button 
-        text="Primary Outlined"
-        variant="stroked"
-        color="primary"
-        icon="home"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Accent Outlined"
-        variant="stroked"
-        color="accent"
-        icon="favorite"
-        (buttonClick)="onLoginClick()">
-      </app-primary-button>
-      
-      <app-primary-button 
-        text="Warn Outlined"
-        variant="stroked"
-        color="warn"
-        icon="warning"
-        (buttonClick)="onDeleteClick()">
-      </app-primary-button>
-    </div>
-  </section>
-
-  <!-- Componentes de Input Field -->
-  <section class="button-section">
-    <h2>🔤 Componentes de Campo de Entrada</h2>
-    
-    <!-- Campos básicos -->
-    <div class="button-group">
-      <h3>Campos Básicos</h3>
-      
-      <app-input-field
-        label="Nome completo"
-        placeholder="Digite seu nome"
-        type="text"
-        prefixIcon="person"
-        hint="Mínimo 2 caracteres"
-        [(ngModel)]="textValue">
-      </app-input-field>
-      
-      <app-input-field
-        label="E-mail"
-        placeholder="exemplo@email.com"
-        type="email"
-        prefixIcon="email"
-        [(ngModel)]="emailValue">
-      </app-input-field>
-      
-      <app-input-field
-        label="Senha"
-        placeholder="Digite sua senha"
-        type="password"
-        prefixIcon="lock"
-        hint="Mínimo 6 caracteres"
-        [(ngModel)]="passwordValue">
-      </app-input-field>
-    </div>
-
-    <!-- Diferentes tamanhos -->
-    <div class="button-group">
-      <h3>Diferentes Tamanhos</h3>
-      
-      <app-input-field
-        label="Campo Pequeno"
-        placeholder="Tamanho pequeno"
-        size="small"
-        prefixIcon="search">
-      </app-input-field>
-      
-      <app-input-field
-        label="Campo Médio"
-        placeholder="Tamanho médio (padrão)"
-        size="medium"
-        prefixIcon="edit">
-      </app-input-field>
-      
-      <app-input-field
-        label="Campo Grande"
-        placeholder="Tamanho grande"
-        size="large"
-        prefixIcon="title">
-      </app-input-field>
-    </div>
-
-    <!-- Estados e variações -->
-    <div class="button-group">
-      <h3>Estados e Variações</h3>
-      
-      <app-input-field
-        label="Campo Obrigatório"
-        placeholder="Este campo é obrigatório"
-        [required]="true"
-        prefixIcon="star"
-        errorMessage="Este campo é obrigatório">
-      </app-input-field>
-      
-      <app-input-field
-        label="Campo Desabilitado"
-        placeholder="Campo desabilitado"
-        [disabled]="true"
-        prefixIcon="block">
-      </app-input-field>
-      
-      <app-input-field
-        label="Appearance Fill"
-        placeholder="Estilo preenchido"
-        appearance="fill"
-        prefixIcon="palette">
-      </app-input-field>
-    </div>
-
-    <!-- Valores atuais -->
-    <div class="button-group">
-      <h3>📊 Valores Atuais</h3>
-      <div class="values-display">
-        <p><strong>Nome:</strong> {{ textValue || 'Vazio' }}</p>
-        <p><strong>E-mail:</strong> {{ emailValue || 'Vazio' }}</p>
-        <p><strong>Senha:</strong> {{ passwordValue ? '***' : 'Vazio' }}</p>
+  <!-- <div class="home-title-content">
+    <div class="hero-section">
+      <div class="title">
+        <h1 class="hero-title">Barbearia Fine </h1>
+        <p class="hero-subtitle"> Estilo, Cuidado e Experiência Desde 2020</p>
+      </div>
+      <p class="hero-description">Um Lugar Perfeito Para Homens Modernos e Estilosos.</p>
+      <div class="badge-item">
+        <mat-icon>verified</mat-icon>
+        <span> 5 anos de experiência</span>
       </div>
     </div>
-  </section>
-    </div>
+  </div> -->
+  <app-hero-section></app-hero-section>
+  <app-barbeiros></app-barbeiros>
+  <app-catalogo-ps></app-catalogo-ps>
+  <app-sobre></app-sobre>
+  <div class="tmp">
+    
+    Aqui vai ficar as outras seções....
   </div>
 </div>
 
