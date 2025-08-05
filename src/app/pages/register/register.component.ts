@@ -22,17 +22,17 @@ export class RegisterComponent {
     private notificationService: NotificationService
   ) {}
 
-  async onRegisterSubmit(formData: RegisterFormData): Promise<void> {
+  onRegisterSubmit(formData: RegisterFormData): void {
     console.log("🚀 Iniciando processo de registro...", formData);
     this.formRegisterComponent.setLoadingState(true);
-    try {
-      // Limpar erros anteriores
+    
+    // Limpar erros anteriores
       this.formRegisterComponent.clearErrors();
       
       // Chamar serviço de cadastro
-      const response = await this.authService.register(formData);
-      
-      if (response.httpStatus == "CREATED") {
+      this.authService.register(formData).subscribe({
+        next: (response) => {
+          if (response.httpStatus == "CREATED") {
         console.log("✅ Cadastro realizado com sucesso");
         
         // 🎉 NOTIFICAÇÃO DE SUCESSO
@@ -44,24 +44,24 @@ export class RegisterComponent {
           this.router.navigate(['/login']);
         }, 3000);
         
-      } else {
-        console.log("❌ Falha no cadastro:", response.message);
-        // O erro já será exibido pelo setGeneralError que já tem notificação
-        this.formRegisterComponent.setGeneralError(
-          response.message || 'Erro ao criar conta. Verifique os dados.'
-        );
-      }
-      
-    } catch (error) {
-      console.error("💥 Erro inesperado no registro:", error);
-      
-      // 🔌 NOTIFICAÇÃO DE ERRO DE CONEXÃO
-      this.formRegisterComponent.showConnectionError();
-      this.formRegisterComponent.setGeneralError('Erro de conexão. Verifique sua internet.');
-      
-    } finally {
-      this.formRegisterComponent.setLoadingState(false);
-    }
+          } else {
+            console.log("❌ Falha no cadastro:", response.message);
+            // O erro já será exibido pelo setGeneralError que já tem notificação
+            this.formRegisterComponent.setGeneralError(
+              response.message || 'Erro ao criar conta. Verifique os dados.'
+            );
+          }
+          this.formRegisterComponent.setLoadingState(false);
+        },
+        error: (error) => {
+          console.error("💥 Erro inesperado no registro:", error);
+          
+          // 🔌 NOTIFICAÇÃO DE ERRO DE CONEXÃO
+          this.formRegisterComponent.showConnectionError();
+          this.formRegisterComponent.setGeneralError(error.message || 'Erro de conexão. Verifique sua internet.');
+          this.formRegisterComponent.setLoadingState(false);
+        }
+      });
   }
 
   onRegisterCancel(): void {

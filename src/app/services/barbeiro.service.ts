@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 export class BarbeiroService {
 
   private apiUrl = `${environment.apiUrl}${environment.barbeirosEndpoint}`
-
+  
   constructor(private http: HttpClient) {
 
    }

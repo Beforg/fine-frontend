@@ -1,5 +1,10 @@
 @import '../../../variables';
 
+// Compensar o header fixo
+.page-container {
+  padding-top: 80px;
+}
+
 .home-title-content {
   position: relative;
   height: 500px;
@@ -97,4 +102,17 @@
  
 .tmp {
   background-color: gray;
+}
+
+// Responsividade para o header fixo
+@media (max-width: 768px) {
+  .page-container {
+    padding-top: 70px; /* Header menor em mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding-top: 60px; /* Header ainda menor em mobile pequeno */
+  }
 }

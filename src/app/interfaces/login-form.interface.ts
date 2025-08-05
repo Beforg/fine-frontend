@@ -15,8 +15,8 @@ export interface LoginFormData {
 // Interface para resposta RAW do back-end (como está chegando)
 export interface BackendLoginResponse {
   token: string;
-  email: string;
-  role: string;
+  // email: string;
+  // role: string;
 }
 
 // Interface para resposta do front-end (padronizada)

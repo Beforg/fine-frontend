@@ -1,0 +1,119 @@
+<app-header></app-header>
+<div class="perfil-container">
+  <!-- Header da página -->
+  <div class="perfil-header">
+    <button class="back-button" mat-icon-button>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="page-title">Meu Perfil</h1>
+    <div class="header-spacer"></div>
+  </div>
+
+  <!-- Card principal do perfil -->
+  <div class="perfil-content">
+    <mat-card class="perfil-card" *ngIf="userInfo !== null; else loadingCard">
+      <!-- Avatar placeholder -->
+      <div class="avatar-section">
+        <div class="avatar-placeholder">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <button class="edit-avatar-btn" mat-mini-fab color="primary">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
+      <!-- Informações do usuário -->
+      <div class="user-info">
+        <h2 class="user-name">{{ userInfo.nome }}</h2>
+        <p class="user-role">{{ getRoleName() }}</p>
+      </div>
+
+      <!-- Formulário de dados -->
+      <div class="form-section">
+        <h3 class="section-title">Informações Pessoais</h3>
+        
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput [value]="userInfo.nome" readonly>
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-mail</mat-label>
+            <input matInput [value]="getUserEmail()" readonly>
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefone</mat-label>
+            <input matInput [value]="userInfo.telefone" readonly>
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Data de Cadastro</mat-label>
+            <input matInput [value]="userInfo.dataCadastro" readonly>
+            <mat-icon matSuffix>event</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Ações -->
+      <div class="actions-section">
+        <button mat-raised-button color="primary" class="edit-button">
+          <mat-icon>edit</mat-icon>
+          Editar Perfil
+        </button>
+        
+        <button mat-stroked-button color="warn" class="delete-button">
+          <mat-icon>delete</mat-icon>
+          Desativar Conta
+        </button>
+      </div>
+    </mat-card>
+
+    <!-- Template de carregamento -->
+    <ng-template #loadingCard>
+      <mat-card class="perfil-card loading-card">
+        <div class="loading-content">
+          <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+          <p>Carregando informações do perfil...</p>
+        </div>
+      </mat-card>
+    </ng-template>
+
+    <!-- Cards de estatísticas (se for barbeiro) -->
+    @if (userInfo !== null && isBarbeiro()) {
+    <div class="stats-section">
+      <mat-card class="stat-card">
+        <div class="stat-content">
+          <mat-icon class="stat-icon">visibility</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">1,234</span>
+            <span class="stat-label">Visualizações</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-content">
+          <mat-icon class="stat-icon">content_cut</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">87</span>
+            <span class="stat-label">Cortes Realizados</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    }
+  </div>
+     
+</div>
+<app-footer></app-footer>
