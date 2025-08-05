@@ -8,6 +8,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  min-height: calc(100vh - 160px); /* Compensar header fixo (80px) e footer (~80px) */
+  padding-top: 80px; /* Compensar altura do header fixo */
   
   // Background com a imagem bgEntrar.jpg
   background-image: url('/assets/bgEntrar.jpg');
@@ -35,6 +37,7 @@
   align-items: center;
   padding: 20px;
   width: 100%;
+  height: 100%;
   position: relative;
   z-index: 2;
 
@@ -94,5 +97,20 @@
         font-size: 24px;
       }
     }
+  }
+}
+
+// Responsividade para .content-wrapper
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding-top: 70px; /* Header menor em mobile */
+    min-height: calc(100vh - 140px);
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding-top: 60px; /* Header ainda menor em mobile pequeno */
+    min-height: calc(100vh - 120px);
   }
 }

@@ -4,5 +4,6 @@ export const environment = {
   authEndpoint: '/auth',
   barbeirosEndpoint: '/barbeiros',
   produtosEndpoint: '/produtos',
-  servicosEndpoint: '/servicos'
+  servicosEndpoint: '/servicos',
+  perfilEndpoint: '/perfil',
 };

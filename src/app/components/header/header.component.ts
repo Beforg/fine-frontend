@@ -43,4 +43,16 @@ export class HeaderComponent {
   closePerfilCard(): void {
     this.perfilCardOpen = false;
   }
+
+  goToHome(): void {
+    if (window.location.pathname === '/home') {
+      // Se já estiver na página inicial, não faz nada
+      return;
+    }
+    this.closeMobileMenu();
+    this.closePerfilCard();
+    // Redirecionar para a página inicial
+    window.location.href = '/home';
+  }
+
 }

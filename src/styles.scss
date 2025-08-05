@@ -14,7 +14,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif; 
   display: flex;
   flex-direction: column;
-  padding-top: 80px; /* Compensar altura do header fixo */
+  /* Removido padding-top global */
 }
 
 /* Garantir que o app-root ocupe toda a altura */
@@ -33,6 +33,18 @@ app-root {
 
 .content-wrapper {
   flex: 1;
+}
+
+/* Classe para páginas que precisam compensar o header fixo */
+.with-fixed-header {
+  padding-top: 80px;
+}
+
+/* Classe para páginas fullscreen (como login) */
+.fullscreen-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* =================================

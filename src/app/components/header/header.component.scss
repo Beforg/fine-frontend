@@ -24,7 +24,8 @@ $logo-size-mobile: 40px;
         display: flex;
         align-items: center;
         flex-shrink: 0;
-
+        cursor: pointer;
+        
         .header-logo {
             width: $logo-size;
             height: $logo-size;
