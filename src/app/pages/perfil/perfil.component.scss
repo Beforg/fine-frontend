@@ -418,4 +418,40 @@
       }
     }
   }
+
+  // Card de carregamento
+  .loading-card {
+    padding: 60px 32px;
+    text-align: center;
+
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+
+      .loading-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: $azul_principal;
+        animation: pulse 1.5s ease-in-out infinite alternate;
+      }
+
+      p {
+        margin: 0;
+        color: $cinza_medio;
+        font-size: 16px;
+      }
+    }
+
+    @keyframes pulse {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0.4;
+      }
+    }
+  }
 }

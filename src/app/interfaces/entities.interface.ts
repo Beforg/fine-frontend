@@ -23,9 +23,8 @@ export interface Servico {
     preco: number;
 }
 
-export interface Cliente {
-    id: number;
+export interface UserInfo {
     nome: string;
-    email: string;
+    telefone: string;
     dataCadastro: string;
 }

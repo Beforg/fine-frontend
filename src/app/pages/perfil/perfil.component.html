@@ -11,7 +11,7 @@
 
   <!-- Card principal do perfil -->
   <div class="perfil-content">
-    <mat-card class="perfil-card">
+    <mat-card class="perfil-card" *ngIf="userInfo !== null; else loadingCard">
       <!-- Avatar placeholder -->
       <div class="avatar-section">
         <div class="avatar-placeholder">
@@ -24,8 +24,8 @@
 
       <!-- Informações do usuário -->
       <div class="user-info">
-        <h2 class="user-name">João Silva</h2>
-        <p class="user-role">Cliente</p>
+        <h2 class="user-name">{{ userInfo.nome }}</h2>
+        <p class="user-role">{{ getRoleName() }}</p>
       </div>
 
       <!-- Formulário de dados -->
@@ -35,7 +35,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Nome Completo</mat-label>
-            <input matInput value="João Silva" readonly>
+            <input matInput [value]="userInfo.nome" readonly>
             <mat-icon matSuffix>person</mat-icon>
           </mat-form-field>
         </div>
@@ -43,7 +43,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>E-mail</mat-label>
-            <input matInput value="joao.silva@email.com" readonly>
+            <input matInput [value]="getUserEmail()" readonly>
             <mat-icon matSuffix>email</mat-icon>
           </mat-form-field>
         </div>
@@ -51,7 +51,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Telefone</mat-label>
-            <input matInput value="(11) 99999-9999" readonly>
+            <input matInput [value]="userInfo.telefone" readonly>
             <mat-icon matSuffix>phone</mat-icon>
           </mat-form-field>
         </div>
@@ -59,7 +59,7 @@
         <div class="form-group">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Data de Cadastro</mat-label>
-            <input matInput value="15/01/2024" readonly>
+            <input matInput [value]="userInfo.dataCadastro" readonly>
             <mat-icon matSuffix>event</mat-icon>
           </mat-form-field>
         </div>
@@ -79,8 +79,18 @@
       </div>
     </mat-card>
 
+    <!-- Template de carregamento -->
+    <ng-template #loadingCard>
+      <mat-card class="perfil-card loading-card">
+        <div class="loading-content">
+          <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+          <p>Carregando informações do perfil...</p>
+        </div>
+      </mat-card>
+    </ng-template>
+
     <!-- Cards de estatísticas (se for barbeiro) -->
-     @if (isBarber) {
+    @if (userInfo !== null && isBarbeiro()) {
     <div class="stats-section">
       <mat-card class="stat-card">
         <div class="stat-content">
