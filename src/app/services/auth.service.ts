@@ -163,6 +163,17 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
+  getHeaders(): {Authorization: string} {
+    const token = this.getToken();
+    if (!token) {
+      console.warn('🔍 Nenhum token encontrado para headers');
+      return {
+        Authorization: '' // Retorna um header vazio se não houver token
+      };
+    }
+    return { Authorization: `Bearer ${token}` };
+
+  }
   /**
    * Armazena o token
    */

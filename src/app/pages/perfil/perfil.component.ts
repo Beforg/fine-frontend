@@ -11,6 +11,8 @@ import { PerfilService } from '../../services/perfil.service';
 import { UserInfo } from '../../interfaces/entities.interface';
 import { AuthService } from '../../services/auth.service';
 import { UserRole } from '../../enums/user-role.enum';
+import { PerfilFormComponent } from "../../components/perfil/perfil-form/perfil-form.component";
+import { BarberStatsComponent } from "../../components/perfil/barber-stats/barber-stats.component";
 
 @Component({
   selector: 'app-perfil',
@@ -22,7 +24,9 @@ import { UserRole } from '../../enums/user-role.enum';
     MatFormFieldModule,
     MatInputModule,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    PerfilFormComponent,
+    BarberStatsComponent
 ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'

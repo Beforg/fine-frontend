@@ -1,0 +1,171 @@
+<app-header></app-header>
+
+<div class="agendamento-container">
+    <app-hero-section-agendamento></app-hero-section-agendamento>
+  <!-- Hero Section - Barbeiro Info -->
+  <!-- <section class="hero-section">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="page-title">Agendar Corte</h1>
+        <div class="barbeiro-info">
+          <div class="barbeiro-avatar">
+            <img src="/assets/tmp/barbeiro1.png" alt="Ralph Edwards" class="avatar-img">
+          </div>
+          <div class="barbeiro-details">
+            <h2 class="barbeiro-name">Ralph Edwards</h2>
+            <p class="barbeiro-stats">253 corte(s)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Form Section - Data Selection -->
+  <!-- <section class="form-section">
+    <div class="form-container">
+      <h3 class="section-title">Selecionar data</h3>
+      
+      <div class="date-input-group">
+        <label for="data-agendamento" class="input-label">Insira a data</label>
+        <div class="date-input-wrapper">
+          <input 
+            type="date" 
+            id="data-agendamento" 
+            class="date-input"
+            placeholder="mm/dd/yyyy">
+          <mat-icon class="input-icon">calendar_today</mat-icon>
+        </div>
+      </div>
+
+
+      <div class="services-section">
+        <h4 class="subsection-title">Selecione os serviços</h4>
+        <div class="service-item">
+          <mat-icon class="service-icon">content_cut</mat-icon>
+          <span class="service-name">Corte e Barba</span>
+          <span class="service-price">Preço: R$ 25,00</span>
+          <mat-checkbox class="service-checkbox"></mat-checkbox>
+        </div>
+        
+        <div class="service-item">
+          <mat-icon class="service-icon">face_retouching_natural</mat-icon>
+          <span class="service-name">Limpeza Facial</span>
+          <span class="service-price">Preço: R$ 15,00</span>
+          <mat-checkbox class="service-checkbox"></mat-checkbox>
+        </div>
+        
+        <div class="service-item">
+          <mat-icon class="service-icon">brush</mat-icon>
+          <span class="service-name">Aplicação Produto (Opcional)</span>
+          <span class="service-price">Preço: R$ 10,00</span>
+          <mat-checkbox class="service-checkbox"></mat-checkbox>
+        </div>
+      </div>
+
+      <div class="total-section">
+        <div class="total-line">
+          <span class="total-label">Total:</span>
+          <span class="total-price">R$ 35,00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="time-section">
+    <div class="time-container">
+      <h3 class="section-title">Horários do Dia:</h3>
+      
+      <div class="time-grid">
+        <div class="time-slot available" *ngFor="let horario of horariosDisponiveis">
+          <button class="time-button" type="button">
+            {{ formatTime(horario) }}
+          </button>
+        </div>
+      </div>
+
+     
+      <div class="time-table-section">
+        <h4 class="subsection-title">Tabela de Horários</h4>
+        <table class="time-table">
+          <thead>
+            <tr>
+              <th>Manhã</th>
+              <th>Tarde</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of getTimeTableRows()">
+              <td>
+                <button 
+                  *ngIf="row.manha" 
+                  class="table-time-button"
+                  [class.selected]="selectedTime === row.manha"
+                  (click)="selectTime(row.manha)">
+                  {{ formatTime(row.manha) }}
+                </button>
+              </td>
+              <td>
+                <button 
+                  *ngIf="row.tarde" 
+                  class="table-time-button"
+                  [class.selected]="selectedTime === row.tarde"
+                  (click)="selectTime(row.tarde)">
+                  {{ formatTime(row.tarde) }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="products-section">
+    <div class="products-container">
+      <h3 class="section-title">Produtos Adicionais</h3>
+      
+      <div class="product-item">
+        <div class="product-info">
+          <span class="product-name">Pomada Modeladora</span>
+          <span class="product-price">R$ 25,00</span>
+        </div>
+        <div class="product-controls">
+          <button class="quantity-btn" type="button">-</button>
+          <span class="quantity">1</span>
+          <button class="quantity-btn" type="button">+</button>
+        </div>
+      </div>
+
+      <div class="product-item">
+        <div class="product-info">
+          <span class="product-name">Óleo para Barba</span>
+          <span class="product-price">R$ 30,00</span>
+        </div>
+        <div class="product-controls">
+          <button class="quantity-btn" type="button">-</button>
+          <span class="quantity">0</span>
+          <button class="quantity-btn" type="button">+</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="action-section">
+    <div class="action-container">
+      <button class="confirm-button" mat-raised-button color="primary">
+        <mat-icon>check</mat-icon>
+        Confirmar Agendamento
+      </button>
+      
+      <button class="cancel-button" mat-stroked-button>
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+    </div>
+  </section> -->
+</div>
+
+<app-footer></app-footer>

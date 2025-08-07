@@ -25,7 +25,7 @@
             {{ barbeiro.visualizacoes }}
           </span>
         </div>
-        <button class="agendar-btn" mat-stroked-button color="primary">
+        <button [routerLink]="['/agendamento', barbeiro.barbeiroId]" class="agendar-btn" mat-stroked-button color="primary">
           <mat-icon>schedule</mat-icon>
           Agendar
         </button>
