@@ -1,0 +1,126 @@
+<section class="form-section">
+    <div class="form-container">
+      <h3 class="section-title">Selecionar data</h3>
+      
+      <div class="date-input-group">
+        <label for="data-agendamento" class="input-label">Insira a data</label>
+        <div class="date-input-wrapper">
+          <input 
+            type="date" 
+            id="data-agendamento" 
+            class="date-input"
+            placeholder="mm/dd/yyyy"
+            [(ngModel)]="selectedDate"
+            (ngModelChange)="onDateSelected($event)">
+          <mat-icon class="input-icon">calendar_today</mat-icon>
+        </div>
+        <!-- Mensagem de aviso quando data não estiver selecionada -->
+        <div class="date-info" *ngIf="!isDateSelected">
+          <small>Selecione uma data para começar!</small>
+        </div>
+      </div>
+      <div class="services-section">
+        <h4 class="subsection-title">Selecione os serviços</h4>
+        
+        <!-- Select para serviços -->
+        <div class="select-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Escolha um serviço</mat-label>
+            <mat-select 
+              (selectionChange)="addService($event.value)"
+              [disabled]="!isDateSelected"
+              (ngModelChange)="handleListarHorarios()">
+              <mat-option *ngFor="let servico of servicosDisponiveis" [value]="servico">
+                <div class="option-content">
+                  <span class="option-name">{{ servico.nome }}</span>
+                  <span class="option-price"> R$ {{ servico.preco.toFixed(2) }}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Serviços selecionados -->
+        <div class="selected-items" *ngIf="servicosSelecionados.length > 0">
+          <h5 class="selected-title">Serviços selecionados:</h5>
+          <div class="selected-item" *ngFor="let servico of servicosSelecionados; let i = index">
+            <span class="item-name">{{ servico.nome }}</span>
+            <span class="item-price">R$ {{ servico.preco.toFixed(2) }}</span>
+            <button 
+              type="button" 
+              class="remove-btn" 
+              (click)="removeService(i)"
+              mat-icon-button 
+              color="warn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Produtos -->
+      <div class="products-section">
+        <h4 class="subsection-title">Selecione os produtos (opcionais)</h4>
+        
+        <!-- Select para produtos -->
+        <div class="select-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Escolha um produto</mat-label>
+            <mat-select 
+              (selectionChange)="addProduct($event.value)"
+              [disabled]="!isDateSelected">
+              <mat-option *ngFor="let produto of produtosDisponiveis" [value]="produto">
+                <div class="option-content">
+                  <span class="option-name">{{ produto.nome }}</span>
+                  <span class="option-price"> R$ {{ produto.preco.toFixed(2) }}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Produtos selecionados -->
+        <div class="selected-items" *ngIf="produtosSelecionados.length > 0">
+          <h5 class="selected-title">Produtos selecionados:</h5>
+          <div class="selected-item" *ngFor="let produto of produtosSelecionados; let i = index">
+            <span class="item-name">{{ produto.nome }}</span>
+            <div class="quantity-controls">
+              <button 
+                type="button" 
+                class="quantity-btn" 
+                (click)="decreaseQuantity('produto', i)"
+                mat-icon-button>
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="quantity">{{ produto.quantidade }}</span>
+              <button 
+                type="button" 
+                class="quantity-btn" 
+                (click)="increaseQuantity('produto', i)"
+                mat-icon-button>
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <span class="item-price">R$ {{ (produto.preco * produto.quantidade).toFixed(2) }}</span>
+            <button 
+              type="button" 
+              class="remove-btn" 
+              (click)="removeProduct(i)"
+              mat-icon-button 
+              color="warn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="total-section">
+        <div class="total-line">
+          <span class="total-label">Total:</span>
+          <span class="total-price">R$ {{ totalGeral.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+    <hr class="divider">
+    <app-horarios [horariosDisponiveis]="horariosDisponiveis" (timeSelected)="onTimeSelected($event)"></app-horarios>
+  </section>
