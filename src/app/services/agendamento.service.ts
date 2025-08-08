@@ -16,7 +16,7 @@ export class AgendamentoService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
    criarAgendamento(agendamentoRequest: AgendamentoRequest): Observable<BackendResponse> {
-     return this.http.post<BackendResponse>(this.apiUrl, agendamentoRequest, { headers: this.authService.getHeaders() }).pipe(
+     return this.http.post<BackendResponse>(`${this.apiUrl}/agendar`, agendamentoRequest, { headers: this.authService.getHeaders() }).pipe(
        tap((response: BackendResponse) => {
          console.log('Agendamento criado com sucesso:', response);
        }),catchError((erros: HttpErrorResponse) => {
@@ -26,15 +26,15 @@ export class AgendamentoService {
      );
   }
 
-  listarHorariosDisponiveis(barbeiroId: number, data: Date, servicosIds: number[]): Observable<HorarioDisponivel[]> {
+  listarHorariosDisponiveis(barbeiroId: number, data: string, servicoIds: number[]): Observable<string[]> {
     const url = `${this.apiUrl}/horarios`;
     const params = {
       barbeiroId: barbeiroId.toString(),
-      data: data.toISOString(),
-      servicosIds: servicosIds.join(',')
+      data: data.toString(),
+      servicoIds: servicoIds.join(',')
     };
-    return this.http.get<HorarioDisponivel[]>(url, { headers: this.authService.getHeaders(), params }).pipe(
-      tap((response: HorarioDisponivel[]) => {
+    return this.http.get<string[]>(url, { params }).pipe(
+      tap((response: string[]) => {
         console.log('Horários disponíveis:', response);
       }),
       catchError((erros: HttpErrorResponse) => {

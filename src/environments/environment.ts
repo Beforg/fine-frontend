@@ -6,5 +6,5 @@ export const environment = {
   produtosEndpoint: '/produtos',
   servicosEndpoint: '/servicos',
   perfilEndpoint: '/perfil',
-  agendamentoEndpoint: '/agendamento'
+  agendamentoEndpoint: '/agendamentos'
 };

@@ -8,11 +8,13 @@ import { AgendamentoService } from '../../services/agendamento.service';
 import { HeaderComponent } from "../../components/header/header.component";
 import { FooterComponent } from "../../components/footer/footer.component";
 import { HeroSectionComponent } from "../../components/agendamento/hero-section/hero-section.component";
+import { FormAgendamentoComponent } from "../../components/agendamento/form-agendamento/form-agendamento.component";
+import { ProdutoService } from '../../services/produto.service';
+import { ServicoService } from '../../services/servico.service';
+import { AgendamentoRequest, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../interfaces/entities.interface';
+import { PrimaryButtonComponent } from '../../components/primary-button/primary-button.component';
 
-interface TimeTableRow {
-  manha?: string;
-  tarde?: string;
-}
+
 
 @Component({
   selector: 'app-agendamento',
@@ -23,40 +25,44 @@ interface TimeTableRow {
     MatButtonModule,
     HeaderComponent,
     FooterComponent,
-    HeroSectionComponent
+    HeroSectionComponent,
+    FormAgendamentoComponent,
+    PrimaryButtonComponent
 ],
   templateUrl: './agendamento.component.html',
   styleUrl: './agendamento.component.scss'
 })
 export class AgendamentoComponent implements OnInit {
   barbeiroId: string | null = null;
-  selectedTime: string | null = null;
-  
-  // Mock data baseado nos horários que você forneceu
-  horariosDisponiveis: string[] = [
-    "10:30:00",
-    "11:00:00", 
-    "11:30:00",
-    "12:00:00",
-    "12:30:00",
-    "13:00:00",
-    "13:30:00",
-    "14:00:00",
-    "14:30:00",
-    "15:00:00",
-    "15:30:00",
-    "16:00:00",
-    "16:30:00",
-    "17:00:00",
-    "17:30:00"
-  ];
 
-  constructor(private route: ActivatedRoute, private agendamentoService: AgendamentoService) {
+  
+  produtosDisponiveis: ProdutoAgendamento[] = [];
+  servicosDisponiveis: ServicoAgendamento[] = [];
+
+  //------- Informações do Agendamento
+
+  servicosIds: number[] = [];
+  produtos: ItemProduto[] = []
+  selectedTime: string | null = null;
+  selectedDate: string | null = null;
+
+  //--------------
+  isTimeSelected: boolean = false;
+  isLoading: boolean = false;
+
+  // Mock data baseado nos horários que você forneceu
+  horariosDisponiveis: string[] = [];
+
+
+
+  constructor(private route: ActivatedRoute, private agendamentoService: AgendamentoService, private servicoService: ServicoService, 
+      private produtoService: ProdutoService) {
     this.barbeiroId = this.route.snapshot.paramMap.get('barbeiroId');
   }
 
   ngOnInit(): void {
     // Pegar o ID dos query parameters se não estiver nos route params
+  
     this.route.queryParams.subscribe(params => {
       if (params['barbeiroId']) {
         this.barbeiroId = params['barbeiroId'];
@@ -64,39 +70,98 @@ export class AgendamentoComponent implements OnInit {
     });
     
     console.log('Barbeiro ID:', this.barbeiroId);
+    this.getProdutosDisponiveis();
+    this.getServicosDisponiveis();
+ 
   }
 
-  formatTime(time: string): string {
-    // Converter "10:30:00" para "10:30"
-    return time.substring(0, 5);
+  getProdutosIdsQuantidade(produtos: ItemProduto[]): void {
+    this.produtos = produtos;
+    console.log('Produtos e suas quantidades:', this.produtos);
   }
 
-  selectTime(time: string): void {
+  getSelectedTime(time: string): void {
+    this.isTimeSelected = true;
     this.selectedTime = time;
-    console.log('Horário selecionado:', time);
+    console.log('Horário selecionado:', this.selectedTime);
   }
 
-  getTimeTableRows(): TimeTableRow[] {
-    const rows: TimeTableRow[] = [];
-    const manhaTimes = this.horariosDisponiveis.filter(time => {
-      const hour = parseInt(time.split(':')[0]);
-      return hour < 13;
-    });
-    
-    const tardeTimes = this.horariosDisponiveis.filter(time => {
-      const hour = parseInt(time.split(':')[0]);
-      return hour >= 13;
-    });
+  onListarHorarios(dadosAgendamento: { data: string; servicosIds: number[], produtos: ItemProduto[] }): void {
+    console.log('Recebido do form:', dadosAgendamento);
 
-    const maxLength = Math.max(manhaTimes.length, tardeTimes.length);
-    
-    for (let i = 0; i < maxLength; i++) {
-      rows.push({
-        manha: manhaTimes[i] || undefined,
-        tarde: tardeTimes[i] || undefined
+    const { data, servicosIds, produtos } = dadosAgendamento;
+    this.selectedDate = data;
+    this.produtos = produtos;
+    this.servicosIds = servicosIds;
+
+    // Chamar o serviço para buscar horários com os parâmetros
+    this.agendamentoService.listarHorariosDisponiveis(Number(this.barbeiroId), data, servicosIds).subscribe({
+      next: (horarios) => {
+        this.horariosDisponiveis = horarios;
+        console.log('Horários disponíveis atualizados:', horarios);
+      },
+      error: (error) => {
+        console.error('Erro ao buscar horários:', error);
+      }
+    });
+  }
+
+  getProdutosDisponiveis(): void {
+      this.produtoService.getProdutos().subscribe(produtos => {
+        this.produtosDisponiveis = produtos.map(produto => ({
+          id: produto.id,
+          nome: produto.nome,
+          preco: produto.preco,
+          quantidade: 0
+        }));
       });
     }
-    
-    return rows;
-  }
+  
+    getServicosDisponiveis(): void {
+      this.servicoService.getServicos().subscribe(servicos => {
+        this.servicosDisponiveis = servicos.map(servico => ({
+          id: servico.id,
+          nome: servico.nome,
+          preco: servico.preco,
+          duracao: servico.duracao
+        }));
+      })
+    }
+
+    submitAgendamento(): void {
+      if (this.selectedTime) {
+
+        this.isLoading = true;
+
+        setTimeout(() => {
+          console.log('Simulando delay de 2 segundos para o agendamento...');
+        }, 2000);
+
+        const dataHora = `${this.selectedDate}T${this.selectedTime}`;
+        const novoAgendamento: AgendamentoRequest = {
+          barbeiroId: Number(this.barbeiroId),
+          servicoIds: this.servicosIds,
+          dataHoraInicio: dataHora,
+          produtos: this.produtos,
+          observacoes: "Nenhuma observação",
+        }
+        console.log('Dados do agendamento:', novoAgendamento);
+        this.agendamentoService.criarAgendamento(novoAgendamento).subscribe({
+          next: (response) => {
+            console.log('Agendamento confirmado para o horário:', this.selectedTime);
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Erro ao criar agendamento:', error);
+            this.isLoading = false;
+          }
+        });
+      } else {
+        console.log('Nenhum horário selecionado.');
+      }
+    }
+
+    cancelAgendamento(): void {
+
+    }
 }

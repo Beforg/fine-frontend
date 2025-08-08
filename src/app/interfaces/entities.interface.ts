@@ -14,6 +14,21 @@ export interface Produto {
     descricao: string;
     preco: number;
     urlImagem: string;
+    // estoque
+}
+
+export interface ProdutoAgendamento {
+    id: number;
+    nome: string;
+    preco: number;
+    quantidade: number;
+}
+
+export interface ServicoAgendamento {
+    id: number;
+    nome: string;
+    preco: number;
+    duracao: number;
 }
 
 export interface Servico {
@@ -21,6 +36,7 @@ export interface Servico {
     nome: string;
     descricao: string;
     preco: number;
+    duracao: number;
 }
 
 export interface UserInfo {
@@ -42,7 +58,7 @@ export interface HorarioDisponivel {
 export interface AgendamentoRequest {
   barbeiroId: number;
   servicoIds: number[];
-  dataHoraInicio: Date; // Ou 'Date', dependendo de como você vai usar
+  dataHoraInicio: string; // Ou 'Date', dependendo de como você vai usar
   produtos?: ItemProduto[]; // O '?' indica que é opcional
   observacoes: string;
 }
