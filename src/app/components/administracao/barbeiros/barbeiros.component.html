@@ -1,0 +1,163 @@
+<div class="barbeiros-container">
+    <div class="header-container">
+        <h1>Gerenciamento de Barbeiros</h1>
+        <button class="btn-adicionar" (click)="adicionarBarbeiro()">
+            <mat-icon>add</mat-icon>
+            Adicionar Barbeiro
+        </button>
+    </div>
+    
+    <div class="table-container">
+        <table class="barbeiros-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Visualizações</th>
+                    <th>Cortes Realizados</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let barbeiro of barbeiros" class="table-row">
+                    <td class="td-id">#{{ barbeiro.barbeiroId }}</td>
+                    <td class="td-foto">
+                        <div class="foto-container">
+                            <img 
+                                *ngIf="barbeiro.urlFoto" 
+                                [src]="barbeiro.urlFoto" 
+                                [alt]="barbeiro.nome"
+                                class="barbeiro-foto">
+                            <div *ngIf="!barbeiro.urlFoto" class="foto-placeholder">
+                                <mat-icon>person</mat-icon>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="td-nome">
+                        <div class="barbeiro-info">
+                            <span class="barbeiro-nome">{{ barbeiro.nome }}</span>
+                        </div>
+                    </td>
+                    <td class="td-telefone">
+                        <span class="telefone-valor">{{ barbeiro.telefone }}</span>
+                    </td>
+                    <td class="td-visualizacoes">
+                        <span class="stat-valor">{{ barbeiro.visualizacoes }}</span>
+                    </td>
+                    <td class="td-cortes">
+                        <span class="stat-valor">{{ barbeiro.corteRealizados }}</span>
+                    </td>
+                    <td class="td-actions">
+                        <div class="actions-container">
+                            <button class="btn-action btn-edit" title="Editar" (click)="editarBarbeiro(barbeiro)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="btn-action btn-delete" title="Remover" (click)="removerBarbeiro(barbeiro.barbeiroId)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensagem quando não há barbeiros -->
+        <div *ngIf="!barbeiros || barbeiros.length === 0" class="no-data">
+            <mat-icon>person_off</mat-icon>
+            <p>Nenhum barbeiro cadastrado</p>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Barbeiro -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="fecharModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ isEditing ? 'Editar Barbeiro' : 'Adicionar Novo Barbeiro' }}</h2>
+                <button class="btn-close" (click)="fecharModal()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <form class="barbeiro-form" (ngSubmit)="salvarBarbeiro()">
+                <div class="form-group">
+                    <label for="nome">Nome do Barbeiro *</label>
+                    <input 
+                        type="text" 
+                        id="nome" 
+                        [(ngModel)]="currentBarbeiro.nome" 
+                        name="nome"
+                        required
+                        placeholder="Digite o nome do barbeiro">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone *</label>
+                    <input 
+                        type="tel" 
+                        id="telefone" 
+                        [(ngModel)]="currentBarbeiro.telefone" 
+                        name="telefone"
+                        required
+                        placeholder="(11) 99999-9999">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="visualizacoes">Visualizações</label>
+                        <input 
+                            type="number" 
+                            id="visualizacoes" 
+                            [(ngModel)]="currentBarbeiro.visualizacoes" 
+                            name="visualizacoes"
+                            min="0"
+                            placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="corteRealizados">Cortes Realizados</label>
+                        <input 
+                            type="number" 
+                            id="corteRealizados" 
+                            [(ngModel)]="currentBarbeiro.corteRealizados" 
+                            name="corteRealizados"
+                            min="0"
+                            placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="urlFoto">URL da Foto</label>
+                    <input 
+                        type="url" 
+                        id="urlFoto" 
+                        [(ngModel)]="currentBarbeiro.urlFoto" 
+                        name="urlFoto"
+                        placeholder="https://exemplo.com/foto.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="urlBackground">URL do Background</label>
+                    <input 
+                        type="url" 
+                        id="urlBackground" 
+                        [(ngModel)]="currentBarbeiro.urlBackground" 
+                        name="urlBackground"
+                        placeholder="https://exemplo.com/background.jpg">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar" (click)="fecharModal()">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-salvar">
+                        <mat-icon>save</mat-icon>
+                        {{ isEditing ? 'Atualizar' : 'Adicionar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

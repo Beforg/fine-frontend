@@ -1,0 +1,20 @@
+<div class="gerenciamento-conteiner" *ngIf="showGerenciamento">
+    <div class="filtros-header">
+        <div class="filtros-container">  
+            <a (click)="toggleProdutos()">Produtos</a>
+            <a (click)="toggleServicos()">Serviços</a>
+            <a (click)="toggleBarbeiros()">Barbeiros</a>
+        </div>
+    </div>
+    <div class="gerenciamento-body">
+        <div class="gerenciamento-produtos" *ngIf="showProdutos">
+            <app-produtos-gerenciamento></app-produtos-gerenciamento>
+        </div>
+        <div class="gerenciamento-servicos" *ngIf="showServicos">
+            <app-servicos-gerenciamento></app-servicos-gerenciamento>
+        </div>
+        <div class="gerenciamento-barbeiros" *ngIf="showBarbeiros">
+            <app-barbeiros-gerenciamento></app-barbeiros-gerenciamento>
+        </div>
+    </div>
+</div>

@@ -21,6 +21,7 @@ export class CardPsComponent {
   @Input() preco!: number;
   @Input() urlImagem!: string;
   @Input() tipo: 'produto' | 'servico' = 'produto';
+  @Input() tempoEstimado?: number; // Tempo estimado em minutos, aplicável apenas para serviços
   
   onCardClick(): void {
     console.log(`Card clicado: ${this.nome} (${this.tipo})`);

@@ -6,6 +6,7 @@ import { BackendResponse } from '../interfaces/response.interface';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { catchError, tap } from 'rxjs';
+import { AgendamentoStatus } from '../enums/agendamento-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,39 @@ export class AgendamentoService {
         throw erros;
       })
     );
+  }
+
+  listarAgendamentos(data: {id: string, page: string, size: string}): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/listar/${data.id}?page=${data.page}&size=${data.size}`, { headers: this.authService.getHeaders() }).pipe(
+      tap((response: any) => {
+        console.log('Agendamentos listados com sucesso:', response);
+      }),
+      catchError((erros: HttpErrorResponse) => {
+        console.error('Erro ao listar agendamentos:', erros);
+        throw erros;
+      })
+    );
+  }
+
+  alterarStatusAgendamento(status: AgendamentoStatus, id: string): Observable<any> {
+    console.log('Headers sendo enviados:', this.authService.getHeaders());
+    console.log('Status:', status, 'ID:', id);
+    
+    const headers = this.authService.getHeaders();
+    return this.http.put<any>(`${this.apiUrl}/status/${id}?status=${status}`, {}, { headers }).pipe(
+      tap((response: any) => {
+        console.log('Status do agendamento alterado com sucesso:', response);
+      }),
+      catchError((erros: HttpErrorResponse) => {
+        console.error('Erro ao alterar status do agendamento:', erros);
+        console.error('Detalhes do erro:', {
+          status: erros.status,
+          statusText: erros.statusText,
+          error: erros.error,
+          url: erros.url
+        });
+        throw erros;
+      })
+    );  
   }
 }

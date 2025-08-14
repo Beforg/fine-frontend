@@ -123,7 +123,7 @@ export class AgendamentoComponent implements OnInit {
           id: servico.id,
           nome: servico.nome,
           preco: servico.preco,
-          duracao: servico.duracao
+          duracaoMinutos: servico.duracaoMinutos
         }));
       })
     }

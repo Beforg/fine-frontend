@@ -10,7 +10,9 @@
     <h4 class="card-title">{{ nome }}</h4>
     <p class="card-description">{{ descricao }}</p>
     <div class="card-footer">
-      <div class="card-price">R$ {{ preco | number:'1.2-2' }}</div>
+      <div class="card-price">R$ {{ preco | number:'1.2-2' }}
+        <span class="card-service-time">{{ tipo === 'servico' ? tempoEstimado + ' min' : '' }}</span>
+      </div>
       <button 
         class="card-action-btn" 
         mat-stroked-button 

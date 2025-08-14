@@ -28,7 +28,7 @@ export interface ServicoAgendamento {
     id: number;
     nome: string;
     preco: number;
-    duracao: number;
+    duracaoMinutos: number;
 }
 
 export interface Servico {
@@ -36,7 +36,7 @@ export interface Servico {
     nome: string;
     descricao: string;
     preco: number;
-    duracao: number;
+    duracaoMinutos: number;
 }
 
 export interface UserInfo {
@@ -61,4 +61,12 @@ export interface AgendamentoRequest {
   dataHoraInicio: string; // Ou 'Date', dependendo de como você vai usar
   produtos?: ItemProduto[]; // O '?' indica que é opcional
   observacoes: string;
+}
+
+export interface Agendamento {
+  id: number;
+  nomeCliente: string;
+  nomeBarbeiro: string;
+  servicos: ServicoAgendamento[];
+  produtos?: ItemProduto[];
 }

@@ -20,14 +20,20 @@
   
   <!-- Navigation Links (desktop) -->
   <nav class="nav-links desktop-nav">
-    <a routerLink="/products" class="nav-link">
+    <!-- <a routerLink="/products" class="nav-link">
       <mat-icon>shopping_bag</mat-icon>
       Produtos
     </a>
     <a routerLink="/services" class="nav-link">
       <mat-icon>content_cut</mat-icon>
       Serviços
-    </a>
+    </a> -->
+    @if (isAdmin() || isBarbeiro()) {
+      <a routerLink="/admin" class="nav-link">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Gerenciamento
+      </a>
+    }
     @if (isLoggedIn()) {
       <button class="nav-link profile-button" (click)="togglePerfilCard()">
         <mat-icon>account_circle</mat-icon>
