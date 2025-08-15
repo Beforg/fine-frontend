@@ -318,6 +318,26 @@
             .form-group {
                 margin-bottom: 1.5rem;
 
+                            .form-group-checkbox {
+                margin-bottom: 2rem;
+
+                .checkbox-label {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                    font-weight: 500;
+                    color: #2c3e50;
+
+                    input[type="checkbox"] {
+                        margin-right: 0.75rem;
+                        width: 18px;
+                        height: 18px;
+                        accent-color: #3498db;
+                    }
+                }
+            }
+
+
                 label {
                     display: block;
                     margin-bottom: 0.5rem;
@@ -485,5 +505,187 @@
     to {
         opacity: 1;
         transform: scale(1) translateY(0);
+    }
+}
+
+// =============================================
+// SEÇÃO DE PREVIEW DAS FOTOS
+// =============================================
+.photos-preview-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.photo-preview-container {
+    h3 {
+        margin: 0 0 1rem 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #495057;
+        text-align: center;
+    }
+}
+
+.photo-preview {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px dashed #ced4da;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-color: $azul_principal;
+    }
+
+    &.background-preview {
+        height: 100px;
+    }
+}
+
+.preview-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .btn-remove-photo {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 24px;
+        height: 24px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(231, 76, 60, 0.9);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+
+        &:hover {
+            background: #e74c3c;
+            transform: scale(1.1);
+        }
+    }
+}
+
+.no-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6c757d;
+    background: #f8f9fa;
+
+    mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.5;
+    }
+
+    span {
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+}
+
+.upload-controls {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-upload {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, $azul_principal, lighten($azul_principal, 10%));
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    mat-icon {
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba($azul_principal, 0.3);
+        background: linear-gradient(135deg, darken($azul_principal, 5%), $azul_principal);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// =============================================
+// RESPONSIVIDADE PARA UPLOAD
+// =============================================
+@media (max-width: 768px) {
+    .photos-preview-section {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .photo-preview {
+        height: 120px;
+
+        &.background-preview {
+            height: 80px;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .photos-preview-section {
+        padding: 0.75rem;
+        gap: 1rem;
+    }
+
+    .photo-preview {
+        height: 100px;
+
+        &.background-preview {
+            height: 60px;
+        }
+    }
+
+    .btn-upload {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
 }

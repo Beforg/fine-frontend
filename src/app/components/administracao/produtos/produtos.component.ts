@@ -1,18 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { ProdutoService } from '../../../services/produto.service';
+import { NotificationService } from '../../../services/notification.service';
+import { ImageService } from '../../../services/image.service';
+import { CadastroProduto, Produto } from '../../../interfaces/entities.interface';
 
 // Interface para o produto
-interface Produto {
-  id: number;
-  nome: string;
-  estoque: number;
-  preco: number;
-  descricao?: string;
-  ativo: boolean;
-}
 
 @Component({
   selector: 'app-produtos-gerenciamento',
@@ -27,6 +23,18 @@ export class ProdutosComponent implements OnInit {
   showModal: boolean = false;
   isEditing: boolean = false;
   currentProduto: Produto = this.getEmptyProduto();
+  
+  // Upload de imagem
+  selectedImageFile: File | null = null;
+  previewImageUrl: string | null = null;
+
+  constructor(
+    private produtoService: ProdutoService,
+    private notificationService: NotificationService,
+    private imageService: ImageService
+  ) {
+    
+  }
 
   ngOnInit(): void {
     this.carregarProdutos();
@@ -39,46 +47,16 @@ export class ProdutosComponent implements OnInit {
       estoque: 0,
       preco: 0,
       descricao: '',
+      urlImagem: '',
       ativo: true
     };
   }
 
   carregarProdutos(): void {
     // Mock data - substituir pela chamada ao serviço
-    this.produtos = [
-      {
-        id: 1,
-        nome: 'Shampoo Premium',
-        estoque: 25,
-        preco: 35.90,
-        descricao: 'Shampoo para cabelos oleosos',
-        ativo: true
-      },
-      {
-        id: 2,
-        nome: 'Cera Modeladora',
-        estoque: 5,
-        preco: 22.50,
-        descricao: 'Cera para fixação de cabelo',
-        ativo: true
-      },
-      {
-        id: 3,
-        nome: 'Gel Fixador',
-        estoque: 30,
-        preco: 18.90,
-        descricao: 'Gel para fixação forte',
-        ativo: true
-      },
-      {
-        id: 4,
-        nome: 'Produto Descontinuado',
-        estoque: 0,
-        preco: 15.00,
-        descricao: 'Produto fora de linha',
-        ativo: false
-      }
-    ];
+    this.produtoService.getProdutos().subscribe(produtos => {
+      this.produtos = produtos;
+    });
   }
 
   // =============================================
@@ -90,53 +68,63 @@ export class ProdutosComponent implements OnInit {
     if (produto) {
       this.isEditing = true;
       this.currentProduto = { ...produto }; // Copia para não alterar o original
+      // Definir preview com a URL existente
+      this.previewImageUrl = produto.urlImagem || null;
     } else {
       this.isEditing = false;
       this.currentProduto = this.getEmptyProduto();
+      // Limpar preview
+      this.previewImageUrl = null;
     }
+    
+    // Limpar arquivo selecionado
+    this.selectedImageFile = null;
   }
 
   fecharModal(): void {
     this.showModal = false;
     this.currentProduto = this.getEmptyProduto();
     this.isEditing = false;
+    // Limpar uploads e preview
+    this.selectedImageFile = null;
+    this.previewImageUrl = null;
   }
 
-  salvarProduto(): void {
-    // Validações básicas
-    if (!this.currentProduto.nome.trim()) {
-      alert('Nome do produto é obrigatório!');
-      return;
-    }
+  // salvarProduto(): void {
+  //   // Validações básicas
+  //   if (!this.currentProduto.nome.trim()) {
+  //     alert('Nome do produto é obrigatório!');
+  //     return;
+  //   }
 
-    if (this.currentProduto.preco <= 0) {
-      alert('Preço deve ser maior que zero!');
-      return;
-    }
+  //   if (this.currentProduto.preco <= 0) {
+  //     alert('Preço deve ser maior que zero!');
+  //     return;
+  //   }
 
-    if (this.currentProduto.estoque < 0) {
-      alert('Estoque não pode ser negativo!');
-      return;
-    }
+  //   if (this.currentProduto.estoque < 0) {
+  //     alert('Estoque não pode ser negativo!');
+  //     return;
+  //   }
 
-    if (this.isEditing) {
-      // Atualizar produto existente
-      const index = this.produtos.findIndex(p => p.id === this.currentProduto.id);
-      if (index !== -1) {
-        this.produtos[index] = { ...this.currentProduto };
-        console.log('Produto atualizado:', this.currentProduto);
-      }
-    } else {
-      // Adicionar novo produto
-      const novoId = Math.max(...this.produtos.map(p => p.id)) + 1;
-      const novoProduto = { ...this.currentProduto, id: novoId };
-      this.produtos.push(novoProduto);
-      console.log('Novo produto adicionado:', novoProduto);
-    }
+  //   if (this.isEditing) {
+  //     // Atualizar produto existente
+  //     const index = this.produtos.findIndex(p => p.id === this.currentProduto.id);
+  //     if (index !== -1) {
+  //       this.produtos[index] = { ...this.currentProduto };
+  //       console.log('Produto atualizado:', this.currentProduto);
+  //     }
+  //   } else {
+  //     // Adicionar novo produto
+  //     const novoId = Math.max(...this.produtos.map(p => p.id)) + 1;
+  //     const novoProduto = { ...this.currentProduto, id: novoId };
+  //     this.produtos.push(novoProduto);
+  //     console.log('Novo produto adicionado:', novoProduto);
+  //   }
 
-    this.fecharModal();
-    // Aqui você faria a chamada para o serviço salvar no backend
-  }
+  //   this.fecharModal();
+  //   // Aqui você faria a chamada para o serviço salvar no backend
+  // }
 
   editarProduto(produto: Produto): void {
     console.log('Editando produto:', produto);
@@ -160,12 +148,108 @@ export class ProdutosComponent implements OnInit {
     this.abrirModal();
   }
 
+  salvarProduto(): void {
+    if (this.isEditing) {
+      // Upload da imagem se foi selecionada
+      if (this.selectedImageFile) {
+        const imageUrl = this.imageService.uploadProdutoPhoto(this.selectedImageFile, this.currentProduto.id);
+        this.currentProduto.urlImagem = imageUrl;
+      }
+
+      this.produtoService.editarProduto(this.currentProduto).subscribe(response => {
+        if (response) {
+          this.carregarProdutos();
+          this.notificationService.success(`Produto "${this.currentProduto.nome}" editado com sucesso!`);
+        } else {
+          this.notificationService.error(response.mensagem || 'Erro ao editar produto');
+        }
+      });
+    } else {
+      const novoProduto: CadastroProduto = {
+        nome: this.currentProduto.nome,
+        preco: this.currentProduto.preco,
+        estoque: this.currentProduto.estoque,
+        descricao: this.currentProduto.descricao,
+        urlImagem: this.currentProduto.urlImagem || '/fine-logo.png'
+      }
+      this.produtoService.cadastrarProduto(novoProduto).subscribe(response => {
+        if (response.httpStatus === "CREATED") {
+          this.carregarProdutos();
+          
+          // Fazer upload da imagem após criar o produto
+          if (this.selectedImageFile) {
+            // Usar timestamp como ID temporário para o nome do arquivo
+            const tempId = Date.now();
+            const imageUrl = this.imageService.uploadProdutoPhoto(this.selectedImageFile, tempId);
+            console.log(`Imagem salva para produto: ${imageUrl}`);
+          }
+          
+          this.notificationService.success(`Produto "${this.currentProduto.nome}" cadastrado com sucesso!`);
+        } else {
+          this.notificationService.error(response.message || 'Erro ao cadastrar produto');
+        }
+      });
+    }
+
+    this.fecharModal();
+  }
+
   // =============================================
   // MÉTODOS AUXILIARES
   // =============================================
   toggleStatus(produto: Produto): void {
-    produto.ativo = !produto.ativo;
-    console.log(`Status do produto ${produto.nome} alterado para: ${produto.ativo ? 'Ativo' : 'Inativo'}`);
-    // Implementar chamada ao serviço para atualizar no backend
+    const novoStatus = !produto.ativo;
+    const statusTexto = novoStatus ? 'ativado' : 'desativado';
+    
+    this.produtoService.editarProduto({ ...produto, ativo: novoStatus }).subscribe(response => {
+      if (response) {
+        this.carregarProdutos();
+        this.notificationService.success(`Produto "${produto.nome}" ${statusTexto} com sucesso!`);
+      } else {
+        this.notificationService.error(response.mensagem || 'Erro ao alterar status do produto');
+      }
+    });
+  }
+
+  // =============================================
+  // MÉTODOS DE UPLOAD DE IMAGEM
+  // =============================================
+  
+  // Método para selecionar imagem do produto
+  onImageSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const validation = this.imageService.validateImageFile(file, 5);
+      if (!validation.valid) {
+        this.notificationService.validationError(validation.error!);
+        return;
+      }
+
+      this.selectedImageFile = file;
+      
+      // Criar preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImageUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Método para remover imagem
+  removerImagem(): void {
+    this.selectedImageFile = null;
+    this.previewImageUrl = null;
+    this.currentProduto.urlImagem = '';
+    
+    // Limpar input
+    const imageInput = document.getElementById('imageInput') as HTMLInputElement;
+    if (imageInput) imageInput.value = '';
+  }
+
+  // Método para abrir seletor de arquivo
+  abrirSeletorImagem(): void {
+    const imageInput = document.getElementById('imageInput') as HTMLInputElement;
+    if (imageInput) imageInput.click();
   }
 }

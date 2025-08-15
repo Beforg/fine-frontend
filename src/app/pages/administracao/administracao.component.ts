@@ -7,6 +7,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { AuthService } from '../../services/auth.service';
 import { SidebarComponent } from "../../components/administracao/sidebar/sidebar.component";
 import { MainComponent } from "../../components/administracao/main/main.component";
+import { UserRole } from '../../enums/user-role.enum';
 
 @Component({
   selector: 'app-administracao',
@@ -54,9 +55,10 @@ export class AdministracaoComponent implements OnInit {
   }
 
   loadUserInfo(): void {
-    // Pegar informações do usuário (implementar conforme seu AuthService)
-    this.userName = 'Fulano'; // Temporário
-    this.userRole = 'ADMIN'; // Temporário
+    const currentUser = this.authService.getCurrentUser();
+    this.userName = currentUser.name;
+    this.userRole = currentUser.role;
+    
   }
 
   navigateToGerenciamento(): void {

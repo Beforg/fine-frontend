@@ -3,7 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { Barbeiro } from '../../../interfaces/entities.interface';
+import { Barbeiro, CadastroBarbeiro, EditarBarbeiro } from '../../../interfaces/entities.interface';
+import { BarbeiroService } from '../../../services/barbeiro.service';
+import { AuthService } from '../../../services/auth.service';
+import { NotificationService } from '../../../services/notification.service';
+import { UserRole } from '../../../enums/user-role.enum';
+import { ImageService } from '../../../services/image.service';
 
 @Component({
   selector: 'app-barbeiros-gerenciamento',
@@ -17,6 +22,27 @@ export class BarbeirosComponent implements OnInit {
   showModal: boolean = false;
   isEditing: boolean = false;
   currentBarbeiro: Barbeiro = this.getEmptyBarbeiro();
+  //arquivos para enviar
+  selectedFotoFile: File | null = null;
+  selectedBackgroundFile: File | null = null;
+  // URLs de preview
+  previewFotoUrl: string | null = null;
+  previewBackgroundUrl: string | null = null;
+  
+  // Campos adicionais para cadastro
+  cadastroEmail: string = '';
+  cadastroSenha: string = '';
+  cadastroEspecialidade: string = '';
+  cadastroBio: string = '';
+
+  constructor(
+    private barbeiroService: BarbeiroService, 
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private imageService: ImageService
+  ) {
+    
+  }
 
   ngOnInit(): void {
     this.carregarBarbeiros();
@@ -28,45 +54,33 @@ export class BarbeirosComponent implements OnInit {
       nome: '',
       telefone: '',
       visualizacoes: 0,
-      corteRealizados: 0,
+      cortesRealizados: 0,
       urlFoto: '',
-      urlBackground: ''
+      urlBackground: '',
+      bio: '',
+      especialidade: '',
+      ativo: true
     };
   }
 
   carregarBarbeiros(): void {
-    // Mock data - substituir pela chamada ao serviço
-    this.barbeiros = [
-      {
-        barbeiroId: 1,
-        nome: 'João Silva',
-        telefone: '(11) 99999-9999',
-        visualizacoes: 1250,
-        corteRealizados: 340,
-        urlFoto: 'assets/tmp/barbeiro1.png',
-        urlBackground: 'assets/tmp/bgBarbeiro1.png'
-      },
-      {
-        barbeiroId: 2,
-        nome: 'Pedro Santos',
-        telefone: '(11) 88888-8888',
-        visualizacoes: 890,
-        corteRealizados: 215,
-        urlFoto: '',
-        urlBackground: ''
-      },
-      {
-        barbeiroId: 3,
-        nome: 'Carlos Oliveira',
-        telefone: '(11) 77777-7777',
-        visualizacoes: 2100,
-        corteRealizados: 567,
-        urlFoto: '',
-        urlBackground: ''
+    // Carregando barbeiros do backend
+    this.barbeiroService.getBarbeiros().subscribe(barbeiros => {
+      if (!this.isAdmin()) {
+        this.barbeiros = barbeiros.filter(b => b.nome == this.authService.getCurrentUser().name);
+      } else {
+        this.barbeiros = barbeiros;
       }
-    ];
+    
+    });
   }
 
+  isAdmin(): boolean {
+    if (this.authService.isAuthenticated()) {
+      return this.authService.getCurrentUser().role === UserRole.ADMIN;
+    }
+    return false;
+  }
   // =============================================
   // MODAL E FORMULÁRIO
   // =============================================
@@ -76,47 +90,169 @@ export class BarbeirosComponent implements OnInit {
     if (barbeiro) {
       this.isEditing = true;
       this.currentBarbeiro = { ...barbeiro }; // Copia para não alterar o original
+      // Definir previews com as URLs existentes
+      this.previewFotoUrl = barbeiro.urlFoto || null;
+      this.previewBackgroundUrl = barbeiro.urlBackground || null;
     } else {
       this.isEditing = false;
       this.currentBarbeiro = this.getEmptyBarbeiro();
+      // Limpar campos de cadastro
+      this.cadastroEmail = '';
+      this.cadastroSenha = '';
+      this.cadastroEspecialidade = '';
+      this.cadastroBio = '';
+      // Limpar previews
+      this.previewFotoUrl = null;
+      this.previewBackgroundUrl = null;
     }
+    
+    // Limpar arquivos selecionados
+    this.selectedFotoFile = null;
+    this.selectedBackgroundFile = null;
   }
 
   fecharModal(): void {
     this.showModal = false;
     this.currentBarbeiro = this.getEmptyBarbeiro();
     this.isEditing = false;
+    // Limpar campos de cadastro
+    this.cadastroEmail = '';
+    this.cadastroSenha = '';
+    this.cadastroEspecialidade = '';
+    this.cadastroBio = '';
+    // Limpar uploads e previews
+    this.selectedFotoFile = null;
+    this.selectedBackgroundFile = null;
+    this.previewFotoUrl = null;
+    this.previewBackgroundUrl = null;
   }
 
   salvarBarbeiro(): void {
     // Validações básicas
     if (!this.currentBarbeiro.nome.trim()) {
-      alert('Nome do barbeiro é obrigatório!');
+      this.notificationService.validationError('Nome do barbeiro é obrigatório!');
       return;
     }
 
     if (!this.currentBarbeiro.telefone.trim()) {
-      alert('Telefone é obrigatório!');
+      this.notificationService.validationError('Telefone é obrigatório!');
       return;
     }
 
     if (this.isEditing) {
-      // Atualizar barbeiro existente
-      const index = this.barbeiros.findIndex(b => b.barbeiroId === this.currentBarbeiro.barbeiroId);
-      if (index !== -1) {
-        this.barbeiros[index] = { ...this.currentBarbeiro };
-        console.log('Barbeiro atualizado:', this.currentBarbeiro);
+      // Upload das imagens se foram selecionadas
+      if (this.selectedFotoFile) {
+        const fotoUrl = this.imageService.uploadBarbeiroPhoto(this.selectedFotoFile, this.currentBarbeiro.barbeiroId, false);
+        this.currentBarbeiro.urlFoto = fotoUrl;
       }
+
+      if (this.selectedBackgroundFile) {
+        const backgroundUrl = this.imageService.uploadBarbeiroPhoto(this.selectedBackgroundFile, this.currentBarbeiro.barbeiroId, true);
+        this.currentBarbeiro.urlBackground = backgroundUrl;
+      }
+
+      // Editar barbeiro existente
+      const barbeiroEditado: EditarBarbeiro =  {
+        barbeiroId: this.currentBarbeiro.barbeiroId,
+        nome: this.currentBarbeiro.nome,
+        telefone: this.currentBarbeiro.telefone,
+        especialidade: this.currentBarbeiro.especialidade,
+        bio: this.currentBarbeiro.bio,
+        urlFoto: this.currentBarbeiro.urlFoto,
+        urlBackground: this.currentBarbeiro.urlBackground,
+        ativo: this.currentBarbeiro.ativo
+      }
+      this.barbeiroService.editarBarbeiro(barbeiroEditado).subscribe(response => {
+        if (response && (response.httpStatus === "OK" || response.httpStatus === "CREATED")) {
+          this.carregarBarbeiros();
+          const isOwnProfile = !this.isAdmin();
+          const successMessage = isOwnProfile 
+            ? 'Seu perfil foi atualizado com sucesso!' 
+            : `Barbeiro "${this.currentBarbeiro.nome}" editado com sucesso!`;
+          this.notificationService.success(successMessage);
+        } else {
+          this.notificationService.error(response?.message || 'Erro ao atualizar barbeiro');
+        }
+      });
     } else {
-      // Adicionar novo barbeiro
-      const novoId = Math.max(...this.barbeiros.map(b => b.barbeiroId)) + 1;
-      const novoBarbeiro = { ...this.currentBarbeiro, barbeiroId: novoId };
-      this.barbeiros.push(novoBarbeiro);
-      console.log('Novo barbeiro adicionado:', novoBarbeiro);
+      // Validações adicionais para cadastro
+      if (!this.cadastroEmail.trim()) {
+        this.notificationService.validationError('Email é obrigatório!');
+        return;
+      }
+
+      if (!this.cadastroSenha.trim()) {
+        this.notificationService.validationError('Senha é obrigatória!');
+        return;
+      }
+
+      if (!this.cadastroEspecialidade.trim()) {
+        this.notificationService.validationError('Especialidade é obrigatória!');
+        return;
+      }
+
+      if (!this.cadastroBio.trim()) {
+        this.notificationService.validationError('Bio é obrigatória!');
+        return;
+      }
+
+      // Adicionar novo barbeiro usando CadastroBarbeiro
+      const novoBarbeiro: CadastroBarbeiro = {
+        nome: this.currentBarbeiro.nome,
+        telefone: this.currentBarbeiro.telefone,
+        email: this.cadastroEmail,
+        senha: this.cadastroSenha,
+        especialidade: this.cadastroEspecialidade,
+        bio: this.cadastroBio,
+        urlFoto: this.currentBarbeiro.urlFoto || '',
+        urlBackground: this.currentBarbeiro.urlBackground || ''
+      };
+      
+      this.barbeiroService.cadastrarBarbeiro(novoBarbeiro).subscribe(response => {
+        if (response && (response.httpStatus === "CREATED" || response.httpStatus === "OK")) {
+          this.carregarBarbeiros();
+          
+          // Fazer upload das imagens após criar o barbeiro
+          if (this.selectedFotoFile && response.data?.barbeiroId) {
+            const fotoUrl = this.imageService.uploadBarbeiroPhoto(this.selectedFotoFile, response.data.barbeiroId, false);
+            // Atualizar URL da foto no barbeiro criado
+            const barbeiroAtualizado: EditarBarbeiro = {
+              barbeiroId: response.data.barbeiroId,
+              nome: novoBarbeiro.nome,
+              telefone: novoBarbeiro.telefone,
+              especialidade: novoBarbeiro.especialidade,
+              bio: novoBarbeiro.bio,
+              urlFoto: fotoUrl,
+              urlBackground: novoBarbeiro.urlBackground,
+              ativo: true
+            };
+            this.barbeiroService.editarBarbeiro(barbeiroAtualizado).subscribe();
+          }
+
+          if (this.selectedBackgroundFile && response.data?.barbeiroId) {
+            const backgroundUrl = this.imageService.uploadBarbeiroPhoto(this.selectedBackgroundFile, response.data.barbeiroId, true);
+            // Atualizar URL do background no barbeiro criado
+            const barbeiroAtualizado: EditarBarbeiro = {
+              barbeiroId: response.data.barbeiroId,
+              nome: novoBarbeiro.nome,
+              telefone: novoBarbeiro.telefone,
+              especialidade: novoBarbeiro.especialidade,
+              bio: novoBarbeiro.bio,
+              urlFoto: novoBarbeiro.urlFoto,
+              urlBackground: backgroundUrl,
+              ativo: true
+            };
+            this.barbeiroService.editarBarbeiro(barbeiroAtualizado).subscribe();
+          }
+          
+          this.notificationService.success(`Barbeiro "${this.currentBarbeiro.nome}" cadastrado com sucesso!`);
+        } else {
+          this.notificationService.error(response?.message || 'Erro ao cadastrar barbeiro');
+        }
+      });
     }
 
     this.fecharModal();
-    // Aqui você faria a chamada para o serviço salvar no backend
   }
 
   editarBarbeiro(barbeiro: Barbeiro): void {
@@ -139,5 +275,93 @@ export class BarbeirosComponent implements OnInit {
   adicionarBarbeiro(): void {
     console.log('Adicionando novo barbeiro');
     this.abrirModal();
+  }
+
+  // =============================================
+  // MÉTODOS DE UPLOAD DE IMAGEM
+  // =============================================
+  
+  // Método para selecionar foto do perfil
+  onFotoSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const validation = this.imageService.validateImageFile(file, 5);
+      if (!validation.valid) {
+        this.notificationService.validationError(validation.error!);
+        return;
+      }
+
+      this.selectedFotoFile = file;
+      
+      // Criar preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewFotoUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Método para selecionar foto de background
+  onBackgroundSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const validation = this.imageService.validateImageFile(file, 10);
+      if (!validation.valid) {
+        this.notificationService.validationError(validation.error!);
+        return;
+      }
+
+      this.selectedBackgroundFile = file;
+      
+      // Criar preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewBackgroundUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Método para remover foto do perfil
+  removerFoto(): void {
+    this.selectedFotoFile = null;
+    this.previewFotoUrl = null;
+    this.currentBarbeiro.urlFoto = '';
+    
+    // Limpar input
+    const fotoInput = document.getElementById('fotoInput') as HTMLInputElement;
+    if (fotoInput) fotoInput.value = '';
+  }
+
+  // Método para remover foto de background
+  removerBackground(): void {
+    this.selectedBackgroundFile = null;
+    this.previewBackgroundUrl = null;
+    this.currentBarbeiro.urlBackground = '';
+    
+    // Limpar input
+    const backgroundInput = document.getElementById('backgroundInput') as HTMLInputElement;
+    if (backgroundInput) backgroundInput.value = '';
+  }
+
+  // Métodos para abrir inputs de arquivo
+  abrirSeletorFoto(): void {
+    const fotoInput = document.getElementById('fotoInput') as HTMLInputElement;
+    if (fotoInput) fotoInput.click();
+  }
+
+  abrirSeletorBackground(): void {
+    const backgroundInput = document.getElementById('backgroundInput') as HTMLInputElement;
+    if (backgroundInput) backgroundInput.click();
+  }
+
+  cleanUploads(): void {
+    this.selectedFotoFile = null;
+    this.selectedBackgroundFile = null;
+  }
+
+  onPhotoSelected(event: any): void {
+
   }
 }

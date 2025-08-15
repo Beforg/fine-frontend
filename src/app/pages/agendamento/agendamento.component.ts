@@ -11,8 +11,9 @@ import { HeroSectionComponent } from "../../components/agendamento/hero-section/
 import { FormAgendamentoComponent } from "../../components/agendamento/form-agendamento/form-agendamento.component";
 import { ProdutoService } from '../../services/produto.service';
 import { ServicoService } from '../../services/servico.service';
-import { AgendamentoRequest, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../interfaces/entities.interface';
+import { AgendamentoRequest, Barbeiro, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../interfaces/entities.interface';
 import { PrimaryButtonComponent } from '../../components/primary-button/primary-button.component';
+import { BarbeiroService } from '../../services/barbeiro.service';
 
 
 
@@ -34,7 +35,7 @@ import { PrimaryButtonComponent } from '../../components/primary-button/primary-
 })
 export class AgendamentoComponent implements OnInit {
   barbeiroId: string | null = null;
-
+  barbeiro: Barbeiro | null = null;
   
   produtosDisponiveis: ProdutoAgendamento[] = [];
   servicosDisponiveis: ServicoAgendamento[] = [];
@@ -56,7 +57,7 @@ export class AgendamentoComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private agendamentoService: AgendamentoService, private servicoService: ServicoService, 
-      private produtoService: ProdutoService) {
+      private produtoService: ProdutoService, private barbeiroService: BarbeiroService) {
     this.barbeiroId = this.route.snapshot.paramMap.get('barbeiroId');
   }
 
@@ -72,7 +73,21 @@ export class AgendamentoComponent implements OnInit {
     console.log('Barbeiro ID:', this.barbeiroId);
     this.getProdutosDisponiveis();
     this.getServicosDisponiveis();
- 
+    this.incrementarVisualizacao();
+    this.loadBarbeiroData();
+    window.scrollTo(0, 0);
+  }
+
+  loadBarbeiroData(){
+    this.barbeiroService.getBarbeiroById(Number(this.barbeiroId)).subscribe({
+      next: (barbeiro) => {
+        this.barbeiro = barbeiro;
+        console.log('Barbeiro carregado:', barbeiro);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar barbeiro:', error);
+      }
+    });
   }
 
   getProdutosIdsQuantidade(produtos: ItemProduto[]): void {
@@ -162,6 +177,17 @@ export class AgendamentoComponent implements OnInit {
     }
 
     cancelAgendamento(): void {
+
+    }
+
+    incrementarVisualizacao(): void {
+      const storageKey = `barber-view-${this.barbeiroId}`;
+
+    if (!sessionStorage.getItem(storageKey)) {
+      this.barbeiroService.incrementarVisualizacao(Number(this.barbeiroId)).subscribe(() => {
+        sessionStorage.setItem(storageKey, 'true');
+      });
+    }
 
     }
 }

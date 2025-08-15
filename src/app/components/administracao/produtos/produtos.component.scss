@@ -145,35 +145,50 @@
                     }
 
                     .td-status {
-                        .status-badge {
-                            padding: 0.25rem 0.75rem;
-                            border-radius: 20px;
-                            font-size: 0.75rem;
-                            font-weight: 600;
-                            text-transform: uppercase;
-                            letter-spacing: 0.5px;
-                            cursor: pointer;
-                            transition: all 0.3s ease;
+                        .status-container {
+                            display: flex;
+                            justify-content: center;
 
-                            &:hover {
-                                transform: scale(1.05);
-                            }
+                            .status-toggle {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.3rem;
+                                padding: 0.4rem 0.8rem;
+                                border: none;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                font-size: 0.8rem;
+                                font-weight: 600;
+                                transition: all 0.3s ease;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
 
-                            &.status-ativo {
-                                background-color: #e8f5e8;
-                                color: #27ae60;
-
-                                &:hover {
-                                    background-color: #d4edda;
+                                mat-icon {
+                                    font-size: 18px;
+                                    width: 18px;
+                                    height: 18px;
                                 }
-                            }
 
-                            &.status-inativo {
-                                background-color: #ffebee;
-                                color: #e74c3c;
+                                &.ativo {
+                                    background: linear-gradient(135deg, #d5f4e6, #a3e6c7);
+                                    color: #27ae60;
+                                    
+                                    &:hover {
+                                        background: linear-gradient(135deg, #a3e6c7, #82e3a1);
+                                        transform: translateY(-1px);
+                                        box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+                                    }
+                                }
 
-                                &:hover {
-                                    background-color: #f8d7da;
+                                &.inativo {
+                                    background: linear-gradient(135deg, #fadbd8, #f1948a);
+                                    color: #e74c3c;
+                                    
+                                    &:hover {
+                                        background: linear-gradient(135deg, #f1948a, #ec7063);
+                                        transform: translateY(-1px);
+                                        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+                                    }
                                 }
                             }
                         }

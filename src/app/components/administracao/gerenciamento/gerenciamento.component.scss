@@ -14,6 +14,7 @@
             display: flex;
             gap: 1rem;
             align-items: center;
+            cursor: pointer;
 
             a {
                 padding: 0.5rem 1rem;
@@ -28,7 +29,7 @@
                 &:hover {
                     background-color: $azul_degrade_borda;
                     border-color: #3498db;
-                    color: #fff;
+                    color: #4e438a;
                 }
             }
 

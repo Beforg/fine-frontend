@@ -152,6 +152,56 @@
                         }
                     }
 
+                    .td-status {
+                        .status-container {
+                            display: flex;
+                            justify-content: center;
+
+                            .status-toggle {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.3rem;
+                                padding: 0.4rem 0.8rem;
+                                border: none;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                font-size: 0.8rem;
+                                font-weight: 600;
+                                transition: all 0.3s ease;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+
+                                mat-icon {
+                                    font-size: 18px;
+                                    width: 18px;
+                                    height: 18px;
+                                }
+
+                                &.ativo {
+                                    background: linear-gradient(135deg, #d5f4e6, #a3e6c7);
+                                    color: #27ae60;
+                                    
+                                    &:hover {
+                                        background: linear-gradient(135deg, #a3e6c7, #82e3a1);
+                                        transform: translateY(-1px);
+                                        box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+                                    }
+                                }
+
+                                &.inativo {
+                                    background: linear-gradient(135deg, #fadbd8, #f1948a);
+                                    color: #e74c3c;
+                                    
+                                    &:hover {
+                                        background: linear-gradient(135deg, #f1948a, #ec7063);
+                                        transform: translateY(-1px);
+                                        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     .td-actions {
                         .actions-container {
                             display: flex;
@@ -343,6 +393,51 @@
                 textarea {
                     resize: vertical;
                     min-height: 80px;
+                }
+
+                // =============================================
+                // CHECKBOX PERSONALIZADO
+                // =============================================
+                .checkbox-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    margin-top: 0.5rem;
+
+                    .checkbox-input {
+                        position: absolute;
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                    }
+
+                    .checkbox-label {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        cursor: pointer;
+                        font-weight: 500;
+                        color: #2c3e50;
+                        margin: 0;
+                        user-select: none;
+                        transition: all 0.3s ease;
+
+                        &:hover {
+                            color: #3498db;
+                        }
+
+                        .checkbox-icon {
+                            font-size: 20px;
+                            width: 20px;
+                            height: 20px;
+                            color: #3498db;
+                            transition: all 0.3s ease;
+                        }
+                    }
+
+                    .checkbox-input:checked + .checkbox-label .checkbox-icon {
+                        color: #27ae60;
+                    }
                 }
             }
 

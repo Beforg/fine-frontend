@@ -37,9 +37,17 @@
                         <span class="preco-valor">{{ produto.preco | currency:'BRL':'symbol':'1.2-2' }}</span>
                     </td>
                     <td class="td-status">
-                        <span class="status-badge" [ngClass]="produto.ativo ? 'status-ativo' : 'status-inativo'" (click)="toggleStatus(produto)">
-                            {{ produto.ativo ? 'Ativo' : 'Inativo' }}
-                        </span>
+                        <div class="status-container">
+                            <button 
+                                class="status-toggle" 
+                                [class.ativo]="produto.ativo"
+                                [class.inativo]="!produto.ativo"
+                                (click)="toggleStatus(produto)"
+                                title="{{ produto.ativo ? 'Clique para desativar' : 'Clique para ativar' }}">
+                                <mat-icon>{{ produto.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                                <span>{{ produto.ativo ? 'Ativo' : 'Inativo' }}</span>
+                            </button>
+                        </div>
                     </td>
                     <td class="td-actions">
                         <div class="actions-container">

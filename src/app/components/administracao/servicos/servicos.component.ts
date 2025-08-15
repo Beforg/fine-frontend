@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Servico } from '../../../interfaces/entities.interface';
+import { Servico, CadastroServico } from '../../../interfaces/entities.interface';
+import { ServicoService } from '../../../services/servico.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-servicos-gerenciamento',
@@ -17,56 +19,22 @@ export class ServicosComponent implements OnInit {
   servicoSelecionado: Servico | null = null;
   novoServico: Partial<Servico> = {};
 
+  constructor(
+    private servicoService: ServicoService,
+    private notificationService: NotificationService
+  ) {
+    
+  }
+
   ngOnInit() {
     this.carregarServicos();
   }
 
   carregarServicos() {
-    // Mock data - substituir pela chamada real da API
-    this.servicos = [
-      {
-        id: 1,
-        nome: 'Corte Masculino',
-        descricao: 'Corte de cabelo masculino tradicional com acabamento perfeito',
-        preco: 25.00,
-        duracaoMinutos: 30
-      },
-      {
-        id: 2,
-        nome: 'Barba',
-        descricao: 'Aparar e modelar barba com navalha e acabamento',
-        preco: 15.00,
-        duracaoMinutos: 20
-      },
-      {
-        id: 3,
-        nome: 'Corte + Barba',
-        descricao: 'Pacote completo com corte de cabelo e barba',
-        preco: 35.00,
-        duracaoMinutos: 45
-      },
-      {
-        id: 4,
-        nome: 'Corte Infantil',
-        descricao: 'Corte especial para crianças até 12 anos',
-        preco: 20.00,
-        duracaoMinutos: 25
-      },
-      {
-        id: 5,
-        nome: 'Sobrancelha',
-        descricao: 'Design e limpeza de sobrancelhas masculinas',
-        preco: 10.00,
-        duracaoMinutos: 15
-      },
-      {
-        id: 6,
-        nome: 'Tratamento Capilar',
-        descricao: 'Hidratação e tratamento para cabelos danificados',
-        preco: 45.00,
-        duracaoMinutos: 60
-      }
-    ];
+    // Carregando serviços do backend
+    this.servicoService.getServicos().subscribe(servicos => {
+      this.servicos = servicos;
+    });
   }
 
   abrirModal(servico?: Servico) {
@@ -79,7 +47,8 @@ export class ServicosComponent implements OnInit {
         nome: '',
         descricao: '',
         preco: 0,
-        duracaoMinutos: 0
+        duracaoMinutos: 0,
+        ativo: true
       };
     }
     this.modalAberto = true;
@@ -94,45 +63,57 @@ export class ServicosComponent implements OnInit {
   salvarServico() {
     // Validações básicas
     if (!this.novoServico.nome || !this.novoServico.nome.trim()) {
-      alert('O nome do serviço é obrigatório');
+      this.notificationService.validationError('O nome do serviço é obrigatório');
       return;
     }
 
     if (!this.novoServico.descricao || !this.novoServico.descricao.trim()) {
-      alert('A descrição do serviço é obrigatória');
+      this.notificationService.validationError('A descrição do serviço é obrigatória');
       return;
     }
 
     if (!this.novoServico.preco || this.novoServico.preco <= 0) {
-      alert('O preço deve ser maior que zero');
+      this.notificationService.validationError('O preço deve ser maior que zero');
       return;
     }
 
     if (!this.novoServico.duracaoMinutos || this.novoServico.duracaoMinutos <= 0) {
-      alert('A duração deve ser maior que zero');
+      this.notificationService.validationError('A duração deve ser maior que zero');
       return;
     }
 
     if (this.servicoSelecionado) {
       // Editar serviço existente
-      const index = this.servicos.findIndex(s => s.id === this.servicoSelecionado?.id);
-      if (index !== -1) {
-        this.servicos[index] = {
-          ...this.servicoSelecionado,
-          ...this.novoServico
-        } as Servico;
-      }
+      const servicoCompleto: Servico = {
+        ...this.servicoSelecionado,
+        ...this.novoServico
+      } as Servico;
+      
+      this.servicoService.editarServico(servicoCompleto).subscribe(response => {
+        if (response) {
+          this.carregarServicos();
+          this.notificationService.success(`Serviço "${this.novoServico.nome}" editado com sucesso!`);
+        } else {
+          this.notificationService.error('Erro ao editar serviço');
+        }
+      });
     } else {
       // Adicionar novo serviço
-      const novoId = Math.max(...this.servicos.map(s => s.id || 0)) + 1;
-      const servico: Servico = {
-        id: novoId,
+      const novoServico: CadastroServico = {
         nome: this.novoServico.nome!,
         descricao: this.novoServico.descricao!,
         preco: this.novoServico.preco!,
         duracaoMinutos: this.novoServico.duracaoMinutos!
       };
-      this.servicos.push(servico);
+      
+      this.servicoService.cadastrarServico(novoServico).subscribe(response => {
+        if (response.httpStatus === "CREATED") {
+          this.carregarServicos();
+          this.notificationService.success(`Serviço "${this.novoServico.nome}" cadastrado com sucesso!`);
+        } else {
+          this.notificationService.error(response.message || 'Erro ao cadastrar serviço');
+        }
+      });
     }
 
     this.fecharModal();
@@ -167,5 +148,22 @@ export class ServicosComponent implements OnInit {
       const mins = minutos % 60;
       return mins > 0 ? `${horas}h ${mins}min` : `${horas}h`;
     }
+  }
+
+  // =============================================
+  // MÉTODOS AUXILIARES
+  // =============================================
+  toggleStatus(servico: Servico): void {
+    const novoStatus = !servico.ativo;
+    const statusTexto = novoStatus ? 'ativado' : 'desativado';
+    
+    this.servicoService.editarServico({ ...servico, ativo: novoStatus! }).subscribe(response => {
+      if (response) {
+        this.carregarServicos();
+        this.notificationService.success(`Serviço "${servico.nome}" ${statusTexto} com sucesso!`);
+      } else {
+        this.notificationService.error("Erro ao alterar status do serviço");
+      }
+    });
   }
 }

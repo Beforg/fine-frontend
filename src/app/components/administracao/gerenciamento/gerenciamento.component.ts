@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProdutosComponent } from "../produtos/produtos.component";
 import { ServicosComponent } from "../servicos/servicos.component";
 import { BarbeirosComponent } from "../barbeiros/barbeiros.component";
+import { AuthService } from '../../../services/auth.service';
+import { UserRole } from '../../../enums/user-role.enum';
 
 @Component({
   selector: 'app-gerenciamento',
@@ -10,11 +12,19 @@ import { BarbeirosComponent } from "../barbeiros/barbeiros.component";
   templateUrl: './gerenciamento.component.html',
   styleUrl: './gerenciamento.component.scss'
 })
-export class GerenciamentoComponent {
+export class GerenciamentoComponent implements OnInit {
   @Input() showGerenciamento: boolean = false;
 
-  showProdutos: boolean = true;
-  showBarbeiros: boolean = false;
+  constructor(private authService: AuthService) {
+
+  }
+
+  ngOnInit(): void {
+    // Lógica a ser executada na inicialização do componente
+  }
+
+  showProdutos: boolean = false;
+  showBarbeiros: boolean = true;
   showServicos: boolean = false;
   // temporario
   toggleProdutos() {
@@ -28,4 +38,12 @@ export class GerenciamentoComponent {
   toggleServicos() {
     this.showServicos = !this.showServicos;
   }
+
+    isAdmin(): boolean {
+      if (this.authService.isAuthenticated()) {
+        return this.authService.getCurrentUser().role === UserRole.ADMIN;
+      }
+      return false;
+    }
+
 }

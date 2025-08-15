@@ -29,9 +29,6 @@ export class AuthService {
    * Realiza login do usuário
    */
   login(credentials: LoginFormData): Observable<LoginResponse> {
-    console.log('🔐 Tentando fazer login...', { login: credentials.login });
-    console.log('📤 Enviando requisição para:', `${this.apiUrl}/login`);
-    console.log('📦 Dados:', credentials);
 
     return this.http.post<BackendLoginResponse>(`${this.apiUrl}/login`, credentials, { headers: this.headers })
       .pipe(
@@ -41,11 +38,9 @@ export class AuthService {
           if (backendResponse.token) {
             // Armazenar token
             this.setToken(backendResponse.token);
-            console.log('🎫 Token armazenado com sucesso');
 
             // Extrair dados do usuário do token
             const userData = this.getCurrentUser();
-            console.log('👤 Dados do usuário extraídos:', userData);
 
             // Retornar resposta padronizada para o frontend
             const standardResponse: LoginResponse = {
@@ -101,9 +96,6 @@ export class AuthService {
   }
 
   register(credentials: RegisterFormData): Observable<BackendResponse> {
-    console.log('🔐 Tentando registrar usuário...', { email: credentials.email });
-    console.log('📤 Enviando requisição para:', `${this.apiUrl}/cadastrar`);
-    console.log('📦 Dados:', credentials);
     
     return this.http.post<BackendResponse>(`${this.apiUrl}/cadastrar`, credentials, { headers: this.headers })
       .pipe(
@@ -286,17 +278,13 @@ export class AuthService {
    */
   getCurrentUser(): any {
     const token = this.getToken();
-    console.log('🔍 Verificando token para getCurrentUser:', token ? 'Token existe' : 'Token não encontrado');
-    
     if (!token) {
       console.log('❌ Nenhum token encontrado');
       return null;
     }
 
     try {
-      console.log('🔓 Decodificando token JWT...');
       const parts = token.split('.');
-      console.log('📊 Partes do token:', parts.length);
       
       if (parts.length !== 3) {
         console.error('❌ Token JWT inválido - não tem 3 partes');
@@ -304,16 +292,15 @@ export class AuthService {
       }
 
       const payload = JSON.parse(atob(parts[1]));
-      console.log('✅ Payload decodificado:', payload);
       
       const userData = {
         id: payload.userId,
         email: payload.email,
         name: payload.nome,
-        role: payload.role
+        role: payload.role,
+        telefone: payload.telefone
       };
       
-      console.log('👤 Dados do usuário extraídos:', userData);
       return userData;
     } catch (error) {
       console.error('❌ Erro ao decodificar token:', error);

@@ -18,12 +18,13 @@
           <th>Descrição</th>
           <th>Preço</th>
           <th>Duração</th>
+          <th>Status</th>
           <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         <tr class="table-row" *ngFor="let servico of servicos">
-          <td class="td-id">{{ servico.id }}</td>
+          <td class="td-id">#{{ servico.id }}</td>
           <td class="td-nome">
             <div class="servico-info">
               <span class="servico-nome">{{ servico.nome }}</span>
@@ -39,6 +40,19 @@
           </td>
           <td class="td-duracao">
             <span class="duracao-valor">{{ formatarDuracao(servico.duracaoMinutos) }}</span>
+          </td>
+          <td class="td-status">
+            <div class="status-container">
+              <button 
+                class="status-toggle" 
+                [class.ativo]="servico.ativo"
+                [class.inativo]="!servico.ativo"
+                (click)="toggleStatus(servico)"
+                title="{{ servico.ativo ? 'Clique para desativar' : 'Clique para ativar' }}">
+                <mat-icon>{{ servico.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                <span>{{ servico.ativo ? 'Ativo' : 'Inativo' }}</span>
+              </button>
+            </div>
           </td>
           <td class="td-actions">
             <div class="actions-container">
@@ -125,6 +139,22 @@
             placeholder="30"
             min="1"
             required>
+        </div>
+      </div>
+
+      <!-- Checkbox para ativar/desativar (apenas na edição) -->
+      <div class="form-group" *ngIf="servicoSelecionado">
+        <div class="checkbox-container">
+          <input 
+            type="checkbox" 
+            id="ativo"
+            [(ngModel)]="novoServico.ativo" 
+            name="ativo"
+            class="checkbox-input">
+          <label for="ativo" class="checkbox-label">
+            <mat-icon class="checkbox-icon">{{ novoServico.ativo ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+            Serviço ativo
+          </label>
         </div>
       </div>
 

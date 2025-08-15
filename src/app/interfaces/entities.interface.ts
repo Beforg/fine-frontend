@@ -3,9 +3,36 @@ export interface Barbeiro {
     nome: string;
     telefone: string;
     visualizacoes: number;
-    corteRealizados: number;
+    cortesRealizados: number;
     urlFoto: string;
     urlBackground: string;
+    bio: string;
+    especialidade: string;
+    ativo: boolean;
+}
+
+export interface CadastroBarbeiro {
+  nome: string;
+  email: string;
+  senha: string;
+  especialidade: string;
+  bio: string;
+  urlFoto: string;
+  urlBackground: string;
+  telefone: string;
+
+}
+
+export interface EditarBarbeiro {
+  barbeiroId: number;
+  nome: string;
+  especialidade: string;
+  bio: string;
+  urlFoto: string;
+  urlBackground: string;
+  telefone: string;
+  ativo: boolean;
+
 }
 
 export interface Produto {
@@ -14,7 +41,17 @@ export interface Produto {
     descricao: string;
     preco: number;
     urlImagem: string;
+    ativo: boolean;
+    estoque: number; // Adicionado para representar o estoque
     // estoque
+}
+
+export interface CadastroProduto {
+  nome: string;
+  descricao: string;
+  estoque: number;
+  preco: number;
+  urlImagem: string;
 }
 
 export interface ProdutoAgendamento {
@@ -37,6 +74,14 @@ export interface Servico {
     descricao: string;
     preco: number;
     duracaoMinutos: number;
+    ativo?: boolean;
+}
+
+export interface CadastroServico {
+  nome: string;
+  descricao: string;
+  preco: number;
+  duracaoMinutos: number;
 }
 
 export interface UserInfo {

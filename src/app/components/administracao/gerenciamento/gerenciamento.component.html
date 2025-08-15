@@ -1,16 +1,17 @@
 <div class="gerenciamento-conteiner" *ngIf="showGerenciamento">
     <div class="filtros-header">
         <div class="filtros-container">  
-            <a (click)="toggleProdutos()">Produtos</a>
-            <a (click)="toggleServicos()">Serviços</a>
+            <a (click)="toggleProdutos()" *ngIf="isAdmin()">Produtos</a>
+            <a (click)="toggleServicos()" *ngIf="isAdmin()">Serviços</a>
             <a (click)="toggleBarbeiros()">Barbeiros</a>
+            <a *ngIf="isAdmin()">Disponibilidade</a>
         </div>
     </div>
     <div class="gerenciamento-body">
-        <div class="gerenciamento-produtos" *ngIf="showProdutos">
-            <app-produtos-gerenciamento></app-produtos-gerenciamento>
+            <div class="gerenciamento-produtos" *ngIf="showProdutos && isAdmin()">
+                <app-produtos-gerenciamento></app-produtos-gerenciamento>
         </div>
-        <div class="gerenciamento-servicos" *ngIf="showServicos">
+        <div class="gerenciamento-servicos" *ngIf="showServicos && isAdmin()">
             <app-servicos-gerenciamento></app-servicos-gerenciamento>
         </div>
         <div class="gerenciamento-barbeiros" *ngIf="showBarbeiros">

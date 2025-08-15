@@ -3,3 +3,4 @@ export enum UserRole {
     CLIENTE = 'ROLE_CLIENTE',
     BARBEIRO = 'ROLE_BARBEIRO'
 }
+

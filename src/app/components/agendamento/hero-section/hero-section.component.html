@@ -5,11 +5,11 @@
         <h1 class="page-title">Agendar Corte</h1>
         <div class="barbeiro-info">
           <div class="barbeiro-avatar">
-            <img src="/assets/tmp/barbeiro1.png" alt="Ralph Edwards" class="avatar-img">
+            <img [src]="barbeiro?.urlFoto" alt="{{barbeiro?.nome}}" class="avatar-img">
           </div>
           <div class="barbeiro-details">
-            <h2 class="barbeiro-name">Ralph Edwards</h2>
-            <p class="barbeiro-stats">253 corte(s)</p>
+            <h2 class="barbeiro-name">{{barbeiro?.nome}}</h2>
+            <p class="barbeiro-stats">{{barbeiro?.cortesRealizados}} corte(s)</p>
         </div>
         </div>
         
