@@ -30,10 +30,10 @@ export class CatalogoPsComponent implements OnInit {
 
   ngOnInit(): void {
    this.servicoService.getServicos().subscribe(servicos => {
-     this.servicos = servicos;
+     this.servicos = servicos.filter(servico => servico.ativo);
    });
    this.produtoService.getProdutos().subscribe(produtos => {
-     this.produtos = produtos;
+     this.produtos = produtos.filter(produto => produto.ativo);
    });
   }
 

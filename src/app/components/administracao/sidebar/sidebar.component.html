@@ -1,0 +1,36 @@
+  <aside class="sidebar">
+    <!-- Perfil do usuário -->
+    <div class="user-profile">
+      <div class="user-avatar">
+        <img src="/assets/fine-logo.jpeg" alt="Avatar" class="avatar-img">
+      </div>
+      <div class="user-info">
+        <h3 class="user-name">Olá, {{ userName }}</h3>
+        <span class="user-role">{{ userRole }}</span>
+      </div>
+    </div>
+
+    <!-- Menu de navegação -->
+    <nav class="sidebar-nav">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <button class="nav-button" (click)="handleNavigateToGerenciamento()">
+            <mat-icon class="nav-icon">settings</mat-icon>
+            <span class="nav-text">Gerenciamento</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-button" (click)="handleNavigateToAgendamentos()">
+            <mat-icon class="nav-icon">schedule</mat-icon>
+            <span class="nav-text">Agendamentos</span>
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-button" (click)="handleVoltar()">
+            <mat-icon class="nav-icon">arrow_back</mat-icon>
+            <span class="nav-text">Voltar</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </aside>

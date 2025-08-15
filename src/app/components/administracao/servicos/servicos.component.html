@@ -1,0 +1,173 @@
+<div class="servicos-container">
+  <!-- Header -->
+  <div class="header-container">
+    <h1>Gerenciar Serviços</h1>
+    <button class="btn-adicionar" (click)="adicionarServico()">
+      <mat-icon>add</mat-icon>
+      Adicionar Serviço
+    </button>
+  </div>
+
+  <!-- Tabela de Serviços -->
+  <div class="table-container">
+    <table class="servicos-table" *ngIf="servicos.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Preço</th>
+          <th>Duração</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-row" *ngFor="let servico of servicos">
+          <td class="td-id">#{{ servico.id }}</td>
+          <td class="td-nome">
+            <div class="servico-info">
+              <span class="servico-nome">{{ servico.nome }}</span>
+            </div>
+          </td>
+          <td class="td-descricao">
+            <div class="descricao-container">
+              <span class="descricao-texto">{{ servico.descricao }}</span>
+            </div>
+          </td>
+          <td class="td-preco">
+            <span class="preco-valor">{{ formatarPreco(servico.preco) }}</span>
+          </td>
+          <td class="td-duracao">
+            <span class="duracao-valor">{{ formatarDuracao(servico.duracaoMinutos) }}</span>
+          </td>
+          <td class="td-status">
+            <div class="status-container">
+              <button 
+                class="status-toggle" 
+                [class.ativo]="servico.ativo"
+                [class.inativo]="!servico.ativo"
+                (click)="toggleStatus(servico)"
+                title="{{ servico.ativo ? 'Clique para desativar' : 'Clique para ativar' }}">
+                <mat-icon>{{ servico.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                <span>{{ servico.ativo ? 'Ativo' : 'Inativo' }}</span>
+              </button>
+            </div>
+          </td>
+          <td class="td-actions">
+            <div class="actions-container">
+              <button 
+                class="btn-action btn-edit" 
+                (click)="editarServico(servico)"
+                title="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button 
+                class="btn-action btn-delete" 
+                (click)="removerServico(servico)"
+                title="Remover">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Mensagem quando não há dados -->
+    <div class="no-data" *ngIf="servicos.length === 0">
+      <mat-icon>design_services</mat-icon>
+      <p>Nenhum serviço cadastrado</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Adicionar/Editar Serviço -->
+<div class="modal-overlay" *ngIf="modalAberto" (click)="fecharModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ servicoSelecionado ? 'Editar Serviço' : 'Adicionar Serviço' }}</h2>
+      <button class="btn-close" (click)="fecharModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form class="servico-form" (ngSubmit)="salvarServico()">
+      <div class="form-group">
+        <label for="nome">Nome do Serviço *</label>
+        <input 
+          type="text" 
+          id="nome"
+          [(ngModel)]="novoServico.nome" 
+          name="nome"
+          placeholder="Ex: Corte Masculino"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição *</label>
+        <textarea 
+          id="descricao"
+          [(ngModel)]="novoServico.descricao" 
+          name="descricao"
+          placeholder="Ex: Corte de cabelo masculino tradicional com acabamento perfeito"
+          rows="3"
+          required></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="preco">Preço (R$) *</label>
+          <input 
+            type="number" 
+            id="preco"
+            [(ngModel)]="novoServico.preco" 
+            name="preco"
+            placeholder="25.00"
+            step="0.01"
+            min="0"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="duracao">Duração (minutos) *</label>
+          <input 
+            type="number" 
+            id="duracao"
+            [(ngModel)]="novoServico.duracaoMinutos" 
+            name="duracao"
+            placeholder="30"
+            min="1"
+            required>
+        </div>
+      </div>
+
+      <!-- Checkbox para ativar/desativar (apenas na edição) -->
+      <div class="form-group" *ngIf="servicoSelecionado">
+        <div class="checkbox-container">
+          <input 
+            type="checkbox" 
+            id="ativo"
+            [(ngModel)]="novoServico.ativo" 
+            name="ativo"
+            class="checkbox-input">
+          <label for="ativo" class="checkbox-label">
+            <mat-icon class="checkbox-icon">{{ novoServico.ativo ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+            Serviço ativo
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="fecharModal()">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+        <button type="submit" class="btn-salvar">
+          <mat-icon>save</mat-icon>
+          {{ servicoSelecionado ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

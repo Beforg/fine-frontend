@@ -19,7 +19,7 @@ export class BarbeirosComponent {
 
   constructor(private barbeiroService: BarbeiroService, private route: ActivatedRoute) {
     this.barbeiroService.getBarbeiros().subscribe(barbeiros => {
-      this.barbeiros = barbeiros;
+      this.barbeiros = barbeiros.filter(barbeiro => barbeiro.ativo);
     });
 
     console.log('BarbeirosComponent initialized', this.barbeiros);

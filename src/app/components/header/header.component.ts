@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { PerfilCardComponent } from '../perfil-card/perfil-card.component';
+import { UserRole } from '../../enums/user-role.enum';
 
 @Component({
   selector: 'app-header',
@@ -53,6 +54,20 @@ export class HeaderComponent {
     this.closePerfilCard();
     // Redirecionar para a página inicial
     window.location.href = '/home';
+  }
+
+  isAdmin(): boolean {
+    if (this.authService.isAuthenticated()) {
+      return this.authService.getCurrentUser().role === UserRole.ADMIN;
+    }
+    return false;
+  }
+
+  isBarbeiro(): boolean {
+    if (this.authService.isAuthenticated()) {
+      return this.authService.getCurrentUser().role === UserRole.BARBEIRO;
+    }
+    return false;
   }
 
 }

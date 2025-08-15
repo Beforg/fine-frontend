@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Barbeiro } from '../../../interfaces/entities.interface';
 
 @Component({
   selector: 'app-hero-section-agendamento',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './hero-section.component.scss'
 })
 export class HeroSectionComponent {
-
+  @Input() barbeiro: Barbeiro |  null = null;
 }
