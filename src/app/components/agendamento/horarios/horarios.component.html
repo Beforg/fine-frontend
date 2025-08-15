@@ -1,18 +1,7 @@
 <section class="time-section">
     <div class="time-container">
-      <h3 class="section-title">Horários do Dia:</h3>
-      
-      <div class="time-grid">
-        <div class="time-slot available" *ngFor="let horario of horariosDisponiveis">
-          <button class="time-button" type="button">
-            {{ formatTime(horario) }}
-          </button>
-        </div>
-      </div>
-
-     
       <div class="time-table-section">
-        <h4 class="subsection-title">Tabela de Horários</h4>
+        <h4 class="subsection-title">Horários Disponíveis</h4>
         <table class="time-table">
           <thead>
             <tr>

@@ -24,8 +24,8 @@
     </div>
 
     <!-- Ações -->
-    <div class="perfil-actions">
-      <button 
+    <div class="perfil-actions" >
+      <button *ngIf="isCliente || isBarbeiro" 
         class="action-button profile-button" 
         (click)="onGoToProfile()"
         mat-button>

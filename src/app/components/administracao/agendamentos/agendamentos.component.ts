@@ -71,7 +71,9 @@ export class AgendamentosComponent implements OnInit {
     console.log('🆔 ID do usuário:', currentUser?.id);
     
     this.loadAgendamentos();
-    this.barbeiroId = currentUser?.id || "";
+    if (currentUser?.role === UserRole.BARBEIRO) {
+      this.barbeiroId = currentUser?.id || "";
+    }
   }
 
   toggleAgendamentoInfo(): void {

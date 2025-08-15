@@ -2,13 +2,16 @@
 <div class="perfil-container">
   <!-- Header da página -->
   <div class="perfil-header">
-    <button class="back-button" mat-icon-button>
+    <button class="back-button" mat-icon-button (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1 class="page-title">Meu Perfil</h1>
+    <div class="container-header-options">
+      <a class="header-option" [ngClass]="{'active': activeTab === 'p'}" (click)="toggleAgendamentos('p')">Perfil</a>
+      <a class="header-option" [ngClass]="{'active': activeTab === 'g'}" (click)="toggleAgendamentos('g')">Agendamentos</a>
+    </div>
     <div class="header-spacer"></div>
   </div>
-  <div class="perfil-content">
+  <div class="perfil-content" *ngIf="!showAgendamentoContainer">
     <app-perfil-form 
     [userInfo]="userInfo" 
     [userEmail]="getUserEmail()"
@@ -18,6 +21,9 @@
     [userInfo]="userInfo" 
     [isBarbeiro]="isBarbeiro()">
   </app-barber-stats>
+  </div>
+  <div class="agendamentos-content" *ngIf="showAgendamentoContainer">
+    <app-agendamentos-gerenciamento [showAgendamentoContainer]="true"></app-agendamentos-gerenciamento>
   </div>
      
 </div>

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { UserRole } from '../../enums/user-role.enum';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-
+  @Input() showSearchBar: boolean = true;
   constructor(private authService: AuthService) {}
   
   isLoggedIn(): boolean {
@@ -66,6 +66,13 @@ export class HeaderComponent {
   isBarbeiro(): boolean {
     if (this.authService.isAuthenticated()) {
       return this.authService.getCurrentUser().role === UserRole.BARBEIRO;
+    }
+    return false;
+  }
+
+  isCliente(): boolean {
+    if (this.authService.isAuthenticated()) {
+      return this.authService.getCurrentUser().role === UserRole.CLIENTE;
     }
     return false;
   }

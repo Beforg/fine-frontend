@@ -44,28 +44,86 @@
         </div>
 
         <div class="form-group">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Data de Cadastro</mat-label>
-            <input matInput [value]="userInfo.dataCadastro" readonly>
-            <mat-icon matSuffix>event</mat-icon>
-          </mat-form-field>
+          <span class="date-field">
+            <mat-label>Membro Desde</mat-label>
+            <span class="date-value">
+              <p>{{ userInfo.dataCadastro | date:'dd/MM/yyyy' }}</p>
+              <mat-icon matSuffix>event</mat-icon>
+            </span>
+          </span>
         </div>
       </div>
 
       <!-- Ações -->
       <div class="actions-section">
-        <button mat-raised-button color="primary" class="edit-button">
+        <!-- <button mat-raised-button color="primary" class="edit-button">
           <mat-icon>edit</mat-icon>
           Editar Perfil
-        </button>
-        
-        <button mat-stroked-button color="warn" class="delete-button">
-          <mat-icon>delete</mat-icon>
-          Desativar Conta
-        </button>
+        </button> -->
+        <app-primary-button (buttonClick)="abrirModalEdicao()" [text]="'Editar Perfil'">
+        </app-primary-button>
       </div>
     </mat-card>
 
+    <mat-card class="edit-container-overlay" *ngIf="showEditModal">
+      <div class="edit-content">
+        <div class="edit-content-header">
+          <h2 class="edit-title">Editar Perfil</h2>
+          <button class="btn-close" (click)="fecharModalEdicao()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        
+        <div class="edit-inputs">
+          <form action="">
+            <app-input-field
+            label="Nome Completo"
+            placeholder="Digite seu nome completo"
+            type="text"
+            prefixIcon="person"
+            formControlName="nome"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="E-mail"
+            placeholder="Digite seu e-mail"
+            type="email"
+            prefixIcon="email"
+            formControlName="email"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="Telefone"
+            placeholder="Digite seu telefone"
+            type="tel"
+            prefixIcon="phone"
+            formControlName="telefone"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="Trocar senha"
+            placeholder="Digite sua nova senha"
+            type="password"
+            prefixIcon="lock"
+            formControlName="novaSenha"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="Confirmar senha"
+            placeholder="Confirme sua nova senha"
+            type="password"
+            prefixIcon="lock"
+            formControlName="confirmarSenha"
+            [required]="true">
+          </app-input-field>
+          <div class="form-action">
+            <app-primary-button icon="'save'" (buttonClick)="onSaveChanges()" [text]="'Salvar Alterações'">
+            </app-primary-button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </mat-card>
 
     <ng-template #loadingCard>
       <mat-card class="perfil-card loading-card">

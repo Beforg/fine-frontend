@@ -39,6 +39,7 @@ export class InputFieldComponent implements ControlValueAccessor {
   @Input() suffixIcon?: string;
   @Input() appearance: 'fill' | 'outline' = 'outline';
   @Input() size: 'small' | 'medium' | 'large' = 'medium';
+  @Input() readonly: boolean = false;
   
   // Eventos
   @Output() valueChange = new EventEmitter<string>();
