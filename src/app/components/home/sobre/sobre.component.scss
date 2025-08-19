@@ -41,8 +41,8 @@
   }
   
   .sobre-paragraph {
-    font-size: 1.1rem;
-    line-height: 1.8;
+    font-size: 24px;
+    line-height: 1.5;
     color: #555;
     margin-bottom: 25px;
     text-align: justify;
@@ -73,7 +73,7 @@
     
     .fachada-img {
       width: 100%;
-      height: 400px;
+      height: 450px;
       object-fit: cover;
       display: block;
       transition: transform 0.3s ease;

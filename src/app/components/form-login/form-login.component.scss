@@ -157,7 +157,7 @@
     
     p {
       color: $texto_secundario;
-      font-size: 14px;
+      font-size: 16px;
       margin: 0 0 8px 0;
     }
 
@@ -167,6 +167,7 @@
       gap: 6px;
       color: $verde_principal;
       text-decoration: none;
+      font-size: 16px;
       font-weight: 500;
       transition: all $transition_normal;
 
@@ -176,7 +177,7 @@
       }
 
       mat-icon {
-        font-size: 18px;
+        font-size: 20px;
       }
     }
   }

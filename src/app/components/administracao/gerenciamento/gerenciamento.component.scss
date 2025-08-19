@@ -3,6 +3,7 @@
 // Definição da animação
 
 .gerenciamento-conteiner {
+
         .filtros-header {
         display: flex;
         justify-content: space-between;
@@ -51,27 +52,6 @@
                     }
                 }
             }
-        }
-    }
-
-    // Animações para os containers de gerenciamento
-    .gerenciamento-body {
-        .gerenciamento-produtos {
-            animation: fadeInTab 0.3s ease-in-out;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-
-        .gerenciamento-servicos {
-            animation: fadeInTab 0.3s ease-in-out;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-
-        .gerenciamento-barbeiros {
-            animation: fadeInTab 0.3s ease-in-out;
-            opacity: 0;
-            animation-fill-mode: forwards;
         }
     }
 }

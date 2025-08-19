@@ -213,7 +213,6 @@ export class FormRegisterComponent implements OnInit, OnDestroy {
    */
   onCancel(): void {
     // Notificação de cancelamento
-    this.notificationService.operationCanceled('Cadastro');
     this.formCancel.emit();
   }
 
