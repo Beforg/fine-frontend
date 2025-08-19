@@ -27,23 +27,31 @@ export class GerenciamentoComponent implements OnInit {
   showBarbeiros: boolean = true;
   showServicos: boolean = false;
   // temporario
-  toggleProdutos() {
-    this.showProdutos = !this.showProdutos;
-  }
 
-  toggleBarbeiros() {
-    this.showBarbeiros = !this.showBarbeiros;
-  }
-
-  toggleServicos() {
-    this.showServicos = !this.showServicos;
-  }
 
     isAdmin(): boolean {
       if (this.authService.isAuthenticated()) {
         return this.authService.getCurrentUser().role === UserRole.ADMIN;
       }
       return false;
+    }
+
+    toggleTab(barbeiro: boolean, servico: boolean, produto: boolean) {
+      this.showBarbeiros = barbeiro;
+      this.showServicos = servico;
+      this.showProdutos = produto;
+    }
+
+    toggleProdutos(): void {
+      this.toggleTab(false, false, true);
+    }
+
+    toggleServicos(): void {
+      this.toggleTab(false, true, false);
+    }
+
+    toggleBarbeiros(): void {
+      this.toggleTab(true, false, false);
     }
 
 }

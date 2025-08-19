@@ -4,6 +4,9 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    animation: fadeInTab 0.3s ease-in-out;
+    opacity: 0;
+    animation-fill-mode: forwards;
 
     .filtros-header {
         display: flex;
@@ -79,6 +82,7 @@
         margin: 1rem;
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        
 
         .overlay {
           position: fixed;
@@ -104,6 +108,9 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
+            animation: fadeInTab 0.3s ease-in-out;
+            opacity: 0;
+            animation-fill-mode: forwards;
 
             thead {
                 background-color: #f8f9fa;

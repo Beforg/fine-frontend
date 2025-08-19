@@ -1,9 +1,9 @@
 <div class="gerenciamento-conteiner" *ngIf="showGerenciamento">
     <div class="filtros-header">
         <div class="filtros-container">  
-            <a (click)="toggleProdutos()" *ngIf="isAdmin()">Produtos</a>
-            <a (click)="toggleServicos()" *ngIf="isAdmin()">Serviços</a>
-            <a (click)="toggleBarbeiros()">Barbeiros</a>
+            <a (click)="toggleTab(false, false, true)" *ngIf="isAdmin()">Produtos</a>
+            <a (click)="toggleTab(false, true, false)" *ngIf="isAdmin()">Serviços</a>
+            <a (click)="toggleTab(true, false, false)" *ngIf="isAdmin()">Barbeiros</a>
             <a *ngIf="isAdmin()">Disponibilidade</a>
         </div>
     </div>

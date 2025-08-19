@@ -101,7 +101,7 @@ export class AgendamentosComponent implements OnInit {
 
 // Trocar o id pelo selecionado (Pelo ADMIN somente)
   loadAgendamentos(): void {
-    const data = {id: "2", page: (this.currentPage + 1).toString(), size: this.pageSize.toString()};
+    const data = {id: "7", page: (this.currentPage + 1).toString(), size: this.pageSize.toString()};
     this.agendamentoService.listarAgendamentos(data).subscribe({
       next: (response) => {
         this.agendamentos = response.content;
@@ -130,11 +130,7 @@ export class AgendamentosComponent implements OnInit {
     switch (status.toUpperCase()) {
       case 'AGENDADO':
         return 'status-agendado';
-      case 'CONFIRMADO':
-        return 'status-confirmado';
-      case 'EM_ANDAMENTO':
-        return 'status-em-andamento';
-      case 'CONCLUIDO':
+      case 'REALIZADO':
         return 'status-concluido';
       case 'CANCELADO':
         return 'status-cancelado';

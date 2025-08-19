@@ -60,7 +60,7 @@
           <mat-icon>edit</mat-icon>
           Editar Perfil
         </button> -->
-        <app-primary-button (buttonClick)="abrirModalEdicao()" [text]="'Editar Perfil'">
+        <app-primary-button icon="edit" (buttonClick)="abrirModalEdicao()" [text]="'Editar Perfil'">
         </app-primary-button>
       </div>
     </mat-card>
@@ -68,7 +68,9 @@
     <mat-card class="edit-container-overlay" *ngIf="showEditModal">
       <div class="edit-content">
         <div class="edit-content-header">
-          <h2 class="edit-title">Editar Perfil</h2>
+          <h2 class="edit-title">
+            <mat-icon>person</mat-icon>
+            Editar Perfil</h2>
           <button class="btn-close" (click)="fecharModalEdicao()">
             <mat-icon>close</mat-icon>
           </button>

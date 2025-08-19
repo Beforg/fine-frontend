@@ -273,6 +273,18 @@
           border-bottom: 0.5px solid $cinza_claro;
           margin-bottom: 20px;
 
+          .edit-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: $cinza_escuro;
+            vertical-align: middle;
+
+            mat-icon {
+              font-size: 30px;
+              margin-top: 12px;
+            }
+          }
+
           .btn-close {
                 width: 40px;
                 height: 40px;
