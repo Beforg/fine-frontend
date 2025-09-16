@@ -1,8 +1,10 @@
 @import '../../../../variables';
 
 .time-section {
-  padding: 2rem 1rem;
-  margin: 2rem;
+  padding: 1rem 1rem;
+  animation: fadeInTab 0.3s ease-in-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
 }
 
 .time-container {
@@ -48,8 +50,8 @@
   }
   
   &.selected {
-    border-color: #3498db;
-    background-color: #3498db;
+    border-color: #012016;
+    background-color: #167551;
     color: white;
   }
 }
@@ -57,6 +59,23 @@
 // Time Table
 .time-table-section {
   margin-top: 2rem;
+  text-align: center;
+  .subsection-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: $preto_principal;
+    margin-bottom: 1rem;
+    padding: 1.1rem;
+    gap: 5px;
+
+    mat-icon {
+      font-size: 1.5rem;
+      color: $preto_principal;
+    }
+  }
 }
 
 .time-table {
@@ -67,9 +86,13 @@
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   
+  data {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
   th {
-    background: #3498db;
-    color: white;
+    background: $header_bg;
+    color: $branco_principal;
     padding: 1rem;
     font-weight: 600;
     text-align: center;
@@ -106,11 +129,13 @@
   &:hover {
     border-color: #3498db;
     background-color: #ebf3fd;
+    transform: translateY(-1px);
   }
   
   &.selected {
-    border-color: #3498db;
-    background-color: #3498db;
-    color: white;
+    border-color: $verde_fine;
+    background-color: rgb(238, 255, 238);
+    color: rgb(0, 0, 0);
+    
   }
 }

@@ -14,6 +14,7 @@ import { ServicoService } from '../../services/servico.service';
 import { AgendamentoRequest, Barbeiro, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../interfaces/entities.interface';
 import { PrimaryButtonComponent } from '../../components/primary-button/primary-button.component';
 import { BarbeiroService } from '../../services/barbeiro.service';
+import { NotificationService } from '../../services/notification.service';
 
 
 
@@ -57,7 +58,7 @@ export class AgendamentoComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private agendamentoService: AgendamentoService, private servicoService: ServicoService, 
-      private produtoService: ProdutoService, private barbeiroService: BarbeiroService) {
+      private produtoService: ProdutoService, private barbeiroService: BarbeiroService, private notificationService: NotificationService) {
     this.barbeiroId = this.route.snapshot.paramMap.get('barbeiroId');
   }
 
@@ -148,10 +149,6 @@ export class AgendamentoComponent implements OnInit {
 
         this.isLoading = true;
 
-        setTimeout(() => {
-          console.log('Simulando delay de 2 segundos para o agendamento...');
-        }, 2000);
-
         const dataHora = `${this.selectedDate}T${this.selectedTime}`;
         const novoAgendamento: AgendamentoRequest = {
           barbeiroId: Number(this.barbeiroId),
@@ -165,6 +162,8 @@ export class AgendamentoComponent implements OnInit {
           next: (response) => {
             console.log('Agendamento confirmado para o horário:', this.selectedTime);
             this.isLoading = false;
+            this.notificationService.success("Agendamento criado com sucesso!");
+            
           },
           error: (error) => {
             console.error('Erro ao criar agendamento:', error);

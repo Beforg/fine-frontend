@@ -90,42 +90,6 @@ export class ProdutosComponent implements OnInit {
     this.previewImageUrl = null;
   }
 
-  // salvarProduto(): void {
-  //   // Validações básicas
-  //   if (!this.currentProduto.nome.trim()) {
-  //     alert('Nome do produto é obrigatório!');
-  //     return;
-  //   }
-
-  //   if (this.currentProduto.preco <= 0) {
-  //     alert('Preço deve ser maior que zero!');
-  //     return;
-  //   }
-
-  //   if (this.currentProduto.estoque < 0) {
-  //     alert('Estoque não pode ser negativo!');
-  //     return;
-  //   }
-
-  //   if (this.isEditing) {
-  //     // Atualizar produto existente
-  //     const index = this.produtos.findIndex(p => p.id === this.currentProduto.id);
-  //     if (index !== -1) {
-  //       this.produtos[index] = { ...this.currentProduto };
-  //       console.log('Produto atualizado:', this.currentProduto);
-  //     }
-  //   } else {
-  //     // Adicionar novo produto
-  //     const novoId = Math.max(...this.produtos.map(p => p.id)) + 1;
-  //     const novoProduto = { ...this.currentProduto, id: novoId };
-  //     this.produtos.push(novoProduto);
-  //     console.log('Novo produto adicionado:', novoProduto);
-  //   }
-
-  //   this.fecharModal();
-  //   // Aqui você faria a chamada para o serviço salvar no backend
-  // }
-
   editarProduto(produto: Produto): void {
     console.log('Editando produto:', produto);
     this.abrirModal(produto);
@@ -175,10 +139,8 @@ export class ProdutosComponent implements OnInit {
       this.produtoService.cadastrarProduto(novoProduto).subscribe(response => {
         if (response.httpStatus === "CREATED") {
           this.carregarProdutos();
-          
-          // Fazer upload da imagem após criar o produto
+        
           if (this.selectedImageFile) {
-            // Usar timestamp como ID temporário para o nome do arquivo
             const tempId = Date.now();
             const imageUrl = this.imageService.uploadProdutoPhoto(this.selectedImageFile, tempId);
             console.log(`Imagem salva para produto: ${imageUrl}`);

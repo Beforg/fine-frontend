@@ -1,6 +1,9 @@
 @import '../../../../variables';
 
+// Definição da animação
+
 .gerenciamento-conteiner {
+
         .filtros-header {
         display: flex;
         justify-content: space-between;
@@ -23,16 +26,20 @@
                 text-decoration: none;
                 color: $preto_principal;
                 transition: all 0.3s ease;
-                font-size: 0.9rem;
+                font-size: 16px;
                 font-weight: 500;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5rem;
 
                 &:hover {
                     background-color: $azul_degrade_borda;
-                    border-color: #3498db;
+                    border-color: #c9e9ff;
                     color: #4e438a;
                 }
             }
-
+            
             .filtros-checkbox {
                 display: flex;
                 gap: 1rem;
@@ -52,3 +59,4 @@
         }
     }
 }
+

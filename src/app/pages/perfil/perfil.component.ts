@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserRole } from '../../enums/user-role.enum';
 import { PerfilFormComponent } from "../../components/perfil/perfil-form/perfil-form.component";
 import { BarberStatsComponent } from "../../components/perfil/barber-stats/barber-stats.component";
+import { AgendamentosComponent } from "../../components/administracao/agendamentos/agendamentos.component";
 
 @Component({
   selector: 'app-perfil',
@@ -26,7 +27,8 @@ import { BarberStatsComponent } from "../../components/perfil/barber-stats/barbe
     HeaderComponent,
     FooterComponent,
     PerfilFormComponent,
-    BarberStatsComponent
+    BarberStatsComponent,
+    AgendamentosComponent
 ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
@@ -34,6 +36,8 @@ import { BarberStatsComponent } from "../../components/perfil/barber-stats/barbe
 export class PerfilComponent implements OnInit {
 
   userInfo: UserInfo | null = null;
+  activeTab: string = 'p'; // 'p' para perfil, 'g' para agendamentos
+  showAgendamentoContainer: boolean = false;
 
   constructor(private perfilService: PerfilService, private authService: AuthService) {
 
@@ -96,5 +100,21 @@ export class PerfilComponent implements OnInit {
 
   isBarbeiro(): boolean {
     return this.isBarber();
+  }
+
+  goBack(): void {
+    window.history.back();  
+  } 
+
+  toggleAgendamentos(option: string): void {
+    this.activeTab = option;
+    
+    if (option === 'g') {
+      this.showAgendamentoContainer = true;
+    } else {
+      this.showAgendamentoContainer = false;
+    }
+    
+    console.log('Active tab:', this.activeTab); // Debug
   }
 }

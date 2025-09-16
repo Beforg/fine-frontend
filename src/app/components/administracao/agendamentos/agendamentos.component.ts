@@ -66,12 +66,11 @@ export class AgendamentosComponent implements OnInit {
   ngOnInit(): void {
     // Debug: informações do usuário
     const currentUser = this.authService.getCurrentUser();
-    console.log('👤 Usuário atual:', currentUser);
-    console.log('🔑 Role do usuário:', currentUser?.role);
-    console.log('🆔 ID do usuário:', currentUser?.id);
     
     this.loadAgendamentos();
-    this.barbeiroId = currentUser?.id || "";
+    if (currentUser?.role === UserRole.BARBEIRO) {
+      this.barbeiroId = currentUser?.id || "";
+    }
   }
 
   toggleAgendamentoInfo(): void {
@@ -99,7 +98,7 @@ export class AgendamentosComponent implements OnInit {
 
 // Trocar o id pelo selecionado (Pelo ADMIN somente)
   loadAgendamentos(): void {
-    const data = {id: "2", page: (this.currentPage + 1).toString(), size: this.pageSize.toString()};
+    const data = {id: "7", page: (this.currentPage + 1).toString(), size: this.pageSize.toString()};
     this.agendamentoService.listarAgendamentos(data).subscribe({
       next: (response) => {
         this.agendamentos = response.content;
@@ -128,11 +127,7 @@ export class AgendamentosComponent implements OnInit {
     switch (status.toUpperCase()) {
       case 'AGENDADO':
         return 'status-agendado';
-      case 'CONFIRMADO':
-        return 'status-confirmado';
-      case 'EM_ANDAMENTO':
-        return 'status-em-andamento';
-      case 'CONCLUIDO':
+      case 'REALIZADO':
         return 'status-concluido';
       case 'CANCELADO':
         return 'status-cancelado';
@@ -160,8 +155,6 @@ export class AgendamentosComponent implements OnInit {
 
     // Verificar permissão primeiro
     if (!this.hasPermissionToChangeStatus()) {
-      console.error('🚫 PERMISSÃO NEGADA: Usuário não tem permissão para alterar status de agendamentos');
-      console.error('💡 Roles permitidos: ADMIN, BARBEIRO. Role atual:', currentUser?.role);
       alert('Você não tem permissão para realizar esta ação.');
       return;
     }
@@ -184,8 +177,7 @@ export class AgendamentosComponent implements OnInit {
         
         // Mostrar mensagem específica baseada no status
         if (error.status === 403) {
-          console.error('🚫 ACESSO NEGADO: O servidor rejeitou a requisição');
-          console.error('💡 Possíveis causas: Token inválido, role insuficiente, ou agendamento não pertence ao usuário');
+          console.error('ACESSO NEGADO: O servidor rejeitou a requisição');
           alert('Acesso negado. Verifique suas permissões.');
         }
       }
@@ -203,8 +195,8 @@ export class AgendamentosComponent implements OnInit {
 
     // Verificar permissão primeiro
     if (!this.hasPermissionToChangeStatus()) {
-      console.error('🚫 PERMISSÃO NEGADA: Usuário não tem permissão para alterar status de agendamentos');
-      console.error('💡 Roles permitidos: ADMIN, BARBEIRO. Role atual:', currentUser?.role);
+      console.error('PERMISSÃO NEGADA: Usuário não tem permissão para alterar status de agendamentos');
+      console.error('Roles permitidos: ADMIN, BARBEIRO. Role atual:', currentUser?.role);
       alert('Você não tem permissão para realizar esta ação.');
       return;
     }
@@ -216,19 +208,10 @@ export class AgendamentosComponent implements OnInit {
         this.loadAgendamentos();
       },
       error: (error) => {
-        console.error('❌ Erro ao cancelar agendamento:', error);
-        console.error('📊 Detalhes completos do erro:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          error: error.error,
-          url: error.url
-        });
-        
         // Mostrar mensagem específica baseada no status
         if (error.status === 403) {
-          console.error('🚫 ACESSO NEGADO: O servidor rejeitou a requisição');
-          console.error('💡 Possíveis causas: Token inválido, role insuficiente, ou agendamento não pertence ao usuário');
+          console.error('ACESSO NEGADO: O servidor rejeitou a requisição');
+          console.error('Possíveis causas: Token inválido, role insuficiente, ou agendamento não pertence ao usuário');
           alert('Acesso negado. Verifique suas permissões.');
         }
       }

@@ -6,7 +6,7 @@
   </div>
   
   <!-- Search Section (sempre visível) -->
-  <div class="search-section">
+  <div class="search-section" *ngIf="showSearchBar">
     <input type="text" placeholder="Buscar..." class="search-input">
     <button class="search-button" mat-icon-button>
       <mat-icon>search</mat-icon>
@@ -77,5 +77,5 @@
 
 <!-- Perfil Card (quando logado) -->
 @if (perfilCardOpen && isLoggedIn()) {
-  <app-perfil-card (close)="closePerfilCard()"></app-perfil-card>
+  <app-perfil-card [isCliente]="isCliente()" [isBarbeiro]="isBarbeiro()" (close)="closePerfilCard()"></app-perfil-card>
 }

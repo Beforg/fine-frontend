@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AgendamentoForm } from '../../../interfaces/agendamento-form.interface';
 import { AgendamentoService } from '../../../services/agendamento.service';
+import { MatIconModule } from '@angular/material/icon';
 
 interface TimeTableRow {
   manha?: string;
@@ -11,17 +12,16 @@ interface TimeTableRow {
 
 @Component({
   selector: 'app-horarios',
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './horarios.component.html',
   styleUrl: './horarios.component.scss'
 })
-export class HorariosComponent {
+export class HorariosComponent  {
 
   selectedTime: string | null = null;
   @Input() horariosDisponiveis: string[] = [];
   @Output() timeSelected = new EventEmitter<string>();
 
-  constructor(private agendamentoService: AgendamentoService) {}
 
   formatTime(time: string): string {
     // Converter "10:30:00" para "10:30"

@@ -7,7 +7,7 @@
         Meu Perfil
       </div>
       <button class="close-button" (click)="onCloseCard()" mat-icon-button>
-        <mat-icon>close</mat-icon>
+        X
       </button>
     </div>
 
@@ -24,8 +24,8 @@
     </div>
 
     <!-- Ações -->
-    <div class="perfil-actions">
-      <button 
+    <div class="perfil-actions" >
+      <button *ngIf="isCliente || isBarbeiro" 
         class="action-button profile-button" 
         (click)="onGoToProfile()"
         mat-button>

@@ -135,7 +135,7 @@ app-root {
   border-top: 1px solid #e0e0e0;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 80%;
 }
 
 // Animações personalizadas
@@ -144,18 +144,40 @@ app-root {
   animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
+
+.active-gerenciamento {
+  background-color: rgb(219, 239, 255);
+  color: $cinza_escuro;
+}
+
 /* =================================
    RESPONSIVIDADE DO HEADER FIXO
    ================================= */
 
 @media (max-width: 768px) {
   body {
-    padding-top: 70px; /* Altura do header menor em mobile */
+    padding-top: 70px; 
   }
 }
 
 @media (max-width: 480px) {
   body {
-    padding-top: 60px; /* Altura ainda menor em mobile pequeno */
+    padding-top: 60px; 
   }
+}
+
+@keyframes fadeInTab {
+    from {
+        opacity: 0;
+        transform: translateY(-10px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); 
+    }
+}
+
+@keyframes fadeOutTab {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

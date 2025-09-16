@@ -6,6 +6,44 @@
   max-width: 450px;
   margin: 0 auto;
   padding: 0;
+  
+
+  .form-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+     p {
+      color: $texto_secundario;
+      font-size: 16px;
+      margin: 0 0 8px 0;
+    }
+
+    .login-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      justify-content: center;
+      gap: 5px;
+      color: $azul_principal;
+      margin-right: 5px;
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: $azul_principal;
+      }
+
+
+        &:hover {
+          text-decoration: underline;
+          transition: all 0.3s ease;
+          transform: scale(1.05);
+        }
+    }
+  }
 
   // Cabeçalho do formulário
   .form-header {

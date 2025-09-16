@@ -121,6 +121,5 @@
         </div>
       </div>
     </div>
-    <hr class="divider">
-    <app-horarios [horariosDisponiveis]="horariosDisponiveis" (timeSelected)="onTimeSelected($event)"></app-horarios>
+    <app-horarios [horariosDisponiveis]="horariosDisponiveis" (timeSelected)="onTimeSelected($event)" *ngIf="horariosDisponiveis.length > 0"></app-horarios>
   </section>

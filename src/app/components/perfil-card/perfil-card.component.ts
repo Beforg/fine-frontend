@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class PerfilCardComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
+  @Input() isCliente: boolean = true; // Define se o card é para cliente ou barbeiro
+  @Input() isBarbeiro: boolean = false; // Define se o card é para barbeiro   
   
   userInfo: {
     name: string;

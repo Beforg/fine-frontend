@@ -3,7 +3,9 @@
   <app-sidebar-gerenciamento [userName]="userName" [userRole]="userRole"
     (navigateToGerenciamento)="navigateToGerenciamento()"
     (navigateToAgendamentos)="navigateToAgendamentos()"
-    (voltar)="voltar()">
+    (voltar)="voltar()"
+    [showGerenciamento]="showGerenciamento"
+    [showAgendamentos]="showAgendamentos">
   </app-sidebar-gerenciamento>
   <app-main-gerenciamento [showGerenciamento]="showGerenciamento" [showAgendamentos]="showAgendamentos"></app-main-gerenciamento>
 

@@ -110,6 +110,8 @@ export class FormAgendamentoComponent implements OnInit {
     this.calculateTotal();
     if (this.servicosSelecionados.length > 0) {
       this.handleListarHorarios();
+    } else {
+      this.horariosDisponiveis = [];
     }
   }
 

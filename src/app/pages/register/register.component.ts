@@ -16,13 +16,18 @@ import { RegisterFormData } from '../../interfaces/register-form.interface';
 export class RegisterComponent {
   @ViewChild('registerForm') formRegisterComponent!: FormRegisterComponent;
 
+  isSubmited: boolean = false;
+
   constructor(
     private router: Router, 
     private authService: AuthService,
     private notificationService: NotificationService
   ) {}
 
+
   onRegisterSubmit(formData: RegisterFormData): void {
+    if (!this.isSubmited) {
+    this.isSubmited = true;
     console.log("🚀 Iniciando processo de registro...", formData);
     this.formRegisterComponent.setLoadingState(true);
     
@@ -40,7 +45,6 @@ export class RegisterComponent {
         
         // Aguardar um pouco para o usuário ver a notificação, depois redirecionar
         setTimeout(() => {
-          console.log("� Redirecionando para login após registro...");
           this.router.navigate(['/login']);
         }, 3000);
         
@@ -50,6 +54,7 @@ export class RegisterComponent {
             this.formRegisterComponent.setGeneralError(
               response.message || 'Erro ao criar conta. Verifique os dados.'
             );
+            this.isSubmited = false;
           }
           this.formRegisterComponent.setLoadingState(false);
         },
@@ -60,8 +65,10 @@ export class RegisterComponent {
           this.formRegisterComponent.showConnectionError();
           this.formRegisterComponent.setGeneralError(error.message || 'Erro de conexão. Verifique sua internet.');
           this.formRegisterComponent.setLoadingState(false);
+          this.isSubmited = false;
         }
       });
+    }
   }
 
   onRegisterCancel(): void {
