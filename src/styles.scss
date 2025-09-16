@@ -135,13 +135,19 @@ app-root {
   border-top: 1px solid #e0e0e0;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 80%;
 }
 
 // Animações personalizadas
 .mat-mdc-snack-bar-container {
   animation-duration: 0.3s !important;
   animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+
+.active-gerenciamento {
+  background-color: rgb(219, 239, 255);
+  color: $cinza_escuro;
 }
 
 /* =================================
@@ -169,4 +175,9 @@ app-root {
         opacity: 1;
         transform: translateY(0); 
     }
+}
+
+@keyframes fadeOutTab {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

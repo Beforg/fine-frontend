@@ -1,7 +1,9 @@
 <section class="time-section">
     <div class="time-container">
       <div class="time-table-section">
-        <h4 class="subsection-title">Horários Disponíveis</h4>
+        <h4 class="subsection-title">
+          <mat-icon>access_time</mat-icon>
+          Horários Disponíveis</h4>
         <table class="time-table">
           <thead>
             <tr>
@@ -9,7 +11,7 @@
               <th>Tarde</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="data">
             <tr *ngFor="let row of getTimeTableRows()">
               <td>
                 <button 

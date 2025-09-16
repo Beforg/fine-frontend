@@ -102,12 +102,12 @@ $logo-size-mobile: 40px;
 
         .login-button {
             font-weight: bold;
-            color: $azul_principal;
-            border: 1px solid $azul_principal;
+            color: $verde_fine;
+            border: 1px solid $verde_fine;
             
             &:hover {
-                background-color: $azul_principal;
-                color: $branco_principal;
+                background-color: $verde_fine;
+                color: $cinza_escuro;
             }
             
             mat-icon {
@@ -119,13 +119,13 @@ $logo-size-mobile: 40px;
 
         .profile-button {
             font-weight: bold;
-            color: $verde_principal;
-            border: 1px solid $verde_principal;
+            color: $verde_fine;
+            border: 1px solid $verde_fine;
             background: none;
             
             &:hover {
-                background-color: $verde_principal;
-                color: $branco_principal;
+                background-color: $verde_fine;
+                color: $cinza_escuro;
             }
             
             mat-icon {

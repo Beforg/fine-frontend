@@ -8,16 +8,16 @@
 // ACTION SECTION
 // =============================================
 .action-section {
-  padding: 2rem 1rem;
-  margin: 2rem;
+  padding: 1rem 1rem;
+  margin: 1rem;
 
 }
 
 .action-container {
-  max-width: 400px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 }
 

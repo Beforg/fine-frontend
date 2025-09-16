@@ -5,10 +5,11 @@ import { ServicosComponent } from "../servicos/servicos.component";
 import { BarbeirosComponent } from "../barbeiros/barbeiros.component";
 import { AuthService } from '../../../services/auth.service';
 import { UserRole } from '../../../enums/user-role.enum';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-gerenciamento',
-  imports: [CommonModule, ProdutosComponent, ServicosComponent, BarbeirosComponent],
+  imports: [CommonModule, ProdutosComponent, ServicosComponent, BarbeirosComponent, MatIconModule],
   templateUrl: './gerenciamento.component.html',
   styleUrl: './gerenciamento.component.scss'
 })

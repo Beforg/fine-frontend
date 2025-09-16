@@ -1,6 +1,7 @@
 <app-header></app-header>
 
 <div class="agendamento-container">
+  <section class="agendamento-section">
     <app-hero-section-agendamento [barbeiro]="barbeiro"></app-hero-section-agendamento>
     <app-form-agendamento
     [produtosDisponiveis]="produtosDisponiveis" 
@@ -10,6 +11,8 @@
     (timeSelected)="getSelectedTime($event)"
     (produtosIdQuantidade)="getProdutosIdsQuantidade($event)">
     </app-form-agendamento>
+  </section>
+
 
   <section class="action-section">
     <div class="action-container">
