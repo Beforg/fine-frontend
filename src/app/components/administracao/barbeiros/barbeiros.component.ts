@@ -9,10 +9,13 @@ import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
 import { UserRole } from '../../../enums/user-role.enum';
 import { ImageService } from '../../../services/image.service';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from "@angular/material/select";
 
 @Component({
   selector: 'app-barbeiros-gerenciamento',
-  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, MatInputModule, MatSelectModule],
   templateUrl: './barbeiros.component.html',
   styleUrl: './barbeiros.component.scss'
 })
@@ -34,6 +37,32 @@ export class BarbeirosComponent implements OnInit {
   cadastroSenha: string = '';
   cadastroEspecialidade: string = '';
   cadastroBio: string = '';
+
+  // Horarios do barbeiro:
+ diasDaSemana: {key: string, label: string}[] = [
+    { key: 'segunda', label: 'Segunda-feira' },
+    { key: 'terca', label: 'Terça-feira' },
+    { key: 'quarta', label: 'Quarta-feira' },
+    { key: 'quinta', label: 'Quinta-feira' },
+    { key: 'sexta', label: 'Sexta-feira' },
+    { key: 'sabado', label: 'Sábado' },
+  ];
+  horariosDeTrabalho: string[] = [
+      '09:00 - 19:00',
+      '09:00 - 14:00',
+      '14:00 - 19:00',
+
+  ];
+
+  horariosPorDia: { [key: string]: string } = {
+    'segunda': '09:00 - 19:00', // Padrão: "Não trabalha"
+    'terca': '09:00 - 19:00',
+    'quarta': '09:00 - 19:00',
+    'quinta': '09:00 - 19:00',
+    'sexta': '09:00 - 19:00',
+    'sabado': '09:00 - 19:00',
+  };
+
 
   constructor(
     private barbeiroService: BarbeiroService, 
