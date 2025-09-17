@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { Barbeiro, CadastroBarbeiro, EditarBarbeiro } from '../../../interfaces/entities.interface';
+import { Barbeiro, CadastroBarbeiro, EditarBarbeiro, HorarioTrabalhoDia } from '../../../interfaces/entities.interface';
 import { BarbeiroService } from '../../../services/barbeiro.service';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService } from '../../../services/notification.service';
@@ -40,12 +40,12 @@ export class BarbeirosComponent implements OnInit {
 
   // Horarios do barbeiro:
  diasDaSemana: {key: string, label: string}[] = [
-    { key: 'segunda', label: 'Segunda-feira' },
-    { key: 'terca', label: 'Terça-feira' },
-    { key: 'quarta', label: 'Quarta-feira' },
-    { key: 'quinta', label: 'Quinta-feira' },
-    { key: 'sexta', label: 'Sexta-feira' },
-    { key: 'sabado', label: 'Sábado' },
+    { key: '1', label: 'Segunda-feira' },
+    { key: '2', label: 'Terça-feira' },
+    { key: '3', label: 'Quarta-feira' },
+    { key: '4', label: 'Quinta-feira' },
+    { key: '5', label: 'Sexta-feira' },
+    { key: '6', label: 'Sábado' },
   ];
   horariosDeTrabalho: string[] = [
       '09:00 - 19:00',
@@ -55,12 +55,12 @@ export class BarbeirosComponent implements OnInit {
   ];
 
   horariosPorDia: { [key: string]: string } = {
-    'segunda': '09:00 - 19:00', // Padrão: "Não trabalha"
-    'terca': '09:00 - 19:00',
-    'quarta': '09:00 - 19:00',
-    'quinta': '09:00 - 19:00',
-    'sexta': '09:00 - 19:00',
-    'sabado': '09:00 - 19:00',
+    '1': '09:00 - 19:00', // Padrão: "Não trabalha"
+    '2': '09:00 - 19:00',
+    '3': '09:00 - 19:00',
+    '4': '09:00 - 19:00',
+    '5': '09:00 - 19:00',
+    '6': '09:30 - 19:00',
   };
 
 
@@ -92,6 +92,18 @@ export class BarbeirosComponent implements OnInit {
     };
   }
 
+  carregarHorariosBarbeiro(barbeiroId: number): void {
+    this.barbeiroService.getHorariosTrabalhoBarbeiro(barbeiroId).subscribe(horarios => {
+       this.horariosPorDia = horarios.reduce((acc: { [key: string]: string }, curr) => {
+          const horaInicio = curr.horaInicio.slice(0, 5);
+          const horaFim = curr.horaFim.slice(0, 5);
+          acc[curr.dia.toString()] = `${horaInicio} - ${horaFim}`;
+          return acc;
+       }, {});
+       console.log("Horários carregados para o barbeiro:", this.horariosPorDia); 
+    });
+  }
+
   carregarBarbeiros(): void {
     // Carregando barbeiros do backend
     this.barbeiroService.getBarbeiros().subscribe(barbeiros => {
@@ -115,7 +127,7 @@ export class BarbeirosComponent implements OnInit {
   // =============================================
   abrirModal(barbeiro?: Barbeiro): void {
     this.showModal = true;
-    
+    this.carregarHorariosBarbeiro(barbeiro!.barbeiroId);
     if (barbeiro) {
       this.isEditing = true;
       this.currentBarbeiro = { ...barbeiro }; // Copia para não alterar o original
@@ -154,6 +166,8 @@ export class BarbeirosComponent implements OnInit {
     this.selectedBackgroundFile = null;
     this.previewFotoUrl = null;
     this.previewBackgroundUrl = null;
+    console.log(this.horariosPorDia);
+    
   }
 
   salvarBarbeiro(): void {
@@ -167,6 +181,17 @@ export class BarbeirosComponent implements OnInit {
       this.notificationService.validationError('Telefone é obrigatório!');
       return;
     }
+
+    let horariosTrabalho: HorarioTrabalhoDia[] = [];
+      for (const diaKey in this.horariosPorDia) {
+        const horario = this.horariosPorDia[diaKey];
+        const [horaInicio, horaFim] = horario.split(' - ');
+        horariosTrabalho.push({
+          dia: parseInt(diaKey),
+          horaInicio: `${horaInicio}:00`,
+          horaFim: `${horaFim}:00`
+        })
+      }
 
     if (this.isEditing) {
       // Upload das imagens se foram selecionadas
@@ -189,7 +214,8 @@ export class BarbeirosComponent implements OnInit {
         bio: this.currentBarbeiro.bio,
         urlFoto: this.currentBarbeiro.urlFoto,
         urlBackground: this.currentBarbeiro.urlBackground,
-        ativo: this.currentBarbeiro.ativo
+        ativo: this.currentBarbeiro.ativo,
+        horariosTrabalho: horariosTrabalho
       }
       this.barbeiroService.editarBarbeiro(barbeiroEditado).subscribe(response => {
         if (response && (response.httpStatus === "OK" || response.httpStatus === "CREATED")) {
@@ -226,6 +252,19 @@ export class BarbeirosComponent implements OnInit {
       }
 
       // Adicionar novo barbeiro usando CadastroBarbeiro
+      // let horariosTrabalho: HorarioTrabalhoDia[] = [];
+      // for (const diaKey in this.horariosPorDia) {
+      //   const horario = this.horariosPorDia[diaKey];
+      //   const [horaInicio, horaFim] = horario.split(' - ');
+      //   horariosTrabalho.push({
+      //     dia: parseInt(diaKey),
+      //     horaInicio: `${horaInicio}:00`,
+      //     horaFim: `${horaFim}:00`
+      //   })
+      // }
+
+      
+
       const novoBarbeiro: CadastroBarbeiro = {
         nome: this.currentBarbeiro.nome,
         telefone: this.currentBarbeiro.telefone,
@@ -234,9 +273,10 @@ export class BarbeirosComponent implements OnInit {
         especialidade: this.cadastroEspecialidade,
         bio: this.cadastroBio,
         urlFoto: this.currentBarbeiro.urlFoto || '',
-        urlBackground: this.currentBarbeiro.urlBackground || ''
+        urlBackground: this.currentBarbeiro.urlBackground || '',
+        horariosTrabalho: horariosTrabalho
       };
-      
+      console.log(novoBarbeiro);
       this.barbeiroService.cadastrarBarbeiro(novoBarbeiro).subscribe(response => {
         if (response && (response.httpStatus === "CREATED" || response.httpStatus === "OK")) {
           this.carregarBarbeiros();
@@ -253,7 +293,8 @@ export class BarbeirosComponent implements OnInit {
               bio: novoBarbeiro.bio,
               urlFoto: fotoUrl,
               urlBackground: novoBarbeiro.urlBackground,
-              ativo: true
+              ativo: true,
+              horariosTrabalho: horariosTrabalho
             };
             this.barbeiroService.editarBarbeiro(barbeiroAtualizado).subscribe();
           }
@@ -269,7 +310,8 @@ export class BarbeirosComponent implements OnInit {
               bio: novoBarbeiro.bio,
               urlFoto: novoBarbeiro.urlFoto,
               urlBackground: backgroundUrl,
-              ativo: true
+              ativo: true,
+              horariosTrabalho: horariosTrabalho
             };
             this.barbeiroService.editarBarbeiro(barbeiroAtualizado).subscribe();
           }

@@ -20,7 +20,14 @@ export interface CadastroBarbeiro {
   urlFoto: string;
   urlBackground: string;
   telefone: string;
+  horariosTrabalho: HorarioTrabalhoDia[];
 
+}
+
+export interface HorarioTrabalhoDia {
+  dia: number; // 1 (Segunda) a 6 (Sábado)
+  horaInicio: string; // Formato "HH:mm:ss"
+  horaFim: string;    // Formato "HH:mm:ss"
 }
 
 export interface EditarBarbeiro {
@@ -32,6 +39,7 @@ export interface EditarBarbeiro {
   urlBackground: string;
   telefone: string;
   ativo: boolean;
+  horariosTrabalho: HorarioTrabalhoDia[];
 
 }
 
