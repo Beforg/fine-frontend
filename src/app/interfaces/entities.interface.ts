@@ -123,3 +123,12 @@ export interface Agendamento {
   servicos: ServicoAgendamento[];
   produtos?: ItemProduto[];
 }
+
+export interface Indisponibilidade {
+  barbeiroId: number;
+  barbeiroNome?: string;
+  data: Date;
+  horaInicio: string; 
+  horaFim: string;   
+  motivo: string;
+}

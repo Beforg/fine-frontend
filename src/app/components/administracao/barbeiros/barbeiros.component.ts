@@ -51,6 +51,7 @@ export class BarbeirosComponent implements OnInit {
       '09:00 - 19:00',
       '09:00 - 14:00',
       '14:00 - 19:00',
+      '09:30 - 19:00'
 
   ];
 

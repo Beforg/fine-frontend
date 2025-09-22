@@ -1,17 +1,25 @@
 <div class="gerenciamento-conteiner" *ngIf="showGerenciamento">
     <div class="filtros-header">
         <div class="filtros-container">  
-            <a (click)="toggleTab(false, false, true)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showProdutos}">
+            <a (click)="toggleTab(false, false, true, false)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showProdutos}">
                 <mat-icon>shopping_bag</mat-icon>
                 Produtos
             </a>
-            <a (click)="toggleTab(false, true, false)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showServicos}">
+            <a (click)="toggleTab(false, true, false, false)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showServicos}">
                 <mat-icon>content_cut</mat-icon>
                 Serviços
             </a>
-            <a (click)="toggleTab(true, false, false)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showBarbeiros}">
+            <a (click)="toggleTab(true, false, false, false)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showBarbeiros}">
                 <mat-icon>person</mat-icon>
                 Barbeiros
+            </a>
+            <a (click)="toggleTab(false, false, false, true)" *ngIf="isAdmin()" [ngClass]="{'active-gerenciamento': showDisponibilidade}">
+                <mat-icon>event_available</mat-icon>
+                Disponibilidade
+            </a>
+            <a href="">
+                <mat-icon>people</mat-icon>
+                Clientes
             </a>
             <!-- <a *ngIf="isAdmin()">Disponibilidade</a> -->
         </div>
@@ -26,5 +34,7 @@
         <div class="gerenciamento-barbeiros" *ngIf="showBarbeiros">
             <app-barbeiros-gerenciamento></app-barbeiros-gerenciamento>
         </div>
+        <div class="gerenciamento-disponibilidade" *ngIf="showDisponibilidade && isAdmin()">
+            <app-disponibilidade></app-disponibilidade>
     </div>
 </div>

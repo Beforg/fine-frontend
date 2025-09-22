@@ -1,0 +1,59 @@
+<div class="disponibilidade-container">
+    <!-- Header -->
+    <div class="header-container">
+        <h1>Disponibilidade dos Barbeiros</h1>
+        <button class="btn-adicionar">
+            <mat-icon>add</mat-icon>
+            Adicionar Bloqueio
+        </button>
+    </div>
+    
+    <!-- Tabela de Indisponibilidades -->
+    <div class="table-container">
+        <table class="disponibilidade-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Barbeiro</th>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Motivo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of indisponibilidades" class="table-row">
+                    <td class="td-id">#{{ item.barbeiroId }}</td>
+                    <td class="td-barbeiro">
+                        <div class="barbeiro-info">
+                            <span class="barbeiro-nome">{{ item.barbeiroNome }}</span>
+                        </div>
+                    </td>
+                    <td class="td-data">{{ item.data | date:'dd/MM/yyyy' }}</td>
+                    <td class="td-horario">
+                        <span class="horario-valor">{{ item.horaInicio }} - {{ item.horaFim }}</span>
+                    </td>
+                    <td class="td-motivo">
+                        <span class="motivo-texto">{{ item.motivo }}</span>
+                    </td>
+                    <td class="td-actions">
+                        <div class="actions-container">
+                            <button class="btn-action btn-edit" title="Editar">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="btn-action btn-delete" title="Remover">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensagem quando não há dados -->
+        <div *ngIf="!indisponibilidades || indisponibilidades.length === 0" class="no-data">
+            <mat-icon>event_busy</mat-icon>
+            <p>Nenhuma indisponibilidade cadastrada</p>
+        </div>
+    </div>
+</div>

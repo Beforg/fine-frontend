@@ -6,10 +6,11 @@ import { BarbeirosComponent } from "../barbeiros/barbeiros.component";
 import { AuthService } from '../../../services/auth.service';
 import { UserRole } from '../../../enums/user-role.enum';
 import { MatIconModule } from '@angular/material/icon';
+import { DisponibilidadeComponent } from '../disponibilidade/disponibilidade.component';
 
 @Component({
   selector: 'app-gerenciamento',
-  imports: [CommonModule, ProdutosComponent, ServicosComponent, BarbeirosComponent, MatIconModule],
+  imports: [CommonModule, ProdutosComponent, ServicosComponent, BarbeirosComponent, MatIconModule, DisponibilidadeComponent],
   templateUrl: './gerenciamento.component.html',
   styleUrl: './gerenciamento.component.scss'
 })
@@ -27,6 +28,7 @@ export class GerenciamentoComponent implements OnInit {
   showProdutos: boolean = false;
   showBarbeiros: boolean = true;
   showServicos: boolean = false;
+  showDisponibilidade: boolean = false;
   // temporario
 
 
@@ -37,10 +39,15 @@ export class GerenciamentoComponent implements OnInit {
       return false;
     }
 
-    toggleTab(barbeiro: boolean, servico: boolean, produto: boolean) {
+    toggleTab(barbeiro: boolean, servico: boolean, produto: boolean, disponibilidade: boolean = false): void {
       this.showBarbeiros = barbeiro;
       this.showServicos = servico;
       this.showProdutos = produto;
+      this.showDisponibilidade = disponibilidade;
+    }
+
+    toggleDisponibilidade(): void {
+      this.toggleTab(false, false, false, true);
     }
 
     toggleProdutos(): void {
