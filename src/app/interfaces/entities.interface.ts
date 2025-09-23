@@ -124,11 +124,22 @@ export interface Agendamento {
   produtos?: ItemProduto[];
 }
 
-export interface Indisponibilidade {
+export interface RegistroIndisponibilidade {
   barbeiroId: number;
-  barbeiroNome?: string;
-  data: Date;
+  data: string;
   horaInicio: string; 
   horaFim: string;   
   motivo: string;
+}
+
+
+export interface Indisponibilidade {
+  id: number;
+  barbeiroId: number;
+  barbeiroNome: string;
+  data: string;
+  horaInicio: string; 
+  horaFim: string;   
+  motivo: string;
+
 }
