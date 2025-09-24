@@ -121,5 +121,13 @@
         </div>
       </div>
     </div>
-    <app-horarios [horariosDisponiveis]="horariosDisponiveis" (timeSelected)="onTimeSelected($event)" *ngIf="horariosDisponiveis.length > 0"></app-horarios>
+    @if (horariosDisponiveis.length > 0) {
+      <app-horarios [horariosDisponiveis]="horariosDisponiveis" (timeSelected)="onTimeSelected($event)" *ngIf="horariosDisponiveis.length > 0"></app-horarios>
+    } @else {
+      <div class="no-data" *ngIf="isDateSelected && servicosSelecionados.length > 0 && horariosDisponiveis.length === 0">
+        <mat-icon>info</mat-icon>
+        <p>O Barbeiro está indisponível para a data selecionada.</p>
+      </div>
+    }
+    
   </section>

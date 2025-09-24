@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +20,8 @@ import { MatSelectModule } from "@angular/material/select";
   styleUrl: './barbeiros.component.scss'
 })
 export class BarbeirosComponent implements OnInit {
-  barbeiros: Barbeiro[] = [];
+  @Input()barbeiros: Barbeiro[] = [];
+  @Output() barbeirosChange = new EventEmitter<Barbeiro[]>();
   // Modal/Formulário
   showModal: boolean = false;
   isEditing: boolean = false;
@@ -75,7 +76,11 @@ export class BarbeirosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carregarBarbeiros();
+    //this.carregarBarbeiros();
+  }
+
+  handleBarbeirosChange() {
+    this.barbeirosChange.emit(this.barbeiros);
   }
 
   getEmptyBarbeiro(): Barbeiro {
@@ -105,17 +110,17 @@ export class BarbeirosComponent implements OnInit {
     });
   }
 
-  carregarBarbeiros(): void {
-    // Carregando barbeiros do backend
-    this.barbeiroService.getBarbeiros().subscribe(barbeiros => {
-      if (!this.isAdmin()) {
-        this.barbeiros = barbeiros.filter(b => b.nome == this.authService.getCurrentUser().name);
-      } else {
-        this.barbeiros = barbeiros;
-      }
+  // carregarBarbeiros(): void {
+  //   // Carregando barbeiros do backend
+  //   this.barbeiroService.getBarbeiros().subscribe(barbeiros => {
+  //     if (!this.isAdmin()) {
+  //       this.barbeiros = barbeiros.filter(b => b.nome == this.authService.getCurrentUser().name);
+  //     } else {
+  //       this.barbeiros = barbeiros;
+  //     }
     
-    });
-  }
+  //   });
+  // }
 
   isAdmin(): boolean {
     if (this.authService.isAuthenticated()) {
@@ -220,7 +225,7 @@ export class BarbeirosComponent implements OnInit {
       }
       this.barbeiroService.editarBarbeiro(barbeiroEditado).subscribe(response => {
         if (response && (response.httpStatus === "OK" || response.httpStatus === "CREATED")) {
-          this.carregarBarbeiros();
+          this.handleBarbeirosChange();
           const isOwnProfile = !this.isAdmin();
           const successMessage = isOwnProfile 
             ? 'Seu perfil foi atualizado com sucesso!' 
@@ -280,7 +285,7 @@ export class BarbeirosComponent implements OnInit {
       console.log(novoBarbeiro);
       this.barbeiroService.cadastrarBarbeiro(novoBarbeiro).subscribe(response => {
         if (response && (response.httpStatus === "CREATED" || response.httpStatus === "OK")) {
-          this.carregarBarbeiros();
+          this.handleBarbeirosChange();
           
           // Fazer upload das imagens após criar o barbeiro
           if (this.selectedFotoFile && response.data?.barbeiroId) {

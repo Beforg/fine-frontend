@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Indisponibilidade, RegistroIndisponibilidade } from '../interfaces/entities.interface';
 import { map, Observable } from 'rxjs';
-import { BackendResponse } from '../interfaces/response.interface';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -17,6 +16,18 @@ export class IndisponibilidadeService {
 
   registrarIndisponibilidade(indisponibilidade: RegistroIndisponibilidade): Observable<any> {
     return this.httpClient.post<Indisponibilidade>(`${this.apiUrl}/registrar`, indisponibilidade, { headers: this.authService.getHeaders()}).pipe(
+    );
+  }
+
+  registrarFeriado(indisponibilidades: RegistroIndisponibilidade[]): Observable<any> {
+    return this.httpClient.post<Indisponibilidade[]>(`${this.apiUrl}/registrar/feriado`, indisponibilidades, { headers: this.authService.getHeaders()}).pipe(
+      map(response => response as Indisponibilidade[])
+    );
+  }
+
+  listarIndisponibilidades(): Observable<Indisponibilidade[]> {
+    return this.httpClient.get<Indisponibilidade[]>(`${this.apiUrl}/listar`, { headers: this.authService.getHeaders()}).pipe(
+      map(response => response as Indisponibilidade[])
     );
   }
 }

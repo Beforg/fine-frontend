@@ -32,9 +32,9 @@
             <app-servicos-gerenciamento></app-servicos-gerenciamento>
         </div>
         <div class="gerenciamento-barbeiros" *ngIf="showBarbeiros">
-            <app-barbeiros-gerenciamento></app-barbeiros-gerenciamento>
+            <app-barbeiros-gerenciamento [barbeiros]="barbeiros" (barbeirosChange)="carregarBarbeiros()"></app-barbeiros-gerenciamento>
         </div>
         <div class="gerenciamento-disponibilidade" *ngIf="showDisponibilidade && isAdmin()">
-            <app-disponibilidade></app-disponibilidade>
+            <app-disponibilidade [barbeiros]="barbeiros"></app-disponibilidade>
     </div>
 </div>

@@ -4,6 +4,17 @@
 .form-section {
   padding: 1rem 1rem;
   margin: 1.5rem;
+
+  .no-data {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 50px;
+    color: #f03a3a;
+    font-size: 20px;
+    font-style: italic;
+  }
   
 }
 

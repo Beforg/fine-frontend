@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Indisponibilidade, Barbeiro, RegistroIndisponibilidade } from '../../../interfaces/entities.interface';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,12 +32,8 @@ export class DisponibilidadeComponent implements OnInit {
   bloqueioForm!: FormGroup;
   
   // Dados para os selects
-  barbeiros: Barbeiro[] = [
-    { barbeiroId: 1, nome: 'João Silva', telefone: '', visualizacoes: 0, cortesRealizados: 0, urlFoto: '', urlBackground: '', bio: '', especialidade: '', ativo: true },
-    { barbeiroId: 2, nome: 'Pedro Santos', telefone: '', visualizacoes: 0, cortesRealizados: 0, urlFoto: '', urlBackground: '', bio: '', especialidade: '', ativo: true },
-    { barbeiroId: 3, nome: 'Carlos Lima', telefone: '', visualizacoes: 0, cortesRealizados: 0, urlFoto: '', urlBackground: '', bio: '', especialidade: '', ativo: true }
-  ];
-  
+  @Input() barbeiros!: Barbeiro[];
+  // 
   horariosDisponiveis: string[] = [
     '09:00', '10:00', '11:00', '12:00', '13:00', 
     '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'
@@ -47,6 +43,18 @@ export class DisponibilidadeComponent implements OnInit {
 
   ngOnInit() {
     this.initializeForm();
+    this.carregarIndisponibilidades();
+  }
+
+  carregarIndisponibilidades() {
+    this.indisponibilidadeService.listarIndisponibilidades().subscribe({
+      next: (data) => {
+        this.indisponibilidades = data;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar indisponibilidades:', error);
+      }
+    });
   }
 
   initializeForm() {
@@ -126,7 +134,7 @@ export class DisponibilidadeComponent implements OnInit {
         const barbeiro = this.barbeiros.find(b => b.barbeiroId === formData.barbeiroId);
         barbeiroNome = barbeiro?.nome || '';
         const novaIndisponibilidade: RegistroIndisponibilidade = {
-          barbeiroId: 2, // somente para teste
+          barbeiroId: formData.barbeiroId,
           data: formData.data,
           horaInicio: formData.horaInicio,
           horaFim: formData.horaFim,
@@ -145,20 +153,24 @@ export class DisponibilidadeComponent implements OnInit {
           }
         });
       } else {
-        barbeiroNome = 'Todos os barbeiros';
+        const novaIndisponibilidade: RegistroIndisponibilidade[] = this.barbeiros.map(b => ({
+          barbeiroId: b.barbeiroId,
+          data: formData.data,
+          horaInicio: formData.horaInicio,
+          horaFim: formData.horaFim,
+          motivo: formData.motivo
+        }));
+        this.indisponibilidadeService.registrarFeriado(novaIndisponibilidade).subscribe({
+          next: (response) => {
+            console.log('Indisponibilidade registrada com sucesso:', response);
+            this.indisponibilidades.push(...response);
+            this.closeModal();
+          },
+          error: (error) => {
+            console.error('Erro ao registrar indisponibilidade:', error);
+          }
+        });
       }
-
-      const novaIndisponibilidade: Indisponibilidade = {
-        id: Date.now(), // ID temporário
-        barbeiroId: formData.tipoBloqueio === 'barbeiro' ? formData.barbeiroId : 0,
-        barbeiroNome: barbeiroNome,
-        data: formData.data,
-        horaInicio: formData.horaInicio,
-        horaFim: formData.horaFim,
-        motivo: formData.motivo
-      };
-
-      this.indisponibilidades.push(novaIndisponibilidade);
       this.closeModal();
     }
   }
