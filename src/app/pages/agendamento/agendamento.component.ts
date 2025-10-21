@@ -124,23 +124,26 @@ export class AgendamentoComponent implements OnInit {
 
   getProdutosDisponiveis(): void {
       this.produtoService.getProdutos().subscribe(produtos => {
-        this.produtosDisponiveis = produtos.map(produto => ({
+        this.produtosDisponiveis = produtos.filter(produto => produto.ativo === true && produto.estoque > 0).map(produto => ({
           id: produto.id,
           nome: produto.nome,
           preco: produto.preco,
-          quantidade: 0
+          quantidade: 0,
+          estoque: produto.estoque
         }));
       });
     }
   
     getServicosDisponiveis(): void {
       this.servicoService.getServicos().subscribe(servicos => {
-        this.servicosDisponiveis = servicos.map(servico => ({
-          id: servico.id,
-          nome: servico.nome,
-          preco: servico.preco,
-          duracaoMinutos: servico.duracaoMinutos
-        }));
+        this.servicosDisponiveis = servicos
+          .filter(servico => servico.ativo === true) // Filtra apenas serviços ativos
+          .map(servico => ({
+            id: servico.id,
+            nome: servico.nome,
+            preco: servico.preco,
+            duracaoMinutos: servico.duracaoMinutos
+          }));
       })
     }
 

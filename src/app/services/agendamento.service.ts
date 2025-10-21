@@ -57,12 +57,12 @@ export class AgendamentoService {
     );
   }
 
-  alterarStatusAgendamento(status: AgendamentoStatus, id: string): Observable<any> {
+  alterarStatusAgendamento(status: AgendamentoStatus, id: string, comprouProdutos: boolean): Observable<any> {
     console.log('Headers sendo enviados:', this.authService.getHeaders());
     console.log('Status:', status, 'ID:', id);
     
     const headers = this.authService.getHeaders();
-    return this.http.put<any>(`${this.apiUrl}/status/${id}?status=${status}`, {}, { headers }).pipe(
+    return this.http.put<any>(`${this.apiUrl}/status/${id}?status=${status}&comprouProdutos=${comprouProdutos}`, {}, { headers }).pipe(
       tap((response: any) => {
         console.log('Status do agendamento alterado com sucesso:', response);
       }),

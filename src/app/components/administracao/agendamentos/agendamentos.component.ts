@@ -158,8 +158,13 @@ export class AgendamentosComponent implements OnInit {
       alert('Você não tem permissão para realizar esta ação.');
       return;
     }
-
-    this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.REALIZADO, id.toString()).subscribe({
+    let comprouProdutos!: boolean;
+    if (window.confirm('O cliente comprou produtos junto com o serviço?')) {
+      comprouProdutos = true;
+    } else {
+      comprouProdutos = false;
+    }
+    this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.REALIZADO, id.toString(), comprouProdutos).subscribe({
       next: (response) => {
         console.log('✅ Agendamento finalizado com sucesso:', response);
         this.showAgendamentoInfo = false; // Fechar modal
@@ -201,7 +206,7 @@ export class AgendamentosComponent implements OnInit {
       return;
     }
 
-    this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.CANCELADO, id.toString()).subscribe({
+    this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.CANCELADO, id.toString(), false).subscribe({
       next: (response) => {
         console.log('✅ Agendamento cancelado com sucesso:', response);
         this.showAgendamentoInfo = false; // Fechar modal

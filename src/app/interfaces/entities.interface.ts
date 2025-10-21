@@ -67,6 +67,7 @@ export interface ProdutoAgendamento {
     nome: string;
     preco: number;
     quantidade: number;
+    estoque: number;
 }
 
 export interface ServicoAgendamento {
@@ -92,10 +93,16 @@ export interface CadastroServico {
   duracaoMinutos: number;
 }
 
+export interface FidelidadeDTO {
+    validade: string;
+    sequencia: number;
+}
+
 export interface UserInfo {
     nome: string;
     telefone: string;
     dataCadastro: string;
+    fidelidade: FidelidadeDTO;
 }
 
 export interface ItemProduto {

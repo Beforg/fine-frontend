@@ -123,7 +123,12 @@ export class FormAgendamentoComponent implements OnInit {
       this.produtosSelecionados.push({ ...produto, quantidade: 1 });
       this.calculateTotal();
       this.handleOnProdutoSelecionado();
+    } 
+
+    if (produto.nome.includes("Corte") || produto.nome.includes("Cabelo") ) {
+      console.log("Produto de corte adicionado. Verifique a fidelidade do cliente.");
     }
+    
   }
 
   removeProduct(index: number): void {
@@ -134,7 +139,9 @@ export class FormAgendamentoComponent implements OnInit {
 
   increaseQuantity(type: string, index: number): void {
     if (type === 'produto') {
-      this.produtosSelecionados[index].quantidade++;
+      if (this.produtosSelecionados[index].quantidade < this.produtosSelecionados[index].estoque) {
+        this.produtosSelecionados[index].quantidade++;
+      }
       this.calculateTotal();
       this.handleOnProdutoSelecionado();
     }
@@ -155,10 +162,6 @@ export class FormAgendamentoComponent implements OnInit {
     const totalServicos = this.servicosSelecionados.reduce((sum, servico) => sum + servico.preco, 0);
     const totalProdutos = this.produtosSelecionados.reduce((sum, produto) => sum + (produto.preco * produto.quantidade), 0);
     
-    // Aqui você pode emitir o total para o componente pai ou atualizar uma propriedade
-    console.log('Total Serviços:', totalServicos);
-    console.log('Total Produtos:', totalProdutos);
-    console.log('Total Geral:', totalServicos + totalProdutos);
   }
 
   //Liberar o input de serviços e produtos
@@ -187,7 +190,7 @@ export class FormAgendamentoComponent implements OnInit {
 
   // Função para habilitar campos de serviços e produtos
   private enableServiceAndProductInputs(): void {
-    // Aqui você pode adicionar lógica para habilitar campos
+  
     console.log('Campos de serviços e produtos habilitados');
   }
 
