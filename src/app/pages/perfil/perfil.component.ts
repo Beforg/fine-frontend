@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { HeaderComponent } from "../../components/header/header.component";
 import { FooterComponent } from "../../components/footer/footer.component";
 import { PerfilService } from '../../services/perfil.service';
-import { UserInfo } from '../../interfaces/entities.interface';
+import { FidelidadeDTO, UserInfo } from '../../interfaces/entities.interface';
 import { AuthService } from '../../services/auth.service';
 import { UserRole } from '../../enums/user-role.enum';
 import { PerfilFormComponent } from "../../components/perfil/perfil-form/perfil-form.component";
@@ -58,10 +58,16 @@ export class PerfilComponent implements OnInit {
         // Usar dados do token como fallback
         const userData = this.authService.getCurrentUser();
         if (userData) {
+          let fidelidade: FidelidadeDTO = {
+            validade: 'N/A',
+            sequencia: 0,
+            fidelidadeAplicada: false 
+          }
           this.userInfo = {
             nome: userData.name || userData.email || 'Usuário',
             telefone: '', // Dados não disponíveis no token
-            dataCadastro: 'N/A' // Dados não disponíveis no token
+            dataCadastro: 'N/A', // Dados não disponíveis no token
+            fidelidade: fidelidade
           };
         }
       }

@@ -3,5 +3,6 @@ export const environment = {
   apiUrl: 'https://sua-api-producao.com/api/v1',
   authEndpoint: '/auth',
   barbeirosEndpoint: '/barbeiros',
-  servicosEndpoint: '/servicos'
+  servicosEndpoint: '/servicos',
+  IndisponibilidadeEndpoint: '/indisponibilidade'
 };

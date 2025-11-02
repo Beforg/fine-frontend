@@ -13,6 +13,11 @@
       <div class="user-info">
         <h2 class="user-name">{{ userInfo.nome }}</h2>
         <p class="user-role">{{ userRole }}</p>
+        <mat-icon>card_membership</mat-icon>
+        <div class="user-fidelidade">
+          <span class="fidelidade-sequence">Corte Grátis: {{ userInfo.fidelidade.sequencia }}/5</span>
+          <span class="fidelidade-validade"> Validade: {{ userInfo.fidelidade.validade }}</span>
+        </div>
       </div>
 
       <!-- Formulário de dados -->

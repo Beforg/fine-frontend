@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { Barbeiro, CadastroBarbeiro, EditarBarbeiro } from '../interfaces/entities.interface';
+import { Barbeiro, CadastroBarbeiro, EditarBarbeiro, HorarioTrabalhoDia } from '../interfaces/entities.interface';
 import { environment } from '../../environments/environment';
 import { BackendResponse } from '../interfaces/response.interface';
 
@@ -29,6 +29,18 @@ export class BarbeiroService {
          return of([]);
        })
      );
+   }
+
+   getHorariosTrabalhoBarbeiro(idBarbeiro: number): Observable<HorarioTrabalhoDia[]> {
+      return this.http.get<HorarioTrabalhoDia[]>(`${this.apiUrl}/horarios/${idBarbeiro}`,  {headers: this.authService.getHeaders()}).pipe(
+         tap(response => {
+            console.log("Horários de trabalho recebidos:", response);
+         }),
+         catchError(error => {
+            console.error('Erro ao buscar horários de trabalho:', error);
+            return of([]);
+         })
+      );
    }
 
    getBarbeiroById(id: number): Observable<Barbeiro> {

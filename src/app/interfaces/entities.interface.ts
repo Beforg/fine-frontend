@@ -20,7 +20,14 @@ export interface CadastroBarbeiro {
   urlFoto: string;
   urlBackground: string;
   telefone: string;
+  horariosTrabalho: HorarioTrabalhoDia[];
 
+}
+
+export interface HorarioTrabalhoDia {
+  dia: number; // 1 (Segunda) a 6 (Sábado)
+  horaInicio: string; // Formato "HH:mm:ss"
+  horaFim: string;    // Formato "HH:mm:ss"
 }
 
 export interface EditarBarbeiro {
@@ -32,6 +39,7 @@ export interface EditarBarbeiro {
   urlBackground: string;
   telefone: string;
   ativo: boolean;
+  horariosTrabalho: HorarioTrabalhoDia[];
 
 }
 
@@ -59,6 +67,7 @@ export interface ProdutoAgendamento {
     nome: string;
     preco: number;
     quantidade: number;
+    estoque: number;
 }
 
 export interface ServicoAgendamento {
@@ -84,10 +93,17 @@ export interface CadastroServico {
   duracaoMinutos: number;
 }
 
+export interface FidelidadeDTO {
+    validade: string;
+    sequencia: number;
+    fidelidadeAplicada: boolean;
+}
+
 export interface UserInfo {
     nome: string;
     telefone: string;
     dataCadastro: string;
+    fidelidade: FidelidadeDTO;
 }
 
 export interface ItemProduto {
@@ -106,6 +122,7 @@ export interface AgendamentoRequest {
   dataHoraInicio: string; // Ou 'Date', dependendo de como você vai usar
   produtos?: ItemProduto[]; // O '?' indica que é opcional
   observacoes: string;
+  foiGratis: boolean;
 }
 
 export interface Agendamento {
@@ -114,4 +131,24 @@ export interface Agendamento {
   nomeBarbeiro: string;
   servicos: ServicoAgendamento[];
   produtos?: ItemProduto[];
+}
+
+export interface RegistroIndisponibilidade {
+  barbeiroId: number;
+  data: string;
+  horaInicio: string; 
+  horaFim: string;   
+  motivo: string;
+}
+
+
+export interface Indisponibilidade {
+  id: number;
+  barbeiroId: number;
+  barbeiroNome: string;
+  data: string;
+  horaInicio: string; 
+  horaFim: string;   
+  motivo: string;
+
 }

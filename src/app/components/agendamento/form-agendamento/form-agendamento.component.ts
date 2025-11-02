@@ -6,28 +6,30 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../../interfaces/entities.interface';
-import { ServicoService } from '../../../services/servico.service';
-import { ProdutoService } from '../../../services/produto.service';
+import { FidelidadeDTO, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../../interfaces/entities.interface';
 import { HorariosComponent } from '../horarios/horarios.component';
+import { ModalComponent } from "../modal/modal.component";
 
 @Component({
   selector: 'app-form-agendamento',
   imports: [
     CommonModule,
     FormsModule,
-    MatIconModule, 
+    MatIconModule,
     MatCheckboxModule,
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
     HorariosComponent
-  ],
+],
   templateUrl: './form-agendamento.component.html',
   styleUrl: './form-agendamento.component.scss'
 })
 export class FormAgendamentoComponent implements OnInit {
   
+  @Input() isLoggedIn: boolean = false;
+  // Fidelidade dados
+  @Input() fidelidadeCliente: FidelidadeDTO | null = null;
   // Serviços disponíveis
   @Input() servicosDisponiveis: ServicoAgendamento[] = [];
   selectedDate: string | null = null;
@@ -47,8 +49,22 @@ export class FormAgendamentoComponent implements OnInit {
   servicosSelecionados: ServicoAgendamento[] = [];
   produtosSelecionados: ProdutoAgendamento[] = [];
 
+  corteGratis!: boolean;
+  // aplicar a fidelidade
+  descontoAplicado: boolean = false;
+  @Output() descontoAplicadoChange = new EventEmitter<boolean>();
+
+  idServicoAplicado: number | null = null;
+
+
   
   constructor() { }
+
+    ngOnInit(): void {
+    if (this.isLoggedIn) {
+      this.validateCorteGratis();
+    }
+  }
 
   handleListarHorarios(): void {
     if (this.selectedDate && this.servicosSelecionados.length > 0) {
@@ -73,6 +89,29 @@ export class FormAgendamentoComponent implements OnInit {
       console.log('Data ou serviços não selecionados');
     }
   }
+  validateCorteGratis(): boolean {
+
+    if (!this.isLoggedIn) {
+      this.corteGratis = false;
+      return this.corteGratis;
+    } else if (this.fidelidadeCliente == null) {
+      this.corteGratis = false;
+      return this.corteGratis;
+    }
+
+    if (this.fidelidadeCliente 
+      && this.fidelidadeCliente.sequencia >= 5 
+      && this.fidelidadeCliente.validade >= new Date().toISOString().split('T')[0]
+      && !this.fidelidadeCliente.fidelidadeAplicada) {
+      this.corteGratis = true;
+      console.log('Corte grátis disponível');
+    } else {
+      this.corteGratis = false;
+    }
+    return this.corteGratis;
+  }
+
+  
 
   onTimeSelected(time: string): void {
     this.timeSelected.emit(time);
@@ -87,32 +126,50 @@ export class FormAgendamentoComponent implements OnInit {
     this.produtosIdQuantidade.emit(produtos);
   }
 
-  ngOnInit(): void {
-    // verificar futuramente se está salvo em cache já para aproveitar.
-    // this.getProdutosDisponiveis();
-    // this.getServicosDisponiveis();
-  }
+
 
 
   // Métodos para serviços
   addService(servico: ServicoAgendamento): void {
     // Verificar se o serviço já foi selecionado
     const jaExiste = this.servicosSelecionados.find(s => s.id === servico.id);
+    
     if (!jaExiste) {
-      this.servicosSelecionados.push({ ...servico });
+      const servicoSelecionado: ServicoAgendamento = { ...servico };
+      this.descontoCorteGratis(servicoSelecionado); 
+      this.servicosSelecionados.push(servicoSelecionado);
       this.calculateTotal();
       this.handleListarHorarios();
     }
   }
 
-  removeService(index: number): void {
-    this.servicosSelecionados.splice(index, 1);
+  descontoCorteGratis(servico: ServicoAgendamento): void {
+    if (this.corteGratis 
+      && (servico.nome.toLowerCase().includes('cabelo') || servico.nome.toLowerCase().includes('corte')) &&
+      !this.descontoAplicado) {
+      servico.preco -= 35; 
+      servico.nome = servico.nome + ' (Corte Grátis)';
+      this.idServicoAplicado = servico.id;
+      this.descontoAplicado = true;
+      this.descontoAplicadoChange.emit(this.descontoAplicado);
+      console.log('Desconto aplicado ao serviço de cabelo grátis');
+    }
+  }
+  removeService(index: number, id: number): void {
+    this.servicosSelecionados.splice(index, 1); 
+    if (this.idServicoAplicado != null && id === this.idServicoAplicado) {
+      this.descontoAplicado = false;
+      this.descontoAplicadoChange.emit(this.descontoAplicado);
+      this.idServicoAplicado = null;
+      console.log('Desconto removido ao retirar o serviço de cabelo grátis');
+    }
     this.calculateTotal();
     if (this.servicosSelecionados.length > 0) {
       this.handleListarHorarios();
     } else {
       this.horariosDisponiveis = [];
     }
+    
   }
 
   // Métodos para produtos
@@ -124,6 +181,7 @@ export class FormAgendamentoComponent implements OnInit {
       this.calculateTotal();
       this.handleOnProdutoSelecionado();
     }
+  
   }
 
   removeProduct(index: number): void {
@@ -134,7 +192,9 @@ export class FormAgendamentoComponent implements OnInit {
 
   increaseQuantity(type: string, index: number): void {
     if (type === 'produto') {
-      this.produtosSelecionados[index].quantidade++;
+      if (this.produtosSelecionados[index].quantidade < this.produtosSelecionados[index].estoque) {
+        this.produtosSelecionados[index].quantidade++;
+      }
       this.calculateTotal();
       this.handleOnProdutoSelecionado();
     }
@@ -152,13 +212,9 @@ export class FormAgendamentoComponent implements OnInit {
 
   // Calcular total
   calculateTotal(): void {
-    const totalServicos = this.servicosSelecionados.reduce((sum, servico) => sum + servico.preco, 0);
-    const totalProdutos = this.produtosSelecionados.reduce((sum, produto) => sum + (produto.preco * produto.quantidade), 0);
+    this.servicosSelecionados.reduce((sum, servico) => sum + servico.preco, 0);
+    this.produtosSelecionados.reduce((sum, produto) => sum + (produto.preco * produto.quantidade), 0);
     
-    // Aqui você pode emitir o total para o componente pai ou atualizar uma propriedade
-    console.log('Total Serviços:', totalServicos);
-    console.log('Total Produtos:', totalProdutos);
-    console.log('Total Geral:', totalServicos + totalProdutos);
   }
 
   //Liberar o input de serviços e produtos
@@ -187,7 +243,7 @@ export class FormAgendamentoComponent implements OnInit {
 
   // Função para habilitar campos de serviços e produtos
   private enableServiceAndProductInputs(): void {
-    // Aqui você pode adicionar lógica para habilitar campos
+  
     console.log('Campos de serviços e produtos habilitados');
   }
 

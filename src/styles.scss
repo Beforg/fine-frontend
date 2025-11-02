@@ -1,5 +1,5 @@
 /* Importar variáveis SCSS */
-@import 'variables';
+@use '_variables' as *;
 
 /* Temas Angular Material disponíveis */
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';

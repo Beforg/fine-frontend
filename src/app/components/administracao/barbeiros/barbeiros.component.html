@@ -209,10 +209,10 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row" *ngIf="isEditing">
                     <div class="form-group">
                         <label for="visualizacoes">Visualizações</label>
-                        <input 
+                        <input readonly="true"
                             type="number" 
                             id="visualizacoes" 
                             [(ngModel)]="currentBarbeiro.visualizacoes" 
@@ -223,13 +223,26 @@
 
                     <div class="form-group">
                         <label for="corteRealizados">Cortes Realizados</label>
-                        <input 
+                        <input readonly="true"
                             type="number" 
                             id="corteRealizados" 
                             [(ngModel)]="currentBarbeiro.cortesRealizados" 
                             name="corteRealizados"
                             min="0"
                             placeholder="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="horariosDeTrabalho">Horários de Trabalho</label>
+                    <div *ngFor="let dia of diasDaSemana">
+                        <label>{{ dia.label }}</label>
+                        <mat-label>Selecione o Horário</mat-label>
+                        <mat-select [(ngModel)]="horariosPorDia[dia.key]" [name]="dia.key">
+                            <mat-option value="">Não trabalha</mat-option>
+                            <mat-option *ngFor="let horario of horariosDeTrabalho" [value]="horario">
+                                {{ horario }}
+                            </mat-option>
+                        </mat-select>
                     </div>
                 </div>
                 <div class="form-group-checkbox">
@@ -242,7 +255,7 @@
                         Barbeiro ativo
                     </label>
                 </div>
-
+                
                 <!-- <div class="form-group">
                     <label for="urlFoto">URL da Foto</label>
                     <input 
