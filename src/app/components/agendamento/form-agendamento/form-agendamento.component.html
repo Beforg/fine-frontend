@@ -1,6 +1,39 @@
 <section class="form-section">
     <div class="form-container">
       <h3 class="section-title">Selecionar data</h3>
+      @if (validateCorteGratis()) {
+        <div class="fidelidade fidelidade-gratis">
+          <mat-icon class="fidelidade-icon">card_giftcard</mat-icon>
+          <h4 class="title-corte-gratis">Corte Grátis Disponível!</h4>
+        </div>
+        
+      } @else if (fidelidadeCliente && fidelidadeCliente.fidelidadeAplicada) {
+        <div class="fidelidade fidelidade-aplicada">
+          <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+          <h4 class="title-corte-gratis">Corte Grátis Já Aplicado em outro Agendamento!</h4>
+        </div>
+      } @else if (fidelidadeCliente && !fidelidadeCliente.fidelidadeAplicada) {
+        <div class="fidelidade fidelidade-progresso">
+          <mat-icon class="fidelidade-icon">loyalty</mat-icon>
+          <div class="fidelidade-info">
+            <h4>Cortes Realizados: {{fidelidadeCliente.sequencia}}/5</h4>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="(fidelidadeCliente.sequencia / 5) * 100"></div>
+            </div>
+            @if (fidelidadeCliente.validade != "Sem registro") {
+            <p class="text-proximo-corte">
+              <mat-icon class="small-icon">schedule</mat-icon>
+              Validade: {{fidelidadeCliente.validade | date: 'dd/MM/yyyy'}}
+            </p>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="fidelidade fidelidade-login">
+          <mat-icon class="fidelidade-icon">login</mat-icon>
+          <h4 class="title-corte-gratis">Faça login para acompanhar sua fidelidade!</h4>
+        </div>
+      }
       
       <div class="date-input-group">
         <label for="data-agendamento" class="input-label">Insira a data</label>
@@ -49,7 +82,7 @@
             <button 
               type="button" 
               class="remove-btn" 
-              (click)="removeService(i)"
+              (click)="removeService(i, servico.id)"
               mat-icon-button 
               color="warn">
               <mat-icon>close</mat-icon>
@@ -57,6 +90,14 @@
           </div>
         </div>
       </div>
+
+
+        @if (descontoAplicado) {
+          <div class="fidelidade fidelidade-aplicada">
+            <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+            <h4>Fidelidade Aplicada!</h4>
+          </div>
+        }
 
       <!-- Seção de Produtos -->
       <div class="products-section">
@@ -129,5 +170,4 @@
         <p>O Barbeiro está indisponível para a data selecionada.</p>
       </div>
     }
-    
   </section>

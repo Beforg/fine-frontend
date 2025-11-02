@@ -99,8 +99,7 @@
                                 (click)="finalizarAgendamento(agendamento.id)">
                                 <mat-icon>check</mat-icon>
                             </button>
-                            <button 
-                                *ngIf="hasPermissionToChangeStatus()" 
+                            <button  
                                 class="btn-action btn-delete" 
                                 title="Cancelar" 
                                 (click)="cancelarAgendamento(agendamento.id)">

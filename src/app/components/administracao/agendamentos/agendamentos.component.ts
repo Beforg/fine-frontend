@@ -164,6 +164,7 @@ export class AgendamentosComponent implements OnInit {
     } else {
       comprouProdutos = false;
     }
+
     this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.REALIZADO, id.toString(), comprouProdutos).subscribe({
       next: (response) => {
         console.log('✅ Agendamento finalizado com sucesso:', response);
@@ -197,14 +198,6 @@ export class AgendamentosComponent implements OnInit {
       role: currentUser?.role,
       userId: currentUser?.id
     });
-
-    // Verificar permissão primeiro
-    if (!this.hasPermissionToChangeStatus()) {
-      console.error('PERMISSÃO NEGADA: Usuário não tem permissão para alterar status de agendamentos');
-      console.error('Roles permitidos: ADMIN, BARBEIRO. Role atual:', currentUser?.role);
-      alert('Você não tem permissão para realizar esta ação.');
-      return;
-    }
 
     this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.CANCELADO, id.toString(), false).subscribe({
       next: (response) => {

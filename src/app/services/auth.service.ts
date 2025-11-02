@@ -33,8 +33,6 @@ export class AuthService {
     return this.http.post<BackendLoginResponse>(`${this.apiUrl}/login`, credentials, { headers: this.headers })
       .pipe(
         map((backendResponse: BackendLoginResponse) => {
-          console.log('✅ Resposta raw do backend:', backendResponse);
-          
           if (backendResponse.token) {
             // Armazenar token
             this.setToken(backendResponse.token);
@@ -53,7 +51,6 @@ export class AuthService {
               } : undefined
             };
 
-            console.log('✅ Resposta padronizada:', standardResponse);
             return standardResponse;
           } else {
             console.error('❌ Token não encontrado na resposta:', backendResponse);
@@ -84,7 +81,6 @@ export class AuthService {
             errorMessage = this.getErrorMessage(error);
           }
 
-          console.log('🔍 Mensagem de erro extraída:', errorMessage);
           
           const errorResponse: LoginResponse = {
             success: false,
@@ -100,11 +96,9 @@ export class AuthService {
     return this.http.post<BackendResponse>(`${this.apiUrl}/cadastrar`, credentials, { headers: this.headers })
       .pipe(
         map((response: BackendResponse) => {
-          console.log('✅ Resposta do registro:', response);
           return response;
         }),
         catchError((error: HttpErrorResponse) => {
-          console.error('❌ Erro no registro:', error);
           
           // Extrair mensagem de erro do backend
           let errorMessage = 'Erro ao registrar usuário. Tente novamente mais tarde.';
@@ -122,8 +116,6 @@ export class AuthService {
             // Usar getErrorMessage para status codes específicos
             errorMessage = this.getErrorMessage(error);
           }
-
-          console.log('🔍 Mensagem de erro de registro extraída:', errorMessage);
           
           const errorResponse: BackendResponse = {
             message: errorMessage,
@@ -236,20 +228,18 @@ export class AuthService {
    * Obtém mensagem de erro personalizada baseada no erro HTTP
    */
   private getErrorMessage(error: HttpErrorResponse): string {
-    console.log('🔍 Processando erro HTTP:', error);
-    console.log('📊 Status HTTP:', error.status);
-    console.log('📝 Error body:', error.error);
+
     
     // Primeiro, tentar extrair mensagem específica do backend
     if (error.error) {
       if (typeof error.error === 'string') {
-        console.log('📝 Mensagem de erro (string):', error.error);
+
         return error.error;
       } else if (error.error.message) {
-        console.log('📝 Mensagem de erro (object.message):', error.error.message);
+
         return error.error.message;
       } else if (error.error.error) {
-        console.log('📝 Mensagem de erro (object.error):', error.error.error);
+
         return error.error.error;
       }
     }
@@ -279,7 +269,6 @@ export class AuthService {
   getCurrentUser(): any {
     const token = this.getToken();
     if (!token) {
-      console.log('❌ Nenhum token encontrado');
       return null;
     }
 
@@ -287,7 +276,6 @@ export class AuthService {
       const parts = token.split('.');
       
       if (parts.length !== 3) {
-        console.error('❌ Token JWT inválido - não tem 3 partes');
         return null;
       }
 

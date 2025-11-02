@@ -1,0 +1,57 @@
+@if (modalVisible) {
+  <div class="modal-overlay" (click)="onCancelar()">
+    <mat-card class="modal-card" (click)="$event.stopPropagation()">
+      <mat-card-header class="modal-header">
+        <div class="header-content">
+          <mat-icon class="header-icon">event_available</mat-icon>
+          <mat-card-title class="modal-title">Confirmar Agendamento</mat-card-title>
+        </div>
+        <button mat-icon-button (click)="onCancelar()" class="close-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+
+      <mat-card-content class="modal-content">
+        <mat-list class="info-list">
+          <mat-list-item>
+            <mat-icon matListItemIcon class="info-icon">calendar_today</mat-icon>
+            <div matListItemTitle class="info-label">Data</div>
+            <div matListItemLine class="info-value">{{ data | date: 'dd/MM/yyyy' }}</div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon class="info-icon">schedule</mat-icon>
+            <div matListItemTitle class="info-label">Horário</div>
+            <div matListItemLine class="info-value">{{ horario }}</div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item>
+            <mat-icon matListItemIcon class="info-icon">person</mat-icon>
+            <div matListItemTitle class="info-label">Barbeiro</div>
+            <div matListItemLine class="info-value">{{ nomeBarbeiro }}</div>
+          </mat-list-item>
+        </mat-list>
+
+        <div class="confirmation-message">
+          <mat-icon class="message-icon">info</mat-icon>
+          <span>Deseja confirmar este agendamento?</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="modal-actions">
+        <button mat-stroked-button (click)="onCancelar()" class="btn-cancelar">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+        <button mat-raised-button color="primary" (click)="onConfirmar()" class="btn-confirmar">
+          <mat-icon>check</mat-icon>
+          Confirmar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+}

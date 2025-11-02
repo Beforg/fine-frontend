@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -11,10 +11,13 @@ import { HeroSectionComponent } from "../../components/agendamento/hero-section/
 import { FormAgendamentoComponent } from "../../components/agendamento/form-agendamento/form-agendamento.component";
 import { ProdutoService } from '../../services/produto.service';
 import { ServicoService } from '../../services/servico.service';
-import { AgendamentoRequest, Barbeiro, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../interfaces/entities.interface';
+import { AgendamentoRequest, Barbeiro, FidelidadeDTO, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../interfaces/entities.interface';
 import { PrimaryButtonComponent } from '../../components/primary-button/primary-button.component';
 import { BarbeiroService } from '../../services/barbeiro.service';
 import { NotificationService } from '../../services/notification.service';
+import { PerfilService } from '../../services/perfil.service';
+import { AuthService } from '../../services/auth.service';
+import { ModalComponent } from "../../components/agendamento/modal/modal.component";
 
 
 
@@ -29,14 +32,18 @@ import { NotificationService } from '../../services/notification.service';
     FooterComponent,
     HeroSectionComponent,
     FormAgendamentoComponent,
-    PrimaryButtonComponent
+    PrimaryButtonComponent,
+    ModalComponent
 ],
   templateUrl: './agendamento.component.html',
   styleUrl: './agendamento.component.scss'
 })
 export class AgendamentoComponent implements OnInit {
   barbeiroId: string | null = null;
-  barbeiro: Barbeiro | null = null;
+  barbeiro: Barbeiro | null = null
+
+  fidelidadeCliente!: FidelidadeDTO | null;
+  fidelidadeAplicada: boolean = false; // Indica se a fidelidade foi aplicada ao serviço de corte
   
   produtosDisponiveis: ProdutoAgendamento[] = [];
   servicosDisponiveis: ServicoAgendamento[] = [];
@@ -51,16 +58,26 @@ export class AgendamentoComponent implements OnInit {
   //--------------
   isTimeSelected: boolean = false;
   isLoading: boolean = false;
+  agendamentoFinalizado: boolean = false;
+  modalConfirmarVisible: boolean = false;
 
   // Mock data baseado nos horários que você forneceu
   horariosDisponiveis: string[] = [];
 
 
 
-  constructor(private route: ActivatedRoute, private agendamentoService: AgendamentoService, private servicoService: ServicoService, 
-      private produtoService: ProdutoService, private barbeiroService: BarbeiroService, private notificationService: NotificationService) {
+  constructor(
+    private route: ActivatedRoute, 
+    private agendamentoService: AgendamentoService, 
+    private servicoService: ServicoService, 
+    private produtoService: ProdutoService, 
+    private barbeiroService: BarbeiroService, 
+    private notificationService: NotificationService,
+    private perfilService: PerfilService,
+    private authService: AuthService,
+    private router: Router) { 
     this.barbeiroId = this.route.snapshot.paramMap.get('barbeiroId');
-  }
+    }
 
   ngOnInit(): void {
     // Pegar o ID dos query parameters se não estiver nos route params
@@ -76,7 +93,52 @@ export class AgendamentoComponent implements OnInit {
     this.getServicosDisponiveis();
     this.incrementarVisualizacao();
     this.loadBarbeiroData();
+    if (this.isLoggedIn()) {
+      this.getFidelidadeCliente();
+    }
     window.scrollTo(0, 0);
+
+  }
+
+  handleAbrirModalConfirmar(): void {
+    this.modalConfirmarVisible = true;
+  }
+
+  handleConfirmarModal(): void {
+    this.submitAgendamento();
+    this.modalConfirmarVisible = false;
+  }
+  
+  handleCancelarModal(): void {
+    this.modalConfirmarVisible = false;
+  }
+
+  handleDescontoAplicadoChang(aplicado: boolean): void {
+    this.fidelidadeAplicada = aplicado;
+  }
+
+  verificaCorteGratis(): boolean {
+    return this.fidelidadeCliente?.sequencia! >= 5 
+    && this.fidelidadeCliente?.fidelidadeAplicada == false
+    && this.fidelidadeAplicada;
+  }
+
+  getFidelidadeCliente(): void {
+    if (!this.authService.isAuthenticated()) {
+      this.fidelidadeCliente = null;
+    } else {
+    this.perfilService.getUserInfos().subscribe({
+      next: (userInfo) => {
+        this.fidelidadeCliente = userInfo.fidelidade;
+        console.log('Fidelidade do cliente carregada:', this.fidelidadeCliente);
+      
+      },
+      error: (error) => {
+        console.error('Erro ao carregar fidelidade do cliente:', error);
+        this.fidelidadeCliente = null;
+      }
+    })
+  }
   }
 
   loadBarbeiroData(){
@@ -147,9 +209,20 @@ export class AgendamentoComponent implements OnInit {
       })
     }
 
-    submitAgendamento(): void {
-      if (this.selectedTime) {
+    isLoggedIn(): boolean {
+      return this.authService.isAuthenticated();
+    }
 
+    submitAgendamento(): void {
+      console.log(this.verificaCorteGratis());
+      if (!this.isLoggedIn()) {
+        this.notificationService.info("Por favor, faça login para agendar um horário.");
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      if (this.selectedTime) {
+        this.agendamentoFinalizado = true;
         this.isLoading = true;
 
         const dataHora = `${this.selectedDate}T${this.selectedTime}`;
@@ -159,27 +232,29 @@ export class AgendamentoComponent implements OnInit {
           dataHoraInicio: dataHora,
           produtos: this.produtos,
           observacoes: "Nenhuma observação",
+          foiGratis: this.verificaCorteGratis()
         }
         console.log('Dados do agendamento:', novoAgendamento);
         this.agendamentoService.criarAgendamento(novoAgendamento).subscribe({
           next: (response) => {
             console.log('Agendamento confirmado para o horário:', this.selectedTime);
             this.isLoading = false;
-            this.notificationService.success("Agendamento criado com sucesso!");
-            
+            this.notificationService.success("Agendamento criado com sucesso! no dia " + this.selectedDate + " às " + this.selectedTime);
+            // refresh page after 3 seconds
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
           },
           error: (error) => {
             console.error('Erro ao criar agendamento:', error);
             this.isLoading = false;
+            this.agendamentoFinalizado = false;
+            this.notificationService.error("Erro ao criar agendamento. Por favor, tente novamente mais tarde.");
           }
         });
       } else {
-        console.log('Nenhum horário selecionado.');
+        this.notificationService.warning("Por favor, selecione um horário antes de confirmar o agendamento.");
       }
-    }
-
-    cancelAgendamento(): void {
-
     }
 
     incrementarVisualizacao(): void {

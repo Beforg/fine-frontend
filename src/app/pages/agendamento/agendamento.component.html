@@ -7,9 +7,12 @@
     [produtosDisponiveis]="produtosDisponiveis" 
     [servicosDisponiveis]="servicosDisponiveis"
     [horariosDisponiveis]="horariosDisponiveis"
+    [fidelidadeCliente]="fidelidadeCliente"
     (listarHorarios)="onListarHorarios($event)"
     (timeSelected)="getSelectedTime($event)"
-    (produtosIdQuantidade)="getProdutosIdsQuantidade($event)">
+    [isLoggedIn]="isLoggedIn()"
+    (produtosIdQuantidade)="getProdutosIdsQuantidade($event)"
+    (descontoAplicadoChange)="handleDescontoAplicadoChang($event)">
     </app-form-agendamento>
   </section>
 
@@ -19,15 +22,25 @@
       <app-primary-button 
         text="Confirmar Agendamento"
         icon="check"
-        [disabled]="!isTimeSelected"
+        [disabled]="!isTimeSelected || agendamentoFinalizado"
         [loading]="isLoading"
         variant="raised"
         size="large"
         color="primary"
-        (buttonClick)="submitAgendamento()">
+        (buttonClick)="handleAbrirModalConfirmar()">
       </app-primary-button>
     </div>
   </section>
+
+  <modal-form-agendamento
+    [modalVisible]="modalConfirmarVisible"
+    [data]="selectedDate!"
+    [horario]="selectedTime!"
+    [nomeBarbeiro]="barbeiro?.nome!"
+    (confirmar)="handleConfirmarModal()"
+    (cancelar)="handleCancelarModal()">
+
+  </modal-form-agendamento>
 
 </div>
 

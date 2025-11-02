@@ -96,6 +96,7 @@ export interface CadastroServico {
 export interface FidelidadeDTO {
     validade: string;
     sequencia: number;
+    fidelidadeAplicada: boolean;
 }
 
 export interface UserInfo {
@@ -121,6 +122,7 @@ export interface AgendamentoRequest {
   dataHoraInicio: string; // Ou 'Date', dependendo de como você vai usar
   produtos?: ItemProduto[]; // O '?' indica que é opcional
   observacoes: string;
+  foiGratis: boolean;
 }
 
 export interface Agendamento {
