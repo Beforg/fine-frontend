@@ -13,10 +13,42 @@
       <div class="user-info">
         <h2 class="user-name">{{ userInfo.nome }}</h2>
         <p class="user-role">{{ userRole }}</p>
-        <mat-icon>card_membership</mat-icon>
+        
         <div class="user-fidelidade">
-          <span class="fidelidade-sequence">Corte Grátis: {{ userInfo.fidelidade.sequencia }}/5</span>
-          <span class="fidelidade-validade"> Validade: {{ userInfo.fidelidade.validade }}</span>
+          <div class="fidelidade-header">
+            <mat-icon class="fidelidade-icon">card_membership</mat-icon>
+            <h3 class="fidelidade-title">Programa de Fidelidade</h3>
+          </div>
+          
+          @if (userInfo.fidelidade.sequencia! < 5) {
+            <div class="fidelidade-card fidelidade-progresso">
+              <div class="fidelidade-content">
+                <mat-icon class="status-icon">loyalty</mat-icon>
+                <div class="fidelidade-info">
+                  <span class="fidelidade-label">Progresso do Corte Grátis</span>
+                  <span class="fidelidade-sequence">{{ userInfo.fidelidade.sequencia }}/5 Cortes</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(userInfo.fidelidade.sequencia! / 5) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="fidelidade-card fidelidade-disponivel">
+              <div class="fidelidade-content">
+                <mat-icon class="status-icon">card_giftcard</mat-icon>
+                <div class="fidelidade-info">
+                  <span class="fidelidade-label">Status</span>
+                  <span class="fidelidade-sequence">Corte Grátis Disponível!</span>
+                </div>
+              </div>
+            </div>
+          }
+          
+          <div class="fidelidade-validade">
+            <mat-icon class="validade-icon">schedule</mat-icon>
+            <span>Validade: {{ userInfo.fidelidade.validade }}</span>
+          </div>
         </div>
       </div>
 
@@ -61,11 +93,7 @@
 
       <!-- Ações -->
       <div class="actions-section">
-        <!-- <button mat-raised-button color="primary" class="edit-button">
-          <mat-icon>edit</mat-icon>
-          Editar Perfil
-        </button> -->
-        <app-primary-button icon="edit" (buttonClick)="abrirModalEdicao()" [text]="'Editar Perfil'">
+        <app-primary-button icon="edit" (buttonClick)="abrirModalEdicao()" [text]="'Alterar Dados'">
         </app-primary-button>
       </div>
     </mat-card>

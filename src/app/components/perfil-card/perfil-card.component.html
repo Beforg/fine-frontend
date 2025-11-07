@@ -33,6 +33,14 @@
         Meu Perfil
       </button>
 
+      <button *ngIf="isCliente || isBarbeiro" 
+        class="action-button agendamentos-button" 
+        (click)="onGoToAgendamentos()"
+        mat-button>
+        <mat-icon>event</mat-icon>
+        Agendamentos
+      </button>
+
       <button 
         class="action-button logout-button" 
         (click)="onLogout()"

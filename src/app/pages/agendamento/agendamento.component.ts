@@ -101,6 +101,12 @@ export class AgendamentoComponent implements OnInit {
   }
 
   handleAbrirModalConfirmar(): void {
+    if (!this.isLoggedIn()) {
+      this.notificationService.info("Por favor, faça login para agendar um horário.");
+      this.router.navigate(['/login']);
+      return;
+    }
+
     this.modalConfirmarVisible = true;
   }
 
@@ -215,11 +221,6 @@ export class AgendamentoComponent implements OnInit {
 
     submitAgendamento(): void {
       console.log(this.verificaCorteGratis());
-      if (!this.isLoggedIn()) {
-        this.notificationService.info("Por favor, faça login para agendar um horário.");
-        this.router.navigate(['/login']);
-        return;
-      }
 
       if (this.selectedTime) {
         this.agendamentoFinalizado = true;
@@ -242,7 +243,7 @@ export class AgendamentoComponent implements OnInit {
             this.notificationService.success("Agendamento criado com sucesso! no dia " + this.selectedDate + " às " + this.selectedTime);
             // refresh page after 3 seconds
             setTimeout(() => {
-              window.location.reload();
+              this.router.navigate([`/perfil`], { queryParams: { tab: 'g' } });
             }, 3000);
           },
           error: (error) => {

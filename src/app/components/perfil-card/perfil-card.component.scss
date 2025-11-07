@@ -157,6 +157,16 @@
       }
     }
 
+    &.agendamentos-button {
+      color: $verde_principal;
+      background-color: rgba(40, 167, 69, 0.1);
+
+      &:hover {
+        background-color: rgba(40, 167, 69, 0.2);
+        transform: translateY(-1px);
+      }
+    }
+
     &.logout-button {
       color: $vermelho_principal;
       background-color: rgba(220, 53, 69, 0.1);

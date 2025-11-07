@@ -90,7 +90,14 @@
           </div>
         </div>
       </div>
-
+      <!-- Tempo Estimado -->
+      <div class="estimated-time" *ngIf="servicosSelecionados.length > 0">
+        <mat-icon class="time-icon">schedule</mat-icon>
+        <div class="time-info">
+          <span class="time-label">Tempo estimado:</span>
+          <span class="time-value">{{ calcularTempoDeServico() }} minutos</span>
+        </div>
+      </div>
 
         @if (descontoAplicado) {
           <div class="fidelidade fidelidade-aplicada">

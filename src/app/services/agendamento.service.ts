@@ -45,8 +45,8 @@ export class AgendamentoService {
     );
   }
 
-  listarAgendamentos(data: {id: string, page: string, size: string}): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/listar/${data.id}?page=${data.page}&size=${data.size}`, { headers: this.authService.getHeaders() }).pipe(
+  listarAgendamentos(data: {id: string, page: string, size: string, filtro: string}): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/listar/${data.id}?page=${data.page}&size=${data.size}&filtro=${data.filtro}`, { headers: this.authService.getHeaders() }).pipe(
       tap((response: any) => {
         console.log('Agendamentos listados com sucesso:', response);
       }),

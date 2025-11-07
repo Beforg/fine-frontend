@@ -9,6 +9,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { IndisponibilidadeService } from '../../../services/indisponibilidade.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-disponibilidade',
@@ -21,7 +23,9 @@ import { IndisponibilidadeService } from '../../../services/indisponibilidade.se
     MatInputModule,
     MatRadioModule,
     MatButtonModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './disponibilidade.component.html',
   styleUrl: './disponibilidade.component.scss'
@@ -30,7 +34,7 @@ export class DisponibilidadeComponent implements OnInit {
   indisponibilidades: Indisponibilidade[] = [];
   isModalOpen: boolean = false;
   bloqueioForm!: FormGroup;
-  
+  minDate = new Date();
   // Dados para os selects
   @Input() barbeiros!: Barbeiro[];
   // 
@@ -109,10 +113,10 @@ export class DisponibilidadeComponent implements OnInit {
   get f() { return this.bloqueioForm.controls; }
 
   // Método para obter a data de hoje no formato YYYY-MM-DD
-  getTodayDate(): string {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  }
+  // getTodayDate(): string {
+  //   const today = new Date();
+  //   return today.toISOString().split('T')[0];
+  // }
 
   openModal() {
     this.isModalOpen = true;

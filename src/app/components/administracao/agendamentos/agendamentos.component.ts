@@ -6,6 +6,9 @@ import { AgendamentoService } from '../../../services/agendamento.service';
 import { AuthService } from '../../../services/auth.service';
 import { AgendamentoStatus } from '../../../enums/agendamento-status.enum';
 import { UserRole } from '../../../enums/user-role.enum';
+import {MatRadioModule} from '@angular/material/radio'
+import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../../services/notification.service';
 
 // Interfaces para tipagem
 interface Servico {
@@ -32,6 +35,7 @@ interface Agendamento {
   produtos: Produto[];
   dataHoraInicio: string;
   status: string;
+  foiGratis: boolean;
 }
 
 
@@ -40,7 +44,9 @@ interface Agendamento {
   imports: [
     CommonModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatRadioModule,
+    FormsModule
   ],
   templateUrl: './agendamentos.component.html',
   styleUrl: './agendamentos.component.scss'
@@ -49,6 +55,7 @@ export class AgendamentosComponent implements OnInit {
   @Input() showAgendamentoContainer: boolean = false;
   // Dados da tabela
   agendamentos: Agendamento[] = [];
+  agendamentosFiltrados: Agendamento[] = [];
   barbeiroId: string = "";
   showAgendamentoInfo: boolean = false;
   agendamentoSelecionado: Agendamento | null = null;
@@ -60,8 +67,12 @@ export class AgendamentosComponent implements OnInit {
   
   // Para exposição no template
   Math = Math;
+  filtroSelecionado: string = 'Agendado';
 
-  constructor(private agendamentoService: AgendamentoService, private authService: AuthService) { }
+  constructor(
+    private agendamentoService: AgendamentoService, 
+    private authService: AuthService,
+    private notification: NotificationService) { }
 
   ngOnInit(): void {
     // Debug: informações do usuário
@@ -77,36 +88,47 @@ export class AgendamentosComponent implements OnInit {
     this.showAgendamentoInfo = !this.showAgendamentoInfo;
   }
 
+  filtrarAgendamentos(): void {
+    this.loadAgendamentos();
+  }
+
   visualizarAgendamento(agendamento: Agendamento): void {
     this.agendamentoSelecionado = agendamento;
     this.showAgendamentoInfo = true;
+  }
+
+  toggleDetalhes(agendamento: Agendamento): void {
+    if (this.agendamentoSelecionado?.id === agendamento.id) {
+      this.agendamentoSelecionado = null;
+    } else {
+      this.agendamentoSelecionado = agendamento;
+    }
   }
 
   // Verificar se o usuário tem permissão para alterar status
   hasPermissionToChangeStatus(): boolean {
     const currentUser = this.authService.getCurrentUser();
     const userRole = currentUser?.role;
-    
-    console.log('🔍 Verificando permissão:', {
-      role: userRole,
-      isAdmin: userRole === UserRole.ADMIN,
-      isBarbeiro: userRole === UserRole.BARBEIRO
-    });
-    
     return userRole === UserRole.ADMIN || userRole === UserRole.BARBEIRO;
   }
 
 // Trocar o id pelo selecionado (Pelo ADMIN somente)
-  loadAgendamentos(): void {
-    const data = {id: "7", page: (this.currentPage + 1).toString(), size: this.pageSize.toString()};
+  loadAgendamentos() {
+    const data = {
+      id: "7", 
+      page: (this.currentPage + 1).toString(), 
+      size: this.pageSize.toString(),
+      filtro: this.filtroSelecionado
+    };
     this.agendamentoService.listarAgendamentos(data).subscribe({
       next: (response) => {
         this.agendamentos = response.content;
         this.totalElements = response.totalElements;
         this.totalPages = response.totalPages;
+        this.agendamentosFiltrados = [...this.agendamentos]; // Inicialmente sem filtro
       },
       error: (error) => {
-        console.error('Erro ao carregar agendamentos:', error);
+        this.notification.error(error.error.message || "Erro ao carregar agendamentos.");
       }
     });
   }
@@ -169,51 +191,57 @@ export class AgendamentosComponent implements OnInit {
       next: (response) => {
         console.log('✅ Agendamento finalizado com sucesso:', response);
         this.showAgendamentoInfo = false; // Fechar modal
+        this.notification.success("Agendamento finalizado com sucesso!");
         this.loadAgendamentos();
       },
       error: (error) => {
-        console.error('❌ Erro ao finalizar agendamento:', error);
-        console.error('📊 Detalhes completos do erro:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          error: error.error,
-          url: error.url
-        });
-        
-        // Mostrar mensagem específica baseada no status
-        if (error.status === 403) {
-          console.error('ACESSO NEGADO: O servidor rejeitou a requisição');
-          alert('Acesso negado. Verifique suas permissões.');
-        }
+        this.notification.error(error.error.message || "Erro ao finalizar agendamento.");
       }
     });
   }
 
   cancelarAgendamento(id: number): void {
     const currentUser = this.authService.getCurrentUser();
-    console.log('🔄 Tentando cancelar agendamento:', {
-      agendamentoId: id,
-      usuario: currentUser?.name,
-      role: currentUser?.role,
-      userId: currentUser?.id
-    });
+    
+    if (!window.confirm('Tem certeza que deseja cancelar este agendamento?')) {
+      return;
+    }
 
     this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.CANCELADO, id.toString(), false).subscribe({
       next: (response) => {
-        console.log('✅ Agendamento cancelado com sucesso:', response);
+        this.notification.success("Agendamento cancelado com sucesso!");
         this.showAgendamentoInfo = false; // Fechar modal
         this.loadAgendamentos();
       },
       error: (error) => {
-        // Mostrar mensagem específica baseada no status
-        if (error.status === 403) {
-          console.error('ACESSO NEGADO: O servidor rejeitou a requisição');
-          console.error('Possíveis causas: Token inválido, role insuficiente, ou agendamento não pertence ao usuário');
-          alert('Acesso negado. Verifique suas permissões.');
-        }
+        this.notification.error(error.error.message || "Erro ao cancelar agendamento.");
       }
     });
   }
+private politicaCancelamentoAgendamento(agendamento: Agendamento): boolean {
+  const currentUser = this.authService.getCurrentUser();
+  const userRole = currentUser?.role;
+
+  // ADMIN e BARBEIRO podem cancelar a qualquer hora
+  if (userRole === UserRole.ADMIN || userRole === UserRole.BARBEIRO) {
+    return true;
+  }
+
+  // CLIENTE só pode cancelar até 1 hora antes do agendamento
+  if (userRole === UserRole.CLIENTE) {
+    const dataAgendamento = new Date(agendamento.dataHoraInicio);
+    const agora = new Date();
+    
+    const diferencaMs = dataAgendamento.getTime() - agora.getTime();
+    
+
+    const diferencaHoras = diferencaMs / (1000 * 60 * 60);
+    
+    return diferencaHoras > 1;
+  }
+
+  // padrão, não permite cancelamento
+  return false;
+}
 
 }

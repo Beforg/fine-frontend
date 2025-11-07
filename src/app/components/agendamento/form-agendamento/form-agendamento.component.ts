@@ -80,15 +80,13 @@ export class FormAgendamentoComponent implements OnInit {
         produtos: produtos
       });
       
-      console.log('Emitindo horários com:', {
-        data: this.selectedDate,
-        servicosIds: servicosIds,
-        produtos: produtos
-      });
-    } else {
-      console.log('Data ou serviços não selecionados');
     }
   }
+  
+  calcularTempoDeServico(): number {
+    return this.servicosSelecionados.reduce((total, servico) => total + servico.duracaoMinutos, 0);
+  }
+
   validateCorteGratis(): boolean {
 
     if (!this.isLoggedIn) {
@@ -110,7 +108,7 @@ export class FormAgendamentoComponent implements OnInit {
     }
     return this.corteGratis;
   }
-
+  
   
 
   onTimeSelected(time: string): void {

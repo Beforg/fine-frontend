@@ -6,6 +6,7 @@ import { UserInfo } from '../../../interfaces/entities.interface';
 import { CommonModule } from '@angular/common';
 import { PrimaryButtonComponent } from "../../primary-button/primary-button.component";
 import { InputFieldComponent } from "../../input-field/input-field.component";
+import { PerfilService } from '../../../services/perfil.service';
 
 @Component({
   selector: 'app-perfil-form',
@@ -19,7 +20,6 @@ export class PerfilFormComponent {
   @Input() userEmail: string = '';
   @Output() editProfile = new EventEmitter<void>();
   showEditModal: boolean = false;
-  
 
   onEditProfile() {
     this.editProfile.emit();
