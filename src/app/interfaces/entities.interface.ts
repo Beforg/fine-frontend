@@ -106,6 +106,11 @@ export interface UserInfo {
     fidelidade: FidelidadeDTO;
 }
 
+export interface ClienteInfo {
+    clienteInfo: UserInfo;
+    ativo: boolean;
+}
+
 export interface ItemProduto {
   produtoId: number;
   quantidade: number;

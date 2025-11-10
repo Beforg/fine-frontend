@@ -1,0 +1,74 @@
+<div class="clientes-container">
+    <div class="header-container">
+        <h1>Gerenciamento de Clientes</h1>
+    </div>
+    
+    <div class="table-container">
+        <table class="clientes-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Data de Cadastro</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cliente of clientes" class="table-row">
+                    <td class="td-nome">
+                        <div class="cliente-info">
+                            <mat-icon class="cliente-icon">person</mat-icon>
+                            <span class="cliente-nome">{{ cliente.clienteInfo.nome }}</span>
+                        </div>
+                    </td>
+                    <td class="td-telefone">
+                        <div class="telefone-info">
+                            <mat-icon class="telefone-icon">phone</mat-icon>
+                            <span class="telefone-valor">{{ cliente.clienteInfo.telefone }}</span>
+                        </div>
+                    </td>
+                    <td class="td-data">
+                        <div class="data-info">
+                            <mat-icon class="data-icon">event</mat-icon>
+                            <span class="data-valor">{{ cliente.clienteInfo.dataCadastro| date:'dd/MM/yyyy' }}</span>
+                        </div>
+                    </td>
+                    <td class="td-status">
+                        <span class="status-badge" [ngClass]="cliente.ativo ? 'status-ativo' : 'status-inativo'">
+                            <mat-icon>{{ cliente.ativo ? 'check_circle' : 'cancel' }}</mat-icon>
+                            {{ cliente.ativo ? 'Ativo' : 'Inativo' }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensagem quando não há clientes -->
+        <div *ngIf="!clientes || clientes.length === 0" class="no-data">
+            <mat-icon>people_off</mat-icon>
+            <p>Nenhum cliente cadastrado</p>
+        </div>
+    </div>
+
+    <!-- Paginação -->
+    <div class="pagination-container" *ngIf="totalPages > 1">
+        <div class="pagination-info">
+            Mostrando {{ (currentPage * pageSize) + 1 }} a {{ Math.min((currentPage + 1) * pageSize, totalElements) }} de {{ totalElements }} clientes
+        </div>
+        <div class="pagination-controls">
+            <button class="btn-pagination" [disabled]="currentPage === 0" (click)="goToPage(0)">
+                <mat-icon>first_page</mat-icon>
+            </button>
+            <button class="btn-pagination" [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="page-info">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
+            <button class="btn-pagination" [disabled]="currentPage === totalPages - 1" (click)="goToPage(currentPage + 1)">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+            <button class="btn-pagination" [disabled]="currentPage === totalPages - 1" (click)="goToPage(totalPages - 1)">
+                <mat-icon>last_page</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
