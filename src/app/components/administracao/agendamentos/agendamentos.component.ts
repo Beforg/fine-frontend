@@ -36,6 +36,7 @@ interface Agendamento {
   dataHoraInicio: string;
   status: string;
   foiGratis: boolean;
+  observacoes: string;
 }
 
 

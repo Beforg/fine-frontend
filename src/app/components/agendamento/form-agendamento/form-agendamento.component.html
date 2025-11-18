@@ -162,6 +162,24 @@
         </div>
       </div>
 
+      <!-- Seção de Observações -->
+      <div class="observacao-section">
+        <h4 class="subsection-title">Observações (opcional)</h4>
+        <div class="observacao-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Adicione observações sobre o agendamento</mat-label>
+            <textarea 
+              matInput 
+              [(ngModel)]="observacao"
+              (ngModelChange)="handleListarHorarios()"
+              placeholder="Ex: Detalhes sobre o corte, etc."
+              rows="4"
+              maxlength="255"></textarea>
+            <mat-hint align="end">{{ observacao.length || 0 }}/255</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
       <div class="total-section">
         <div class="total-line">
           <span class="total-label">Total:</span>

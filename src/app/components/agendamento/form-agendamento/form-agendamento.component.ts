@@ -6,6 +6,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 import { FidelidadeDTO, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../../interfaces/entities.interface';
 import { HorariosComponent } from '../horarios/horarios.component';
 import { ModalComponent } from "../modal/modal.component";
@@ -20,6 +21,7 @@ import { ModalComponent } from "../modal/modal.component";
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
+    MatInputModule,
     HorariosComponent
 ],
   templateUrl: './form-agendamento.component.html',
@@ -41,6 +43,7 @@ export class FormAgendamentoComponent implements OnInit {
     data: string;
     servicosIds: number[];
     produtos: ItemProduto[];
+    observacoes?: string;
   }>();
   @Output() timeSelected = new EventEmitter<string>();
   @Output() produtosIdQuantidade = new EventEmitter<ItemProduto[]>();
@@ -48,6 +51,9 @@ export class FormAgendamentoComponent implements OnInit {
   // Itens selecionados
   servicosSelecionados: ServicoAgendamento[] = [];
   produtosSelecionados: ProdutoAgendamento[] = [];
+
+  // Observação do agendamento
+  observacao: string = '';
 
   corteGratis!: boolean;
   // aplicar a fidelidade
@@ -77,7 +83,8 @@ export class FormAgendamentoComponent implements OnInit {
       this.listarHorarios.emit({
         data: this.selectedDate,
         servicosIds: servicosIds,
-        produtos: produtos
+        produtos: produtos,
+        observacoes: this.observacao
       });
       
     }

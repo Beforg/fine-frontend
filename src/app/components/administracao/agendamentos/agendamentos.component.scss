@@ -644,6 +644,49 @@
                         }
                     }
                 }
+
+                // Seção de Observações
+                &.observacao-section {
+                    border-left-color: #9b59b6;
+                    background: linear-gradient(135deg, #f8f5ff 0%, #f0ebff 100%);
+
+                    .section-title {
+                        mat-icon {
+                            color: #9b59b6;
+                        }
+                    }
+
+                    .section-content {
+                        .observacao-content {
+                            display: flex;
+                            gap: 1rem;
+                            padding: 1rem;
+                            background: #ffffff;
+                            border-radius: 8px;
+                            border-left: 4px solid #9b59b6;
+                            box-shadow: 0 2px 4px rgba(155, 89, 182, 0.1);
+
+                            .observacao-icon {
+                                font-size: 1.5rem;
+                                width: 1.5rem;
+                                height: 1.5rem;
+                                color: #9b59b6;
+                                flex-shrink: 0;
+                                margin-top: 0.2rem;
+                            }
+
+                            .observacao-text {
+                                margin: 0;
+                                color: $preto_principal;
+                                line-height: 1.6;
+                                font-size: 0.95rem;
+                                word-wrap: break-word;
+                                white-space: pre-wrap;
+                                flex: 1;
+                            }
+                        }
+                    }
+                }
             }
         }
 

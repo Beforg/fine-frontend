@@ -54,7 +54,8 @@ export class AgendamentoComponent implements OnInit {
   produtos: ItemProduto[] = []
   selectedTime: string | null = null;
   selectedDate: string | null = null;
-
+  observacao: string = '';
+  
   //--------------
   isTimeSelected: boolean = false;
   isLoading: boolean = false;
@@ -170,13 +171,14 @@ export class AgendamentoComponent implements OnInit {
     console.log('Horário selecionado:', this.selectedTime);
   }
 
-  onListarHorarios(dadosAgendamento: { data: string; servicosIds: number[], produtos: ItemProduto[] }): void {
+  onListarHorarios(dadosAgendamento: { data: string; servicosIds: number[], produtos: ItemProduto[], observacoes?: string }): void {
     console.log('Recebido do form:', dadosAgendamento);
 
-    const { data, servicosIds, produtos } = dadosAgendamento;
+    const { data, servicosIds, produtos, observacoes } = dadosAgendamento;
     this.selectedDate = data;
     this.produtos = produtos;
     this.servicosIds = servicosIds;
+    this.observacao = observacoes ?? '';
 
     // Chamar o serviço para buscar horários com os parâmetros
     this.agendamentoService.listarHorariosDisponiveis(Number(this.barbeiroId), data, servicosIds).subscribe({
@@ -232,7 +234,7 @@ export class AgendamentoComponent implements OnInit {
           servicoIds: this.servicosIds,
           dataHoraInicio: dataHora,
           produtos: this.produtos,
-          observacoes: "Nenhuma observação",
+          observacoes: this.observacao,
           foiGratis: this.verificaCorteGratis()
         }
         console.log('Dados do agendamento:', novoAgendamento);

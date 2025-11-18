@@ -124,10 +124,10 @@ export interface HorarioDisponivel {
 export interface AgendamentoRequest {
   barbeiroId: number;
   servicoIds: number[];
-  dataHoraInicio: string; // Ou 'Date', dependendo de como você vai usar
-  produtos?: ItemProduto[]; // O '?' indica que é opcional
-  observacoes: string;
+  dataHoraInicio: string; 
+  produtos?: ItemProduto[]; 
   foiGratis: boolean;
+  observacoes: string;
 }
 
 export interface Agendamento {
@@ -136,6 +136,7 @@ export interface Agendamento {
   nomeBarbeiro: string;
   servicos: ServicoAgendamento[];
   produtos?: ItemProduto[];
+  observacoes: string;
 }
 
 export interface RegistroIndisponibilidade {

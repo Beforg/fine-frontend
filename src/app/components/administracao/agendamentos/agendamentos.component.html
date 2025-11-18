@@ -227,6 +227,19 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="detail-section observacao-section" *ngIf="agendamento.observacoes">
+                                        <div class="section-title">
+                                            <mat-icon>comment</mat-icon>
+                                            <span>Observações</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="observacao-content">
+                                                <mat-icon class="observacao-icon">notes</mat-icon>
+                                                <p class="observacao-text">{{ agendamento.observacoes }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="expanded-footer" *ngIf="agendamento.status == 'Agendado'">

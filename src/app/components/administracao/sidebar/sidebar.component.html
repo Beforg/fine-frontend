@@ -13,16 +13,16 @@
     <!-- Menu de navegação -->
     <nav class="sidebar-nav">
       <ul class="nav-list">
-        <li class="nav-item" [ngClass]="{'active-gerenciamento': showGerenciamento}">
-          <button class="nav-button" (click)="handleNavigateToGerenciamento()">
-            <mat-icon class="nav-icon">settings</mat-icon>
-            <span class="nav-text">Gerenciamento</span>
-          </button>
-        </li>
         <li class="nav-item" [ngClass]="{'active-gerenciamento': showAgendamentos}">
           <button class="nav-button" (click)="handleNavigateToAgendamentos()">
             <mat-icon class="nav-icon">schedule</mat-icon>
             <span class="nav-text">Agendamentos</span>
+          </button>
+        </li>
+        <li class="nav-item" [ngClass]="{'active-gerenciamento': showGerenciamento}">
+          <button class="nav-button" (click)="handleNavigateToGerenciamento()">
+            <mat-icon class="nav-icon">settings</mat-icon>
+            <span class="nav-text">Gerenciamento</span>
           </button>
         </li>
         <li class="nav-item">

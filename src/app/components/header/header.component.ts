@@ -14,7 +14,7 @@ import { UserRole } from '../../enums/user-role.enum';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  @Input() showSearchBar: boolean = true;
+  @Input() showSearchBar: boolean = false;
   constructor(private authService: AuthService) {}
   
   isLoggedIn(): boolean {
