@@ -1,6 +1,10 @@
 // Importar variáveis
 @import '../../../variables';
 
+// Variáveis de tema verde
+$verde_light: #2ecc71;
+$verde_dark: #218838;
+
 .form-login {
   width: 100%;
   max-width: 450px;
@@ -17,21 +21,23 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      font-size: 30px;
-      font-weight: 500;
-      color: $texto_principal;
-      margin: 0 0 8px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      margin: 0 0 12px 0;
+      letter-spacing: -0.5px;
 
       .title-icon {
-        font-size: 28px;
-        color: $azul_principal;
+        font-size: 32px;
+        color: $verde_light;
       }
     }
 
     .form-subtitle {
-      color: $texto_secundario;
+      color: rgba(255, 255, 255, 0.75);
       font-size: 16px;
       margin: 0;
+      font-weight: 500;
     }
   }
 
@@ -39,17 +45,21 @@
   .error-message {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background-color: rgba(220, 53, 69, 0.1);
-    color: $cor_erro;
-    padding: 12px 16px;
-    border-radius: $border_radius_medium;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.15), rgba(220, 53, 69, 0.1));
+    color: #ff6b6b;
+    padding: 14px 18px;
+    border-radius: 12px;
     border-left: 4px solid $cor_erro;
     margin-bottom: 24px;
     font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
 
     .error-icon {
-      font-size: 20px;
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
     }
   }
 
@@ -62,6 +72,88 @@
 
     app-input-field {
       width: 100%;
+      
+      // Customização dos inputs para tema verde claro
+      ::ng-deep {
+        .mat-mdc-form-field {
+          width: 100%;
+        }
+        
+        .mat-mdc-text-field-wrapper {
+          background: rgba(255, 255, 255, 0.95);
+          border-radius: 12px;
+          
+          &:hover {
+            background: rgba(255, 255, 255, 1);
+          }
+        }
+        
+        .mat-mdc-form-field-focus-overlay {
+          background-color: transparent;
+        }
+        
+        .mdc-text-field--filled {
+          background: transparent;
+        }
+        
+        // Label
+        .mat-mdc-form-field-label,
+        .mat-mdc-floating-label {
+          color: rgba(0, 0, 0, 0.6) !important;
+          font-weight: 500;
+        }
+        
+        // Input text
+        .mat-mdc-input-element {
+          color: #1a1a1a !important;
+          font-weight: 500;
+          caret-color: $verde_principal;
+          
+          &::placeholder {
+            color: rgba(0, 0, 0, 0.4) !important;
+          }
+        }
+        
+        // Ícones
+        .mat-mdc-form-field-icon-prefix,
+        .mat-mdc-form-field-icon-suffix {
+          mat-icon {
+            color: $verde_principal;
+          }
+        }
+        
+        // Border inferior
+        .mdc-line-ripple::before {
+          border-bottom-color: rgba(40, 167, 69, 0.3) !important;
+        }
+        
+        .mdc-line-ripple::after {
+          border-bottom-color: $verde_principal !important;
+        }
+        
+        // Estado de foco
+        .mat-mdc-form-field.mat-focused {
+          .mat-mdc-form-field-label {
+            color: $verde_principal !important;
+          }
+          
+          .mat-mdc-text-field-wrapper {
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+          }
+        }
+        
+        // Estado de erro
+        .mat-mdc-form-field.mat-form-field-invalid {
+          .mat-mdc-text-field-wrapper {
+            box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+          }
+          
+          .mdc-line-ripple::before,
+          .mdc-line-ripple::after {
+            border-bottom-color: $cor_erro !important;
+          }
+        }
+      }
     }
 
     // centralizar os campos em telas menores
@@ -69,10 +161,7 @@
       flex-direction: column;
       align-items: center;
       gap: 16px;
-      margin-right: 20px;
     }
-    
-
   }
 
   // Links do formulário
@@ -80,28 +169,45 @@
     text-align: right;
     margin-bottom: 24px;
 
-    .forgot-password-link {
-      color: $azul_principal;
+    .forgot-password-link,
+    .forgot-senha-link {
+      color: $verde_light;
       text-decoration: none;
       font-size: 14px;
-      transition: all $transition_normal;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, $verde_principal, $verde_light);
+        transition: width 0.3s ease;
+      }
 
       &:hover {
-        text-decoration: underline;
-        color: darken($azul_principal, 10%);
+        color: $verde_principal;
+        
+        &::after {
+          width: 100%;
+        }
       }
     }
 
     @media (max-width: 480px) {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
 
-      .forgot-password-link {
+      .forgot-password-link,
+      .forgot-senha-link {
         display: block;
         margin-bottom: 8px;
       }
     }
-
   }
 
   // Botões de ação
@@ -113,16 +219,68 @@
 
     app-primary-button {
       width: 100%;
+      
+      // Customização dos botões para tema verde
+      ::ng-deep {
+        .primary-button {
+          width: 100%;
+          border-radius: 50px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+          font-size: 14px;
+          height: 50px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          
+          &:hover:not([disabled]) {
+            transform: translateY(-3px);
+          }
+        }
+        
+        // Botão primário (Entrar)
+        .mat-mdc-raised-button.mat-primary {
+          background: linear-gradient(135deg, $verde_principal, $verde_light) !important;
+          color: white !important;
+          box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+          
+          &:hover:not([disabled]) {
+            background: linear-gradient(135deg, $verde_light, $verde_principal) !important;
+            box-shadow: 0 8px 30px rgba(40, 167, 69, 0.6);
+          }
+          
+          &[disabled] {
+            background: rgba(40, 167, 69, 0.3) !important;
+            opacity: 0.6;
+          }
+        }
+        
+        // Botão secundário (Cancelar)
+        .mat-mdc-outlined-button.mat-warn {
+          border: 2px solid rgba(255, 255, 255, 0.3) !important;
+          color: rgba(255, 255, 255, 0.9) !important;
+          background: rgba(255, 255, 255, 0.05);
+          
+          &:hover:not([disabled]) {
+            border-color: rgba(220, 53, 69, 0.6) !important;
+            background: rgba(220, 53, 69, 0.1);
+            color: #ff6b6b !important;
+          }
+          
+          &[disabled] {
+            opacity: 0.4;
+          }
+        }
+      }
     }
 
     // Responsividade para telas maiores
     @media (min-width: 640px) {
       flex-direction: row;
       justify-content: space-between;
+      gap: 16px;
       
       app-primary-button {
         flex: 1;
-        max-width: calc(50% - 6px);
       }
     }
   }
@@ -130,24 +288,55 @@
   // Divisor
   .form-divider {
     text-align: center;
-    margin: 24px 0;
+    margin: 32px 0;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(40, 167, 69, 0.2) 20%,
+        rgba(46, 204, 113, 0.3) 50%,
+        rgba(40, 167, 69, 0.2) 80%,
+        transparent 100%);
+      position: relative;
+    }
     
     &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background-color: $cinza_claro;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(40, 167, 69, 0.2) 50%,
+        rgba(46, 204, 113, 0.3) 100%);
+    }
+    
+    &::after {
+      background: linear-gradient(90deg, 
+        rgba(46, 204, 113, 0.3) 0%,
+        rgba(40, 167, 69, 0.2) 50%,
+        transparent 100%);
     }
 
     span {
-      background-color: none;
-      padding: 0 16px;
-      color: $texto_secundario;
-      font-size: 14px;
+      position: relative;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, 
+        rgba(18, 13, 43, 0.8), 
+        rgba(28, 23, 53, 0.8));
+      padding: 8px 20px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 50px;
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
   }
 
@@ -156,28 +345,37 @@
     text-align: center;
     
     p {
-      color: $texto_secundario;
-      font-size: 16px;
-      margin: 0 0 8px 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 15px;
+      margin: 0 0 12px 0;
+      font-weight: 500;
     }
 
     .register-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      color: $verde_principal;
+      gap: 8px;
+      color: $verde_light;
       text-decoration: none;
       font-size: 16px;
-      font-weight: 500;
-      transition: all $transition_normal;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 50px;
+      background: rgba(40, 167, 69, 0.1);
+      border: 2px solid rgba(40, 167, 69, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
-        text-decoration: underline;
-        color: darken($verde_principal, 10%);
+        background: rgba(40, 167, 69, 0.2);
+        border-color: $verde_principal;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
       }
 
       mat-icon {
         font-size: 20px;
+        width: 20px;
+        height: 20px;
       }
     }
   }
@@ -235,17 +433,96 @@
   }
 }
 
-// Responsividade mobile
+// Responsividade
+@media (max-width: 768px) {
+  .form-login {
+    .form-header {
+      margin-bottom: 28px;
+      
+      .form-title {
+        font-size: 28px;
+      }
+      
+      .form-subtitle {
+        font-size: 15px;
+      }
+    }
+    
+    .form-fields {
+      gap: 18px;
+    }
+    
+    .form-divider {
+      margin: 24px 0;
+    }
+  }
+}
+
 @media (max-width: 480px) {
   .form-login {
-    padding: 0 16px;
+    padding: 0;
 
-    .form-header .form-title {
-      font-size: 20px;
+    .form-header {
+      margin-bottom: 24px;
+      
+      .form-title {
+        font-size: 26px;
+        gap: 6px;
+        
+        .title-icon {
+          font-size: 28px;
+        }
+      }
+      
+      .form-subtitle {
+        font-size: 14px;
+      }
+    }
+
+    .form-fields {
+      gap: 16px;
+      margin-bottom: 12px;
     }
 
     .form-actions {
-      gap: 8px;
+      gap: 10px;
+    }
+    
+    .error-message {
+      padding: 12px 16px;
+      font-size: 13px;
+      
+      .error-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    
+    .form-divider {
+      margin: 20px 0;
+      
+      span {
+        font-size: 12px;
+      }
+    }
+    
+    .form-register {
+      p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      
+      .register-link {
+        font-size: 15px;
+        padding: 10px 20px;
+        
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
     }
   }
 }
