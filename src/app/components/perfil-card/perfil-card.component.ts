@@ -42,8 +42,13 @@ export class PerfilCardComponent implements OnInit {
   }
 
   onGoToProfile(): void {
-    console.log('🔀 Navegando para página do perfil...');
-    this.router.navigate(['/perfil']);
+    
+    this.router.navigate(['/perfil'], { queryParams: { tab: 'p' } });
+    this.close.emit();
+  }
+
+  onGoToAgendamentos(): void {
+    this.router.navigate(['/perfil'], { queryParams: { tab: 'g' } });
     this.close.emit();
   }
 

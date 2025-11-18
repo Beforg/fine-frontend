@@ -6,8 +6,18 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="container-header-options">
-      <a class="header-option" [ngClass]="{'active': activeTab === 'p'}" (click)="toggleAgendamentos('p')">Perfil</a>
-      <a class="header-option" [ngClass]="{'active': activeTab === 'g'}" (click)="toggleAgendamentos('g')">Agendamentos</a>
+      <a 
+      class="header-option" 
+      [ngClass]="{'active': activeTab === 'p'}" 
+      (click)="toggleAgendamentos('p')"
+      [routerLink]="['/perfil']"
+      [queryParams]="{ tab: 'p' }">Perfil</a>
+      <a 
+      class="header-option" 
+      [ngClass]="{'active': activeTab === 'g'}" 
+      (click)="toggleAgendamentos('g')"
+      [routerLink]="['/perfil']"
+      [queryParams]="{ tab: 'g' }">Agendamentos</a>
     </div>
     <div class="header-spacer"></div>
   </div>

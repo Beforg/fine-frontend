@@ -14,6 +14,7 @@ import { UserRole } from '../../enums/user-role.enum';
 import { PerfilFormComponent } from "../../components/perfil/perfil-form/perfil-form.component";
 import { BarberStatsComponent } from "../../components/perfil/barber-stats/barber-stats.component";
 import { AgendamentosComponent } from "../../components/administracao/agendamentos/agendamentos.component";
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -28,7 +29,8 @@ import { AgendamentosComponent } from "../../components/administracao/agendament
     FooterComponent,
     PerfilFormComponent,
     BarberStatsComponent,
-    AgendamentosComponent
+    AgendamentosComponent,
+    RouterModule
 ],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
@@ -36,15 +38,23 @@ import { AgendamentosComponent } from "../../components/administracao/agendament
 export class PerfilComponent implements OnInit {
 
   userInfo: UserInfo | null = null;
-  activeTab: string = 'p'; // 'p' para perfil, 'g' para agendamentos
+  activeTab: 'p' | 'g' = 'p'; // 'p' para perfil, 'g' para agendamentos
   showAgendamentoContainer: boolean = false;
 
-  constructor(private perfilService: PerfilService, private authService: AuthService) {
+  constructor(
+    private perfilService: PerfilService, 
+    private authService: AuthService, 
+    private route: ActivatedRoute,
+    private router: Router) {
 
   }
 
   ngOnInit(): void {
     this.getUserInfos();
+    this.route.queryParamMap.subscribe(params => {
+      const tab = (params.get('tab') as 'p' | 'g') ?? 'p';
+      this.setActiveTab(tab);
+    });
   }
 
   getUserInfos(): void {
@@ -112,15 +122,19 @@ export class PerfilComponent implements OnInit {
     window.history.back();  
   } 
 
-  toggleAgendamentos(option: string): void {
-    this.activeTab = option;
-    
-    if (option === 'g') {
-      this.showAgendamentoContainer = true;
-    } else {
-      this.showAgendamentoContainer = false;
-    }
-    
-    console.log('Active tab:', this.activeTab); // Debug
+  setActiveTab(tab: 'p' | 'g') {
+    this.activeTab = tab;
+    this.showAgendamentoContainer = tab === 'g';
+  }
+
+  toggleAgendamentos(tab: 'p' | 'g') {
+    this.setActiveTab(tab);
+    // mantém a URL sincronizada
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
   }
 }

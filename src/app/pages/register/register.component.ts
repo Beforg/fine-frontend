@@ -54,7 +54,7 @@ export class RegisterComponent {
             this.formRegisterComponent.setGeneralError(
               response.message || 'Erro ao criar conta. Verifique os dados.'
             );
-            this.isSubmited = false;
+          
           }
           this.formRegisterComponent.setLoadingState(false);
         },

@@ -9,10 +9,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { DisponibilidadeComponent } from '../disponibilidade/disponibilidade.component';
 import { Barbeiro } from '../../../interfaces/entities.interface';
 import { BarbeiroService } from '../../../services/barbeiro.service';
+import { ClientesComponent } from "../clientes/clientes.component";
 
 @Component({
   selector: 'app-gerenciamento',
-  imports: [CommonModule, ProdutosComponent, ServicosComponent, BarbeirosComponent, MatIconModule, DisponibilidadeComponent],
+  imports: [CommonModule, ProdutosComponent, ServicosComponent, BarbeirosComponent, MatIconModule, DisponibilidadeComponent, ClientesComponent],
   templateUrl: './gerenciamento.component.html',
   styleUrl: './gerenciamento.component.scss'
 })
@@ -31,6 +32,7 @@ export class GerenciamentoComponent implements OnInit {
   showProdutos: boolean = false;
   showBarbeiros: boolean = true;
   showServicos: boolean = false;
+  showClientes: boolean = false;
   showDisponibilidade: boolean = false;
   // temporario
 
@@ -52,27 +54,31 @@ export class GerenciamentoComponent implements OnInit {
       return false;
     }
 
-    toggleTab(barbeiro: boolean, servico: boolean, produto: boolean, disponibilidade: boolean = false): void {
+    toggleTab(barbeiro: boolean, servico: boolean, produto: boolean, disponibilidade: boolean = false, clientes: boolean = false): void {
       this.showBarbeiros = barbeiro;
       this.showServicos = servico;
       this.showProdutos = produto;
       this.showDisponibilidade = disponibilidade;
+      this.showClientes = clientes;
     }
 
     toggleDisponibilidade(): void {
-      this.toggleTab(false, false, false, true);
+      this.toggleTab(false, false, false, true, false);
     }
 
     toggleProdutos(): void {
-      this.toggleTab(false, false, true);
+      this.toggleTab(false, false, true, false, false);
     }
 
     toggleServicos(): void {
-      this.toggleTab(false, true, false);
+      this.toggleTab(false, true, false, false, false);
     }
 
     toggleBarbeiros(): void {
-      this.toggleTab(true, false, false);
+      this.toggleTab(true, false, false, false, false);
     }
 
-}
+    toggleClientes(): void {
+      this.toggleTab(false, false, false, false, true);
+    }
+  }

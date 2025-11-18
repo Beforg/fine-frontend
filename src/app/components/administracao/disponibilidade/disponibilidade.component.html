@@ -1,7 +1,7 @@
 <div class="disponibilidade-container">
     <!-- Header -->
     <div class="header-container">
-        <h1>Disponibilidade dos Barbeiros</h1>
+        <h1>Indisponibilidade dos Barbeiros e Feriados </h1>
         <button class="btn-adicionar" (click)="openModal()">
             <mat-icon>add</mat-icon>
             Adicionar Bloqueio
@@ -71,7 +71,9 @@
                 <div class="form-group">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Data</mat-label>
-                        <input matInput type="date" formControlName="data" [min]="getTodayDate()">
+                        <input matInput [matDatepicker]="picker" formControlName="data" [min]="minDate" placeholder="Selecione a data">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                         <mat-error *ngIf="f['data'].errors?.['required']">
                             Data é obrigatória
                         </mat-error>
@@ -79,6 +81,16 @@
                             Não é possível selecionar uma data anterior a hoje
                         </mat-error>
                     </mat-form-field>
+                    <!-- <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Data</mat-label>
+                        <input matInput type="date" formControlName="data" [min]="getTodayDate()">
+                        <mat-error *ngIf="f['data'].errors?.['required']">
+                            Data é obrigatória
+                        </mat-error>
+                        <mat-error *ngIf="f['data'].errors?.['dataPassada']">
+                            Não é possível selecionar uma data anterior a hoje
+                        </mat-error>
+                    </mat-form-field> -->
                 </div>
 
                 <!-- Horários -->

@@ -1,17 +1,19 @@
  <div class="agendamentos-container" *ngIf="showAgendamentoContainer">
     <div class="filtros-header">
         <div class="filtros-container">
-            <a href="">Todos</a>
-            <a href="">Hoje</a>
-            <a href="">Próximos 7 dias</a>
-            <a href="">Próximos 30 dias</a>
             <div class="filtros-checkbox">
-                <label><input type="checkbox"> Opção 1</label>
-                <label><input type="checkbox"> Opção 2</label>
-                <label><input type="checkbox"> Opção 3</label>
+                <label for="filtros">Filtros:</label>
+                <mat-radio-group
+                    aria-labelledby="filtros"
+                    [(ngModel)]="filtroSelecionado"
+                    (change)="filtrarAgendamentos()">
+                    <mat-radio-button value="opcao1" value='Agendado,Realizado'>Todos</mat-radio-button>
+                    <mat-radio-button value="opcao1" value='Agendado'>Agendados</mat-radio-button>
+                    <mat-radio-button value="opcao2" value='Realizado'>Realizados</mat-radio-button>
+                    <mat-radio-button value="opcao3" value='Cancelado'>Cancelados</mat-radio-button>
+                </mat-radio-group>
             </div>
         </div>
-        <input type="text" placeholder="Buscar agendamentos...">
     </div>
 
     <!-- Tabela de Agendamentos -->
@@ -31,199 +33,235 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let agendamento of agendamentos" class="table-row">
-                    <td class="td-id">#{{ agendamento.id }}</td>
-                    
-                    <td class="td-cliente">
-                        <div class="cliente-info">
-                            <span class="cliente-nome">{{ agendamento.nomeCliente }}</span>
-                        </div>
-                    </td>
-                    
-                    <td class="td-barbeiro">
-                        <span class="barbeiro-nome">{{ agendamento.nomeBarbeiro }}</span>
-                    </td>
-                    
-                    <td class="td-datetime">
-                        <div class="datetime-info">
-                            <span class="data">{{ agendamento.dataHoraInicio | date:'dd/MM/yyyy' }}</span>
-                            <span class="hora">{{ agendamento.dataHoraInicio | date:'HH:mm' }}</span>
-                        </div>
-                    </td>
-                    
-                    <td class="td-servicos">
-                        <div class="servicos-list">
-                            <div *ngFor="let servico of agendamento.servicos" class="servico-item">
-                                <span class="servico-nome">{{ servico.nome }}</span>
-                                <span class="servico-preco">R$ {{ servico.preco | number:'1.2-2' }}</span>
+                <ng-container *ngFor="let agendamento of agendamentosFiltrados">
+                    <tr class="table-row" [class.expanded]="agendamentoSelecionado?.id === agendamento.id">
+                        <td class="td-id">#{{ agendamento.id }}</td>
+                        
+                        <td class="td-cliente">
+                            <div class="cliente-info">
+                                <span class="cliente-nome">{{ agendamento.nomeCliente }}</span>
                             </div>
-                            <div *ngIf="agendamento.servicos.length === 0" class="no-items">
-                                Nenhum serviço
+                        </td>
+                        
+                        <td class="td-barbeiro">
+                            <span class="barbeiro-nome">{{ agendamento.nomeBarbeiro }}</span>
+                        </td>
+                        
+                        <td class="td-datetime">
+                            <div class="datetime-info">
+                                <span class="data">{{ agendamento.dataHoraInicio | date:'dd/MM/yyyy' }}</span>
+                                <span class="hora">{{ agendamento.dataHoraInicio | date:'HH:mm' }}</span>
                             </div>
-                        </div>
-                    </td>
-                    
-                    <td class="td-produtos">
-                        <div class="produtos-list">
-                            <div *ngFor="let produto of agendamento.produtos" class="produto-item">
-                                <span class="produto-nome">{{ produto.nome }}</span>
-                                <span class="produto-info">
-                                    {{ produto.quantidade }}x R$ {{ produto.preco | number:'1.2-2' }}
-                                </span>
+                        </td>
+                        
+                        <td class="td-servicos">
+                            <div class="servicos-list">
+                                <div *ngFor="let servico of agendamento.servicos" class="servico-item">
+                                    <span class="servico-nome">{{ servico.nome }}</span>
+                                    <span class="servico-preco">R$ {{ servico.preco | number:'1.2-2' }}</span>
+                                </div>
+                                <div *ngIf="agendamento.servicos.length === 0" class="no-items">
+                                    Nenhum serviço
+                                </div>
                             </div>
-                            <div *ngIf="agendamento.produtos.length === 0" class="no-items">
-                                Nenhum produto
+                        </td>
+                        
+                        <td class="td-produtos">
+                            <div class="produtos-list">
+                                <div *ngFor="let produto of agendamento.produtos" class="produto-item">
+                                    <span class="produto-nome">{{ produto.nome }}</span>
+                                    <span class="produto-info">
+                                        {{ produto.quantidade }}x R$ {{ produto.preco | number:'1.2-2' }}
+                                    </span>
+                                </div>
+                                <div *ngIf="agendamento.produtos.length === 0" class="no-items">
+                                    Nenhum produto
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    
-                    <td class="td-total">
-                        <span class="total-valor">R$ {{ calculateTotal(agendamento) | number:'1.2-2' }}</span>
-                    </td>
-                    
-                    <td class="td-status">
-                        <span class="status-badge" [ngClass]="getStatusClass(agendamento.status)">
-                            {{ agendamento.status }}
-                        </span>
-                    </td>
-                    
-                    <td class="td-actions">
-                        <div class="actions-container">
-                            <button class="btn-action btn-view" title="Visualizar" (click)="visualizarAgendamento(agendamento)">
-                                <mat-icon>visibility</mat-icon>
-                            </button>
-                            <button 
-                                *ngIf="hasPermissionToChangeStatus()" 
-                                class="btn-action btn-edit" 
-                                title="Concluir" 
-                                (click)="finalizarAgendamento(agendamento.id)">
-                                <mat-icon>check</mat-icon>
-                            </button>
-                            <button  
-                                class="btn-action btn-delete" 
-                                title="Cancelar" 
-                                (click)="cancelarAgendamento(agendamento.id)">
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                        
+                        <td class="td-total">
+                            <span class="total-valor">R$ {{ calculateTotal(agendamento) | number:'1.2-2' }}</span>
+                        </td>
+                        
+                        <td class="td-status">
+                            <span class="status-badge" [ngClass]="getStatusClass(agendamento.status)">
+                                {{ agendamento.status }}
+                            </span>
+                        </td>
+                        
+                        <td class="td-actions">
+                            <div class="actions-container">
+                                <button 
+                                    class="btn-action btn-view" 
+                                    [class.active]="agendamentoSelecionado?.id === agendamento.id"
+                                    title="Visualizar Detalhes" 
+                                    (click)="toggleDetalhes(agendamento)">
+                                    <mat-icon>{{ agendamentoSelecionado?.id === agendamento.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+                                </button>
+                                <button 
+                                    *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()" 
+                                    class="btn-action btn-edit" 
+                                    title="Concluir" 
+                                    (click)="finalizarAgendamento(agendamento.id)">
+                                    <mat-icon>check</mat-icon>
+                                </button>
+                                <button
+                                    *ngIf="agendamento.status == 'Agendado'"  
+                                    class="btn-action btn-delete" 
+                                    title="Cancelar" 
+                                    (click)="cancelarAgendamento(agendamento.id)">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Linha Expandida com Detalhes -->
+                    <tr class="expanded-row" *ngIf="agendamentoSelecionado?.id === agendamento.id">
+                        <td colspan="9" class="expanded-cell">
+                            <div class="expanded-content">
+                                <div class="expanded-header">
+                                    <h3>
+                                        <mat-icon>info</mat-icon>
+                                        Detalhes do Agendamento #{{ agendamento.id }}
+                                    </h3>
+                                </div>
+
+                                <div class="expanded-body">
+                                    <div class="detail-section">
+                                        <div class="section-title">
+                                            <mat-icon>person</mat-icon>
+                                            <span>Informações do Cliente</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="info-row">
+                                                <span class="label">Nome:</span>
+                                                <span class="value">{{ agendamento.nomeCliente }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-section">
+                                        <div class="section-title">
+                                            <mat-icon>content_cut</mat-icon>
+                                            <span>Barbeiro Responsável</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="info-row">
+                                                <span class="label">Nome:</span>
+                                                <span class="value">{{ agendamento.nomeBarbeiro }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-section">
+                                        <div class="section-title">
+                                            <mat-icon>schedule</mat-icon>
+                                            <span>Data e Horário</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="info-row">
+                                                <span class="label">Data:</span>
+                                                <span class="value">{{ agendamento.dataHoraInicio | date:'dd/MM/yyyy' }}</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Horário:</span>
+                                                <span class="value">{{ agendamento.dataHoraInicio | date:'HH:mm' }}</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Duração Estimada:</span>
+                                                <span class="value">{{ calculateServiceTime(agendamento) }} minutos</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-section" *ngIf="agendamento.servicos.length > 0">
+                                        <div class="section-title">
+                                            <mat-icon>design_services</mat-icon>
+                                            <span>Serviços Contratados</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="info-row" *ngFor="let servico of agendamento.servicos">
+                                                <span class="label">{{ servico.nome }}</span>
+                                                <span class="value">R$ {{ servico.preco | number:'1.2-2' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-section" *ngIf="agendamento.produtos.length > 0">
+                                        <div class="section-title">
+                                            <mat-icon>inventory</mat-icon>
+                                            <span>Produtos Utilizados</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="info-row" *ngFor="let produto of agendamento.produtos">
+                                                <span class="label">{{ produto.nome }} ({{ produto.quantidade }}x)</span>
+                                                <span class="value">R$ {{ (produto.preco * produto.quantidade) | number:'1.2-2' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-section total-section">
+                                        <div class="section-title">
+                                            <mat-icon>info</mat-icon>
+                                            <span>Status e Total</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="info-row">
+                                                <span class="label">Status:</span>
+                                                <span class="status-display" [ngClass]="getStatusClass(agendamento.status)">
+                                                    {{ agendamento.status }}
+                                                </span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="label">Fidelidade Aplicada:</span>
+                                                <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.foiGratis" [class.fidelidade-nao]="!agendamento.foiGratis">
+                                                    <mat-icon>{{ agendamento.foiGratis ? 'check_circle' : 'cancel' }}</mat-icon>
+                                                    {{ agendamento.foiGratis ? 'Sim' : 'Não' }}
+                                                </span>
+                                            </div>
+                                            <div class="total-display">
+                                                <span class="total-label">Total:</span>
+                                                <span class="total-value">R$ {{ calculateTotal(agendamento) | number:'1.2-2' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="detail-section observacao-section" *ngIf="agendamento.observacoes">
+                                        <div class="section-title">
+                                            <mat-icon>comment</mat-icon>
+                                            <span>Observações</span>
+                                        </div>
+                                        <div class="section-content">
+                                            <div class="observacao-content">
+                                                <mat-icon class="observacao-icon">notes</mat-icon>
+                                                <p class="observacao-text">{{ agendamento.observacoes }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="expanded-footer" *ngIf="agendamento.status == 'Agendado'">
+                                    <button
+                                    *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
+                                    class="btn-action-expanded btn-edit-expanded" 
+                                    (click)="finalizarAgendamento(agendamento.id)">
+                                        <mat-icon>check</mat-icon>
+                                        Concluir Agendamento
+                                    </button>
+                                    <button class="btn-action-expanded btn-cancel-expanded" (click)="cancelarAgendamento(agendamento.id)">
+                                        <mat-icon>cancel</mat-icon>
+                                        Cancelar Agendamento
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
             </tbody>
         </table>
-        <div class="overlay" *ngIf="showAgendamentoInfo">
-            <div class="agendamento-info">
-                <div class="modal-header">
-                    <h2>Informações do Agendamento #{{ agendamentoSelecionado?.id }}</h2>
-                    <button class="close-btn" (click)="showAgendamentoInfo = false" title="Fechar">
-                        <mat-icon>close</mat-icon>
-                    </button>
-                </div>
-
-                <div class="agendamento-details" *ngIf="agendamentoSelecionado">
-                    <div class="detail-section">
-                        <div class="section-title">
-                            <mat-icon>person</mat-icon>
-                            Informações do Cliente
-                        </div>
-                        <div class="section-content">
-                            <div class="info-row">
-                                <span class="label">Nome:</span>
-                                <span class="value">{{ agendamentoSelecionado.nomeCliente }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <div class="section-title">
-                            <mat-icon>content_cut</mat-icon>
-                            Barbeiro Responsável
-                        </div>
-                        <div class="section-content">
-                            <div class="info-row">
-                                <span class="label">Nome:</span>
-                                <span class="value">{{ agendamentoSelecionado.nomeBarbeiro }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <div class="section-title">
-                            <mat-icon>schedule</mat-icon>
-                            Data e Horário
-                        </div>
-                        <div class="section-content">
-                            <div class="info-row">
-                                <span class="label">Data:</span>
-                                <span class="value">{{ agendamentoSelecionado.dataHoraInicio | date:'dd/MM/yyyy' }}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Horário:</span>
-                                <span class="value">{{ agendamentoSelecionado.dataHoraInicio | date:'HH:mm' }}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Duração Estimada:</span>
-                                <span class="value">{{ calculateServiceTime(agendamentoSelecionado) }} minutos</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section" *ngIf="agendamentoSelecionado.servicos.length > 0">
-                        <div class="section-title">
-                            <mat-icon>design_services</mat-icon>
-                            Serviços Contratados
-                        </div>
-                        <div class="section-content">
-                            <div class="info-row" *ngFor="let servico of agendamentoSelecionado.servicos">
-                                <span class="label">{{ servico.nome }}</span>
-                                <span class="value">R$ {{ servico.preco | number:'1.2-2' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section" *ngIf="agendamentoSelecionado.produtos.length > 0">
-                        <div class="section-title">
-                            <mat-icon>inventory</mat-icon>
-                            Produtos Utilizados
-                        </div>
-                        <div class="section-content">
-                            <div class="info-row" *ngFor="let produto of agendamentoSelecionado.produtos">
-                                <span class="label">{{ produto.nome }} ({{ produto.quantidade }}x)</span>
-                                <span class="value">R$ {{ (produto.preco * produto.quantidade) | number:'1.2-2' }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <div class="section-title">
-                            <mat-icon>info</mat-icon>
-                            Status e Total
-                        </div>
-                        <div class="section-content">
-                            <div class="info-row">
-                                <span class="label">Status:</span>
-                                <span class="status-display" [ngClass]="getStatusClass(agendamentoSelecionado.status)">
-                                    {{ agendamentoSelecionado.status }}
-                                </span>
-                            </div>
-                            <div class="total-display">
-                                Total: R$ {{ calculateTotal(agendamentoSelecionado) | number:'1.2-2' }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer" *ngIf="hasPermissionToChangeStatus()">
-                    <button class="btn-action-modal btn-edit-modal" (click)="finalizarAgendamento(agendamentoSelecionado!.id)">
-                        <mat-icon>check</mat-icon>
-                        Concluir
-                    </button>
-                    <button class="btn-action-modal btn-cancel-modal" (click)="cancelarAgendamento(agendamentoSelecionado!.id)">
-                        <mat-icon>cancel</mat-icon>
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
+        
         <!-- Mensagem quando não há dados -->
         <div *ngIf="!agendamentos || agendamentos.length === 0" class="no-data">
             <mat-icon>event_busy</mat-icon>

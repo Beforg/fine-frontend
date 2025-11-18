@@ -5,6 +5,7 @@
       border-radius: $border_radius_large;
       box-shadow: $sombra_media;
       background: $branco_principal;
+      animation: fadeInTab 0.3s ease-in-out;
 
       // Seção do avatar
       .avatar-section {
@@ -65,12 +66,167 @@
         }
 
         .user-role {
-          margin: 0;
+          margin: 0 0 24px 0;
           font-size: 16px;
           color: $cinza_medio;
           text-transform: uppercase;
           font-weight: 500;
           letter-spacing: 1px;
+        }
+
+        // Fidelidade Section
+        .user-fidelidade {
+          margin-top: 24px;
+          padding: 20px;
+          background: linear-gradient(135deg, $bg_cinza_claro 0%, #e9ecef 100%);
+          border-radius: $border_radius_large;
+          box-shadow: $sombra_leve;
+
+          .fidelidade-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+
+            .fidelidade-icon {
+              font-size: 28px;
+              width: 28px;
+              height: 28px;
+              color: $azul_principal;
+            }
+
+            .fidelidade-title {
+              margin: 0;
+              font-size: 18px;
+              font-weight: 600;
+              color: $azul_titulo_pagina;
+            }
+          }
+
+          .fidelidade-card {
+            padding: 16px;
+            border-radius: $border_radius_medium;
+            margin-bottom: 12px;
+            border: 2px solid;
+            transition: all $transition_normal;
+
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: $sombra_media;
+            }
+
+            &.fidelidade-progresso {
+              background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+              border-color: $azul_principal;
+
+              .status-icon {
+                color: $azul_principal;
+              }
+
+              .fidelidade-sequence {
+                color: $azul_principal;
+              }
+
+              .progress-bar {
+                width: 100%;
+                height: 8px;
+                background: rgba(255, 255, 255, 0.6);
+                border-radius: $border_radius_small;
+                overflow: hidden;
+                margin-top: 8px;
+
+                .progress-fill {
+                  height: 100%;
+                  background: linear-gradient(90deg, $azul_principal 0%, $roxo_principal 100%);
+                  border-radius: $border_radius_small;
+                  transition: width 0.5s ease;
+                }
+              }
+            }
+
+            &.fidelidade-disponivel {
+              background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+              border-color: $verde_principal;
+              animation: pulse-green 2s ease-in-out infinite;
+
+              .status-icon {
+                color: $verde_principal;
+              }
+
+              .fidelidade-sequence {
+                color: $verde_principal;
+                font-weight: 700;
+              }
+            }
+
+            .fidelidade-content {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+
+              .status-icon {
+                font-size: 40px;
+                width: 40px;
+                height: 40px;
+                flex-shrink: 0;
+              }
+
+              .fidelidade-info {
+                flex: 1;
+                text-align: left;
+
+                .fidelidade-label {
+                  display: block;
+                  font-size: 12px;
+                  color: $cinza_escuro;
+                  font-weight: 500;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                  margin-bottom: 4px;
+                }
+
+                .fidelidade-sequence {
+                  display: block;
+                  font-size: 18px;
+                  font-weight: 600;
+                }
+              }
+            }
+          }
+
+          .fidelidade-validade {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-radius: $border_radius_medium;
+            border: 1px solid $cor_aviso;
+
+            .validade-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+              color: $cor_aviso;
+            }
+
+            span {
+              font-size: 14px;
+              color: #856404;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+      @keyframes pulse-green {
+        0%, 100% {
+          box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
         }
       }
 
