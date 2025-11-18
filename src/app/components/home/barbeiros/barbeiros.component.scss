@@ -1,27 +1,63 @@
 @import '../../../../variables';
 
+// Green color variations
+$verde_light: #2ecc71;
+$verde_dark: #218838;
+
+// Scroll animation
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .barbeiros-section {
   padding: 80px 5% 60px;
   background: $branco_degrade_barbeiro;
+  position: relative;
 
   .section-header {
     text-align: center;
     margin-bottom: 60px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 
-    .barbeiros-text {
-      font-size: 36px;
-      color: $preto_principal;
-      font-weight: 400;
-      margin-bottom: 50px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 60%;
-      line-height: 1.2;
-      
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      background: rgba(40, 167, 69, 0.1);
+      border: 1px solid rgba(40, 167, 69, 0.2);
+      border-radius: 50px;
+      color: $verde_principal;
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+
+      mat-icon {
+        font-size: 1.2rem;
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+
+      &:hover {
+        background: rgba(40, 167, 69, 0.15);
+        transform: translateY(-2px);
+      }
     }
 
     .section-title {
-      font-size: 2.5rem;
+      font-size: clamp(2rem, 5vw, 2.5rem);
       font-weight: 700;
       color: $azul_titulo_pagina;
       margin-bottom: 15px;
@@ -35,16 +71,25 @@
         transform: translateX(-50%);
         width: 80px;
         height: 4px;
-        background: $azul_degrade_borda;
+        background: linear-gradient(90deg, $verde_principal, $verde_light);
         border-radius: 2px;
       }
     }
 
     .section-subtitle {
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
       color: $cinza_subtitle;
-      font-weight: 400;
+      font-weight: 500;
       margin-top: 20px;
+    }
+
+    .barbeiros-text {
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      color: $texto_secundario;
+      font-weight: 400;
+      margin: 20px auto 0;
+      max-width: 700px;
+      line-height: 1.7;
     }
   }
 
@@ -63,16 +108,26 @@
       box-shadow: $sombra_media;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+
+      // Stagger animation based on index
+      &[data-index="0"] { animation-delay: 0.1s; }
+      &[data-index="1"] { animation-delay: 0.2s; }
+      &[data-index="2"] { animation-delay: 0.3s; }
+      &[data-index="3"] { animation-delay: 0.4s; }
+      &[data-index="4"] { animation-delay: 0.5s; }
+      &[data-index="5"] { animation-delay: 0.6s; }
 
       &:hover {
         transform: translateY(-10px);
-        box-shadow: $sombra_forte;
+        box-shadow: 0 15px 40px rgba(40, 167, 69, 0.15);
       }
 
       .barbeiro-image-container {
         position: relative;
         height: 280px;
-        overflow:visible;
+        overflow: visible;
 
         .barbeiro-image {
           width: 100%;
@@ -88,7 +143,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: $bg_overlay_barbeiro;
+            background: linear-gradient(
+              45deg,
+              rgba(40, 167, 69, 0.15) 0%,
+              rgba(0, 0, 0, 0.3) 50%,
+              rgba(40, 167, 69, 0.2) 100%
+            );
           }
         }
 
@@ -100,12 +160,36 @@
           z-index: 3;
 
           .avatar-img {
-            width: 196px;
-            height: 200px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
+            border: 4px solid white;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             object-fit: cover;
             background: $branco_principal;
+            transition: transform 0.3s ease;
+          }
+
+          .avatar-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, $verde_principal, $verde_light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+
+            mat-icon {
+              font-size: 14px;
+              width: 14px;
+              height: 14px;
+              color: white;
+            }
           }
         }
       }
@@ -114,46 +198,66 @@
         transform: scale(1.05);
       }
 
+      &:hover .barbeiro-avatar .avatar-img {
+        transform: scale(1.1);
+      }
+
       .barbeiro-info {
         padding: 50px 30px 30px;
         text-align: center;
 
         .barbeiro-name {
-          font-size: 1.5rem;
+          font-size: clamp(1.25rem, 3vw, 1.5rem);
           font-weight: 600;
           color: $azul_titulo_pagina;
-          margin-bottom: 15px;
+          margin-bottom: 20px;
         }
 
         .barbeiro-stats {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
           margin-bottom: 25px;
 
           .stat-item {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 6px;
-            background: $branco_principal;
+            background: rgba(40, 167, 69, 0.1);
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9rem;
-            font-weight: 500;
-            color: $cinza_subtitle;
+            font-weight: 600;
+            color: $verde_dark;
+            transition: all 0.3s ease;
 
             mat-icon {
               font-size: 16px;
               width: 16px;
               height: 16px;
-              color: #FFD700;
+              color: $verde_principal;
             }
+
+            &:hover {
+              background: rgba(40, 167, 69, 0.15);
+              transform: translateY(-2px);
+            }
+          }
+
+          .stat-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(40, 167, 69, 0.2);
           }
         }
 
         .agendar-btn {
-          background: $azul_degrade_borda;
+          background: linear-gradient(135deg, $verde_principal, $verde_light);
           color: $branco_principal;
           border: none;
           padding: 12px 30px;
-          border-radius: 25px;
+          border-radius: 50px;
           font-weight: 600;
           font-size: 1rem;
           cursor: pointer;
@@ -161,12 +265,16 @@
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+          box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 
           &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
-            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, $verde_light, $verde_principal);
+          }
+
+          &:active {
+            transform: translateY(-1px);
           }
 
           mat-icon {
@@ -180,43 +288,83 @@
   }
 }
 
-// Responsividade
+// Responsividade - Carousel para Mobile
 @media (max-width: 768px) {
   .barbeiros-section {
-    padding: 60px 3% 40px;
+    padding: 60px 0 40px;
 
-    .barbeiros-grid {
-      grid-template-columns: 1fr;
-      gap: 30px;
-      padding: 0 10px;
+    .section-header {
+      padding: 0 5%;
 
-      .barbeiro-card {
-        .barbeiro-image-container {
-          height: 250px;
-        }
+      .section-label {
+        font-size: 0.875rem;
+        padding: 6px 16px;
+      }
 
-        .barbeiro-info {
-          padding: 40px 20px 25px;
-
-          .barbeiro-name {
-            font-size: 1.3rem;
-          }
-
-          .agendar-btn {
-            padding: 10px 25px;
-            font-size: 0.9rem;
-          }
-        }
+      .barbeiros-text {
+        font-size: 1rem;
       }
     }
 
-    .section-header {
-      .section-title {
-        font-size: 2rem;
+    .barbeiros-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      gap: 20px;
+      padding: 0 5%;
+      margin: 0;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
       }
 
-      .section-subtitle {
-        font-size: 1rem;
+      .barbeiro-card {
+        flex: 0 0 85%;
+        max-width: 350px;
+        scroll-snap-align: center;
+        margin: 0;
+
+        .barbeiro-image-container {
+          height: 250px;
+
+          .barbeiro-avatar {
+            .avatar-img {
+              width: 100px;
+              height: 100px;
+            }
+
+            .avatar-badge {
+              width: 26px;
+              height: 26px;
+
+              mat-icon {
+                font-size: 13px;
+                width: 13px;
+                height: 13px;
+              }
+            }
+          }
+        }
+
+        .barbeiro-info {
+          padding: 45px 20px 25px;
+
+          .barbeiro-stats {
+            .stat-item {
+              padding: 6px 12px;
+              font-size: 0.85rem;
+            }
+          }
+
+          .agendar-btn {
+            padding: 12px 28px;
+            width: 100%;
+          }
+        }
       }
     }
   }
@@ -224,12 +372,55 @@
 
 @media (max-width: 480px) {
   .barbeiros-section {
+    .section-header {
+      .section-label {
+        font-size: 0.75rem;
+        padding: 6px 14px;
+      }
+    }
+
     .barbeiros-grid {
+      padding: 0 3%;
+
       .barbeiro-card {
-        margin: 0 10px;
+        flex: 0 0 90%;
+
+        .barbeiro-image-container {
+          height: 230px;
+
+          .barbeiro-avatar {
+            bottom: -35px;
+
+            .avatar-img {
+              width: 90px;
+              height: 90px;
+              border: 3px solid white;
+            }
+          }
+        }
 
         .barbeiro-info {
-          padding: 35px 15px 20px;
+          padding: 40px 15px 20px;
+
+          .barbeiro-stats {
+            gap: 8px;
+
+            .stat-item {
+              padding: 6px 10px;
+              font-size: 0.8rem;
+
+              mat-icon {
+                font-size: 14px;
+                width: 14px;
+                height: 14px;
+              }
+            }
+          }
+
+          .agendar-btn {
+            padding: 10px 24px;
+            font-size: 0.9rem;
+          }
         }
       }
     }

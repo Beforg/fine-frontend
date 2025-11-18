@@ -2,6 +2,7 @@
   <div class="card-image">
     <img [src]="urlImagem" [alt]="nome" (error)="onImageError($event)">
     <div class="card-overlay">
+      <mat-icon>{{ tipo === 'produto' ? 'shopping_bag' : 'content_cut' }}</mat-icon>
       <span class="card-type">{{ tipo | titlecase }}</span>
     </div>
   </div>
@@ -9,20 +10,37 @@
   <div class="card-content" title="{{nome}}">
     <h4 class="card-title">{{ nome }}</h4>
     <p class="card-description">{{ descricao == "" ? 'Sem Descrição' : descricao }}</p>
-    <div class="card-footer">
-      <div class="card-price">R$ {{ preco | number:'1.2-2' }}
-        <span class="card-service-time" *ngIf="tipo === 'servico'">
-          <mat-icon>timer</mat-icon>
-          <p>{{tempoEstimado}} min</p>
-        </span>
+    
+    <div class="card-details" *ngIf="tipo === 'servico'">
+      <div class="detail-item">
+        <mat-icon>timer</mat-icon>
+        <span>{{tempoEstimado}} min</span>
       </div>
-      <button 
+    </div>
+
+    <div class="card-footer">
+      <div class="card-price">
+        <span class="price-label">Valor</span>
+        <span class="price-value">R$ {{ preco | number:'1.2-2' }}</span>
+      </div>
+      
+      <!-- Botão comentado conforme solicitado -->
+      <!-- <button 
+        *ngIf="tipo === 'produto'"
         class="card-action-btn" 
         mat-stroked-button 
         color="primary"
         (click)="onCardClick(); $event.stopPropagation();">
-        <mat-icon>{{ tipo === 'produto' ? 'shopping_cart' : 'event_available' }}</mat-icon>
-        {{ tipo === 'produto' ? 'Comprar' : 'Agendar' }}
+        <mat-icon>shopping_cart</mat-icon>
+        Comprar
+      </button> -->
+      
+      <button 
+        *ngIf="tipo === 'servico'"
+        class="card-action-btn" 
+        (click)="onCardClick(); $event.stopPropagation();">
+        <mat-icon>event_available</mat-icon>
+        <span>Agendar</span>
       </button>
     </div>
   </div>
