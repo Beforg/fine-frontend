@@ -1,6 +1,22 @@
 // Importar variáveis
 @import '../../../variables';
 
+// Variáveis de tema verde
+$verde_light: #2ecc71;
+$verde_dark: #218838;
+
+// Animação
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 // Estilos para o wrapper de conteúdo com background
 .content-wrapper {
   flex: 1;
@@ -8,15 +24,17 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  min-height: auto;
+  padding: 140px 20px 60px;
   
-  // Background com a imagem bgEntrar.jpg
+  // Background com a imagem bgRegister.jpg
   background-image: url('/assets/bgRegister.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment:scroll;
+  background-attachment: scroll;
   
-  // Overlay escuro para melhor legibilidade do texto
+  // Overlay com gradiente verde
   &::before {
     content: '';
     position: absolute;
@@ -24,7 +42,23 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: $bg_overlay_claro;
+    background: linear-gradient(135deg, 
+      rgba(18, 13, 43, 0.85) 0%, 
+      rgba(40, 167, 69, 0.2) 50%, 
+      rgba(18, 13, 43, 0.85) 100%);
+    z-index: 1;
+  }
+  
+  // Padrão decorativo com pontos
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, rgba(40, 167, 69, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
     z-index: 1;
   }
 }
@@ -33,58 +67,170 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
   width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
   position: relative;
   z-index: 2;
-  animation: fadeInTab 0.6s ease-out;
+  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
   .register-card {
-    margin-top: 100px;
-    background: $card_bg;
-    backdrop-filter: blur(10px);
-    padding: 40px;
-    border-radius: $border_radius_xl;
-    box-shadow: $sombra_intensa;
-    text-align: center;
-    max-width: 450px;
+    background: linear-gradient(135deg, 
+      rgba(18, 13, 43, 0.95) 0%, 
+      rgba(28, 23, 53, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    padding: 48px 40px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(40, 167, 69, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
     width: 100%;
     position: relative;
-    z-index: 3; // Aumentei o z-index para ficar acima do overlay
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    
+    // Border superior verde gradiente
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, $verde_principal, $verde_light, $verde_principal);
+      border-radius: 24px 24px 0 0;
+    }
+    
+    // Glow verde sutil no fundo
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(40, 167, 69, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      animation: pulse 4s ease-in-out infinite;
+    }
     
     h1 {
-      color: $texto_principal;
+      color: white;
       margin-bottom: 10px;
       font-size: 28px;
-      font-weight: 600;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      font-weight: 700;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
     
     p {
-      color: $texto_secundario;
+      color: rgba(255, 255, 255, 0.7);
       margin-bottom: 30px;
       font-size: 16px;
     }
-    
-    
+
+    .badge-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      mat-icon {
+        color: $verde_light;
+        margin-right: 8px;
+      }
+
+      span {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Animação pulse
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+// Responsividade
+@media (max-width: 1024px) {
+  .content-wrapper {
+    padding: 120px 20px 50px;
   }
   
-  // Responsividade
-  @media (max-width: 480px) {
-    padding: 10px;
+  .register-container {
+    max-width: 480px;
     
     .register-card {
-      margin: 10px;
-      padding: 20px;
+      padding: 40px 32px;
     }
+  }
+}
 
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 100px 16px 40px;
+    min-height: auto;
+  }
+  
+  .register-container {
+    max-width: 100%;
+    
+    .register-card {
+      padding: 36px 28px;
+      border-radius: 20px;
+      
+      h1 {
+        font-size: 26px;
+      }
+      
+      p {
+        font-size: 15px;
+      }
+    }
+  }
+}
 
-    .login-card {
-      padding: 20px;
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding: 90px 12px 30px;
+  }
+  
+  .register-container {
+    .register-card {
+      padding: 32px 24px;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4),
+                  0 0 0 1px rgba(40, 167, 69, 0.3);
+      
+      &::before {
+        height: 3px;
+      }
       
       h1 {
         font-size: 24px;
+      }
+      
+      p {
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+      
+      .badge-item {
+        margin-bottom: 8px;
+        
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+        
+        span {
+          font-size: 13px;
+        }
       }
     }
   }
