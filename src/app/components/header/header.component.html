@@ -61,6 +61,12 @@
       <mat-icon>content_cut</mat-icon>
       Serviços
     </a> -->
+    @if (isAdmin() || isBarbeiro()) {
+      <a routerLink="/admin" class="mobile-nav-link" (click)="closeMobileMenu()">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Gerenciamento
+      </a>
+    }
     @if (isLoggedIn()) {
       <a class="mobile-nav-link profile-button" (click)="togglePerfilCard(); closeMobileMenu()">
         <mat-icon>account_circle</mat-icon>
