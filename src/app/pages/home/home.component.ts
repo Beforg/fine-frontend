@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,7 @@ import { SobreComponent } from "../../components/home/sobre/sobre.component";
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   
   // Propriedades para os campos de exemplo
   textValue: string = '';
@@ -24,7 +24,39 @@ export class HomeComponent {
   passwordValue: string = '';
   
   // Injetar o Router no construtor
-  constructor(private router: Router) {}
+  constructor(private router: Router, private elementRef: ElementRef) {}
+  
+  ngAfterViewInit() {
+    this.setupScrollAnimations();
+  }
+
+  setupScrollAnimations() {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1 // Trigger when 10% of element is visible
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          // Optional: stop observing after animation
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+
+    // Observe all components in page-container
+    const elementsToAnimate = this.elementRef.nativeElement.querySelectorAll(
+      'app-hero-section, app-barbeiros, app-catalogo-ps, app-sobre'
+    );
+
+    elementsToAnimate.forEach((element: Element) => {
+      element.classList.add('scroll-reveal');
+      observer.observe(element);
+    });
+  }
   
   // Métodos para testar o botão
   onLoginClick() {

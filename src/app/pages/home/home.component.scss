@@ -5,6 +5,36 @@
   padding-top: 80px;
 }
 
+// Animações de scroll reveal
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Variações de animação para diferentes componentes
+app-hero-section.scroll-reveal {
+  transition-delay: 0.1s;
+}
+
+app-barbeiros.scroll-reveal {
+  transition-delay: 0.2s;
+}
+
+app-catalogo-ps.scroll-reveal {
+  transition-delay: 0.2s;
+}
+
+app-sobre.scroll-reveal {
+  transition-delay: 0.2s;
+}
+
 .home-title-content {
   position: relative;
   height: 500px;

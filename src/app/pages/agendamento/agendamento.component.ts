@@ -18,6 +18,7 @@ import { NotificationService } from '../../services/notification.service';
 import { PerfilService } from '../../services/perfil.service';
 import { AuthService } from '../../services/auth.service';
 import { ModalComponent } from "../../components/agendamento/modal/modal.component";
+import { BloqueioAgendamentoUtils, BloqueioInfo } from '../../utils/bloqueio.agendamento.utils';
 
 
 
@@ -64,7 +65,7 @@ export class AgendamentoComponent implements OnInit {
 
   // Mock data baseado nos horários que você forneceu
   horariosDisponiveis: string[] = [];
-
+  // bloqueio
 
 
   constructor(
@@ -81,7 +82,8 @@ export class AgendamentoComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    // Pegar o ID dos query parameters se não estiver nos route params
+    
+    BloqueioAgendamentoUtils.obterBloqueioAtual();
   
     this.route.queryParams.subscribe(params => {
       if (params['barbeiroId']) {
@@ -222,7 +224,12 @@ export class AgendamentoComponent implements OnInit {
     }
 
     submitAgendamento(): void {
-      console.log(this.verificaCorteGratis());
+      
+      if (BloqueioAgendamentoUtils.estaBloqueado()) {
+        this.notificationService.error(`Você atingiu o limite de agendamentos. Aguarde ${BloqueioAgendamentoUtils.obterTempoRestanteFormatado()} para tentar novamente.`);
+        return;
+      }
+
 
       if (this.selectedTime) {
         this.agendamentoFinalizado = true;
@@ -247,6 +254,8 @@ export class AgendamentoComponent implements OnInit {
             setTimeout(() => {
               this.router.navigate([`/perfil`], { queryParams: { tab: 'g' } });
             }, 3000);
+            BloqueioAgendamentoUtils.incrementarTentativa();
+
           },
           error: (error) => {
             console.error('Erro ao criar agendamento:', error);
