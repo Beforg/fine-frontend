@@ -1,0 +1,81 @@
+<header class="header-container">
+  <!-- Logo Section -->
+  <div class="logo-section" (click)="goToHome()">
+    <img src="{{ imgHeader }}" alt="Fine Barbearia Logo" class="header-logo">
+    <h1 class="business-name">Barbearia Fine</h1>
+  </div>
+  
+  <!-- Search Section (sempre visível) -->
+  <div class="search-section" *ngIf="showSearchBar">
+    <input type="text" placeholder="Buscar..." class="search-input">
+    <button class="search-button" mat-icon-button>
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+  
+  <!-- Menu Hambúrguer (apenas mobile) -->
+  <button class="mobile-menu-button" mat-icon-button (click)="toggleMobileMenu()">
+    <mat-icon>{{ mobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
+  
+  <!-- Navigation Links (desktop) -->
+  <nav class="nav-links desktop-nav">
+    <!-- <a routerLink="/products" class="nav-link">
+      <mat-icon>shopping_bag</mat-icon>
+      Produtos
+    </a>
+    <a routerLink="/services" class="nav-link">
+      <mat-icon>content_cut</mat-icon>
+      Serviços
+    </a> -->
+    @if (isAdmin() || isBarbeiro()) {
+      <a routerLink="/admin" class="nav-link">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Gerenciamento
+      </a>
+    }
+    @if (isLoggedIn()) {
+      <button class="nav-link profile-button" (click)="togglePerfilCard()">
+        <mat-icon>account_circle</mat-icon>
+        Minha Conta
+      </button>
+     } @else {
+    <a routerLink="/login" class="nav-link login-button">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
+    }
+  </nav>
+
+  
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.open]="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+  
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-nav" [class.open]="mobileMenuOpen">
+    <a routerLink="/products" class="mobile-nav-link" (click)="closeMobileMenu()">
+      <mat-icon>shopping_bag</mat-icon>
+      Produtos
+    </a>
+    <a routerLink="/services" class="mobile-nav-link" (click)="closeMobileMenu()">
+      <mat-icon>content_cut</mat-icon>
+      Serviços
+    </a>
+    @if (isLoggedIn()) {
+      <a class="mobile-nav-link profile-button" (click)="togglePerfilCard(); closeMobileMenu()">
+        <mat-icon>account_circle</mat-icon>
+        Minha Conta
+      </a>
+    } @else {
+    <a routerLink="/login" class="mobile-nav-link login-button" (click)="closeMobileMenu()">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
+  }
+  </nav>
+</header>
+
+<!-- Perfil Card (quando logado) -->
+@if (perfilCardOpen && isLoggedIn()) {
+  <app-perfil-card [isCliente]="isCliente()" [isBarbeiro]="isBarbeiro()" (close)="closePerfilCard()"></app-perfil-card>
+}

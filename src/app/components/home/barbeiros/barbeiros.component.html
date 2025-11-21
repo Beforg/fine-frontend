@@ -1,0 +1,36 @@
+<section class="barbeiros-section">
+  <div class="section-header">
+    <p class="barbeiros-text">Agende seu horário e descubra por que, desde 2020, tantos clientes escolhem viver essa experiência com a gente.</p>
+    <h2 class="section-title">Nossos Barbeiros</h2>
+    <p class="section-subtitle">Profissionais experientes para cuidar do seu estilo</p>
+  </div>
+
+  <div class="barbeiros-grid">
+    
+    <!-- Barbeiro 1 , todo: fazer uma lista depois para iterar os barbeiros.-->
+     <!-- todo: colocar essas imagens no s3 -->
+    <div class="barbeiro-card" *ngFor="let barbeiro of barbeiros">
+      <div class="barbeiro-image-container">
+        <div class="barbeiro-image" [ngStyle]="{'background-image': 'url(' + barbeiro.urlBackground + ')'}">
+          <div class="image-overlay"></div>
+        </div>
+        <div class="barbeiro-avatar">
+          <img [src]="barbeiro.urlFoto" [alt]="barbeiro.nome" class="avatar-img">
+        </div>
+      </div>
+      <div class="barbeiro-info">
+        <h3 class="barbeiro-name">{{ barbeiro.nome }}</h3>
+        <div class="barbeiro-stats">
+          <span class="stat-item">
+            <mat-icon>search</mat-icon>
+            {{ barbeiro.visualizacoes }}
+          </span>
+        </div>
+        <button [routerLink]="['/agendamento', barbeiro.barbeiroId]" class="agendar-btn" mat-stroked-button color="primary">
+          <mat-icon>schedule</mat-icon>
+          Agendar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,53 @@
+<div class="perfil-card-overlay" (click)="onCloseCard()">
+  <div class="perfil-card" (click)="$event.stopPropagation()">
+    <!-- Header do card -->
+    <div class="perfil-header">
+      <div class="perfil-avatar">
+        <mat-icon>account_circle</mat-icon>
+        Meu Perfil
+      </div>
+      <button class="close-button" (click)="onCloseCard()" mat-icon-button>
+        X
+      </button>
+    </div>
+
+    <!-- Informações do usuário -->
+    <div class="perfil-info" *ngIf="userInfo">
+      <h3 class="user-name">{{ userInfo.name }}</h3>
+      <p class="user-email">{{ userInfo.email }}</p>
+    </div>
+
+    <!-- Caso não tenha informações -->
+    <div class="perfil-info" *ngIf="!userInfo">
+      <h3 class="user-name">Carregando...</h3>
+      <p class="user-email">Obtendo informações do usuário</p>
+    </div>
+
+    <!-- Ações -->
+    <div class="perfil-actions" >
+      <button *ngIf="isCliente || isBarbeiro" 
+        class="action-button profile-button" 
+        (click)="onGoToProfile()"
+        mat-button>
+        <mat-icon>person</mat-icon>
+        Meu Perfil
+      </button>
+
+      <button *ngIf="isCliente || isBarbeiro" 
+        class="action-button agendamentos-button" 
+        (click)="onGoToAgendamentos()"
+        mat-button>
+        <mat-icon>event</mat-icon>
+        Agendamentos
+      </button>
+
+      <button 
+        class="action-button logout-button" 
+        (click)="onLogout()"
+        mat-button>
+        <mat-icon>exit_to_app</mat-icon>
+        Sair
+      </button>
+    </div>
+  </div>
+</div>

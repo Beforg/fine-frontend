@@ -1,0 +1,256 @@
+// Importar variáveis
+@import '../../../variables';
+
+.perfil-container {
+  min-height: 100vh;
+  background: $bg_cinza_claro;
+  padding: 20px;
+  padding-top: 100px; /* 80px do header + 20px normal */
+
+  
+  // Overlay escuro para melhor legibilidade do texto
+  
+  // Header da página
+  .perfil-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .back-button {
+      color: $azul_principal;
+      margin-right: 16px;
+      
+      &:hover {
+        background-color: rgba(28, 57, 187, 0.1);
+      }
+    }
+
+
+    .container-header-options {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .header-option {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 400;
+      color: $azul_titulo_pagina;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: rgba(211, 14, 0, 0.1);
+        text-decoration: none;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+    box-shadow: $sombra_leve;
+    border-radius: 10px;
+    transform: translateY(-1px);
+
+  }
+
+    .header-spacer {
+      width: 48px; // Mesmo tamanho do botão para centralizar o título
+    }
+  }
+
+  // Conteúdo principal
+  .perfil-content {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+  }
+
+
+// Responsividade
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 16px;
+    padding-top: 86px; /* 70px do header + 16px normal */
+
+    .perfil-header {
+      margin-bottom: 20px;
+
+      .page-title {
+        font-size: 24px;
+      }
+    }
+
+    .perfil-content {
+      .perfil-card {
+        padding: 24px;
+
+        .avatar-section {
+          margin-bottom: 24px;
+
+          .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+
+            mat-icon {
+              font-size: 64px;
+              width: 64px;
+              height: 64px;
+            }
+          }
+
+          .edit-avatar-btn {
+            right: calc(50% - 58px);
+          }
+        }
+
+        .user-info {
+          margin-bottom: 24px;
+
+          .user-name {
+            font-size: 20px;
+          }
+
+          .user-role {
+            font-size: 14px;
+          }
+        }
+
+        .actions-section {
+          flex-direction: column;
+          align-items: center;
+
+          .edit-button,
+          .delete-button {
+            width: 100%;
+            max-width: 300px;
+          }
+        }
+      }
+
+      .stats-section {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-container {
+    padding: 12px;
+    padding-top: 72px; /* 60px do header + 12px normal */
+
+    .perfil-content {
+      .perfil-card {
+        padding: 20px;
+
+        .avatar-section {
+          .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+
+            mat-icon {
+              font-size: 48px;
+              width: 48px;
+              height: 48px;
+            }
+          }
+
+          .edit-avatar-btn {
+            right: calc(50% - 48px);
+            width: 32px;
+            height: 32px;
+
+            mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+
+        .form-section {
+          .form-group {
+            margin-bottom: 16px;
+          }
+        }
+      }
+
+      .stats-section {
+        .stat-card {
+          padding: 16px;
+
+          .stat-content {
+            gap: 12px;
+
+            .stat-icon {
+              font-size: 24px;
+              width: 24px;
+              height: 24px;
+            }
+
+            .stat-info {
+              .stat-number {
+                font-size: 20px;
+              }
+
+              .stat-label {
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Card de carregamento
+  // .loading-card {
+  //   padding: 60px 32px;
+  //   text-align: center;
+
+  //   .loading-content {
+  //     display: flex;
+  //     flex-direction: column;
+  //     align-items: center;
+  //     gap: 16px;
+
+  //     .loading-icon {
+  //       font-size: 48px;
+  //       width: 48px;
+  //       height: 48px;
+  //       color: $azul_principal;
+  //       animation: pulse 1.5s ease-in-out infinite alternate;
+  //     }
+
+  //     p {
+  //       margin: 0;
+  //       color: $cinza_medio;
+  //       font-size: 16px;
+  //     }
+  //   }
+
+  //   @keyframes pulse {
+  //     from {
+  //       opacity: 1;
+  //     }
+  //     to {
+  //       opacity: 0.4;
+  //     }
+  //   }
+  // }
+}

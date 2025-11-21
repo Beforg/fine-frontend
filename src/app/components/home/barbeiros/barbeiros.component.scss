@@ -1,0 +1,237 @@
+@import '../../../../variables';
+
+.barbeiros-section {
+  padding: 80px 5% 60px;
+  background: $branco_degrade_barbeiro;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+
+    .barbeiros-text {
+      font-size: 36px;
+      color: $preto_principal;
+      font-weight: 400;
+      margin-bottom: 50px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 60%;
+      line-height: 1.2;
+      
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $azul_titulo_pagina;
+      margin-bottom: 15px;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: $azul_degrade_borda;
+        border-radius: 2px;
+      }
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: $cinza_subtitle;
+      font-weight: 400;
+      margin-top: 20px;
+    }
+  }
+
+  .barbeiros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+    .barbeiro-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: $sombra_media;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: $sombra_forte;
+      }
+
+      .barbeiro-image-container {
+        position: relative;
+        height: 280px;
+        overflow:visible;
+
+        .barbeiro-image {
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          transition: transform 0.3s ease;
+
+          .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: $bg_overlay_barbeiro;
+          }
+        }
+
+        .barbeiro-avatar {
+          position: absolute;
+          bottom: -40px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 3;
+
+          .avatar-img {
+            width: 196px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+            background: $branco_principal;
+          }
+        }
+      }
+
+      &:hover .barbeiro-image {
+        transform: scale(1.05);
+      }
+
+      .barbeiro-info {
+        padding: 50px 30px 30px;
+        text-align: center;
+
+        .barbeiro-name {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: $azul_titulo_pagina;
+          margin-bottom: 15px;
+        }
+
+        .barbeiro-stats {
+          margin-bottom: 25px;
+
+          .stat-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: $branco_principal;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: $cinza_subtitle;
+
+            mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+              color: #FFD700;
+            }
+          }
+        }
+
+        .agendar-btn {
+          background: $azul_degrade_borda;
+          color: $branco_principal;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 25px;
+          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+          }
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .barbeiros-section {
+    padding: 60px 3% 40px;
+
+    .barbeiros-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 0 10px;
+
+      .barbeiro-card {
+        .barbeiro-image-container {
+          height: 250px;
+        }
+
+        .barbeiro-info {
+          padding: 40px 20px 25px;
+
+          .barbeiro-name {
+            font-size: 1.3rem;
+          }
+
+          .agendar-btn {
+            padding: 10px 25px;
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+
+    .section-header {
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .section-subtitle {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .barbeiros-section {
+    .barbeiros-grid {
+      .barbeiro-card {
+        margin: 0 10px;
+
+        .barbeiro-info {
+          padding: 35px 15px 20px;
+        }
+      }
+    }
+  }
+}

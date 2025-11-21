@@ -1,0 +1,180 @@
+<div class="disponibilidade-container">
+    <!-- Header -->
+    <div class="header-container">
+        <h1>Indisponibilidade dos Barbeiros e Feriados </h1>
+        <button class="btn-adicionar" (click)="openModal()">
+            <mat-icon>add</mat-icon>
+            Adicionar Bloqueio
+        </button>
+    </div>
+    
+    <!-- Tabela de Indisponibilidades -->
+    <div class="table-container">
+        <table class="disponibilidade-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Barbeiro</th>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Motivo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of indisponibilidades" class="table-row">
+                    <td class="td-id">#{{ item.barbeiroId }}</td>
+                    <td class="td-barbeiro">
+                        <div class="barbeiro-info">
+                            <span class="barbeiro-nome">{{ item.barbeiroNome }}</span>
+                        </div>
+                    </td>
+                    <td class="td-data">{{ item.data | date:'dd/MM/yyyy' }}</td>
+                    <td class="td-horario">
+                        <span class="horario-valor">{{ item.horaInicio }} - {{ item.horaFim }}</span>
+                    </td>
+                    <td class="td-motivo">
+                        <span class="motivo-texto">{{ item.motivo }}</span>
+                    </td>
+                    <td class="td-actions">
+                        <div class="actions-container">
+                            <button class="btn-action btn-edit" title="Editar">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="btn-action btn-delete" title="Remover">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensagem quando não há dados -->
+        <div *ngIf="!indisponibilidades || indisponibilidades.length === 0" class="no-data">
+            <mat-icon>event_busy</mat-icon>
+            <p>Nenhuma indisponibilidade cadastrada</p>
+        </div>
+    </div>
+    <!-- Modal de Adicionar Indisponibilidade -->
+    <div class="modal-overlay" *ngIf="isModalOpen">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Adicionar Bloqueio</h2>
+                <button class="close-button" (click)="closeModal()" type="button">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            
+            <form [formGroup]="bloqueioForm" (ngSubmit)="onSubmit()" class="modal-content">
+                <!-- Data -->
+                <div class="form-group">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Data</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="data" [min]="minDate" placeholder="Selecione a data">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="f['data'].errors?.['required']">
+                            Data é obrigatória
+                        </mat-error>
+                        <mat-error *ngIf="f['data'].errors?.['dataPassada']">
+                            Não é possível selecionar uma data anterior a hoje
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Data</mat-label>
+                        <input matInput type="date" formControlName="data" [min]="getTodayDate()">
+                        <mat-error *ngIf="f['data'].errors?.['required']">
+                            Data é obrigatória
+                        </mat-error>
+                        <mat-error *ngIf="f['data'].errors?.['dataPassada']">
+                            Não é possível selecionar uma data anterior a hoje
+                        </mat-error>
+                    </mat-form-field> -->
+                </div>
+
+                <!-- Horários -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Hora Inicial</mat-label>
+                            <mat-select formControlName="horaInicio">
+                                <mat-option *ngFor="let hora of horariosDisponiveis" [value]="hora">
+                                    {{ hora }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f['horaInicio'].errors?.['required']">
+                                Hora inicial é obrigatória
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Hora Final</mat-label>
+                            <mat-select formControlName="horaFim">
+                                <mat-option *ngFor="let hora of horariosDisponiveis" [value]="hora">
+                                    {{ hora }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="f['horaFim'].errors?.['required']">
+                                Hora final é obrigatória
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Tipo de Bloqueio -->
+                <div class="form-group">
+                    <label class="form-label">Tipo de Bloqueio</label>
+                    <mat-radio-group formControlName="tipoBloqueio" class="radio-group">
+                        <mat-radio-button value="feriado" class="radio-option">
+                            Feriado
+                        </mat-radio-button>
+                        <mat-radio-button value="barbeiro" class="radio-option">
+                            Barbeiro Específico
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <!-- Select de Barbeiro (só aparece se for selecionado barbeiro) -->
+                <div class="form-group" *ngIf="f['tipoBloqueio'].value === 'barbeiro'">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Selecionar Barbeiro</mat-label>
+                        <mat-select formControlName="barbeiroId">
+                            <mat-option *ngFor="let barbeiro of barbeiros" [value]="barbeiro.barbeiroId">
+                                {{ barbeiro.nome }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f['barbeiroId'].errors?.['required']">
+                            Selecione um barbeiro
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Motivo -->
+                <div class="form-group">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Motivo</mat-label>
+                        <textarea matInput formControlName="motivo" rows="3" 
+                                placeholder="Descreva o motivo do bloqueio..."></textarea>
+                        <mat-error *ngIf="f['motivo'].errors?.['required']">
+                            Motivo é obrigatório
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Botões -->
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" (click)="closeModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-confirm" [disabled]="!bloqueioForm.valid">
+                        <mat-icon>save</mat-icon>
+                        Salvar Bloqueio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

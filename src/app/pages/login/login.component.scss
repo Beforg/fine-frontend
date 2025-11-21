@@ -1,0 +1,117 @@
+// Importar variáveis
+@import '../../../variables';
+
+// Estilos para o wrapper de conteúdo com background
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 160px); /* Compensar header fixo (80px) e footer (~80px) */
+  padding-top: 80px; /* Compensar altura do header fixo */
+  
+  // Background com a imagem bgEntrar.jpg
+  background-image: url('/assets/bgEntrar.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  
+  // Overlay escuro para melhor legibilidade do texto
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $bg_overlay_claro;
+    z-index: 1;
+  }
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  animation: fadeInTab 0.6s ease-out;
+
+  .login-card {
+    background: $card_bg;
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: $border_radius_xl;
+    box-shadow: $sombra_intensa;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    position: relative;
+    z-index: 3; // Aumentei o z-index para ficar acima do overlay
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    h1 {
+      color: $texto_principal;
+      margin-bottom: 10px;
+      font-size: 28px;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    p {
+      color: $texto_secundario;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .badge-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      mat-icon {
+        color: $texto_secundario;
+        margin-right: 8px;
+      }
+
+      span {
+        color: $texto_secundario;
+        font-size: 14px;
+      }
+    }
+
+  }
+  
+  // Responsividade
+  @media (max-width: 480px) {
+    padding: 10px;
+    
+    .login-card {
+      padding: 20px;
+      
+      h1 {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+// Responsividade para .content-wrapper
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding-top: 70px; /* Header menor em mobile */
+    min-height: calc(100vh - 140px);
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding-top: 60px; /* Header ainda menor em mobile pequeno */
+    min-height: calc(100vh - 120px);
+  }
+}

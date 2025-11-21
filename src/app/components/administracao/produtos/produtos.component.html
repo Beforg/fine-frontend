@@ -1,0 +1,156 @@
+<div class="produtos-container">
+    <div class="header-container">
+        <h1>Gerenciamento de Produtos</h1>
+        <button class="btn-adicionar" (click)="adicionarProduto()">
+            <mat-icon>add</mat-icon>
+            Adicionar Produto
+        </button>
+    </div>
+    
+    <div class="table-container">
+        <table class="produtos-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Estoque</th>
+                    <th>Preço</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let produto of produtos" class="table-row">
+                    <td class="td-id">#{{ produto.id }}</td>
+                    <td class="td-nome">
+                        <div class="produto-info">
+                            <span class="produto-nome">{{ produto.nome }}</span>
+                            <span class="produto-descricao" *ngIf="produto.descricao">{{ produto.descricao }}</span>
+                        </div>
+                    </td>
+                    <td class="td-estoque">
+                        <span class="estoque-valor" [ngClass]="{'estoque-baixo': produto.estoque < 10}">
+                            {{ produto.estoque }} unidades
+                        </span>
+                    </td>
+                    <td class="td-preco">
+                        <span class="preco-valor">{{ produto.preco | currency:'BRL':'symbol':'1.2-2' }}</span>
+                    </td>
+                    <td class="td-status">
+                        <div class="status-container">
+                            <button 
+                                class="status-toggle" 
+                                [class.ativo]="produto.ativo"
+                                [class.inativo]="!produto.ativo"
+                                (click)="toggleStatus(produto)"
+                                title="{{ produto.ativo ? 'Clique para desativar' : 'Clique para ativar' }}">
+                                <mat-icon>{{ produto.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                                <span>{{ produto.ativo ? 'Ativo' : 'Inativo' }}</span>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="td-actions">
+                        <div class="actions-container">
+                            <button class="btn-action btn-edit" title="Editar" (click)="editarProduto(produto)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button class="btn-action btn-delete" title="Remover" (click)="removerProduto(produto.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensagem quando não há produtos -->
+        <div *ngIf="!produtos || produtos.length === 0" class="no-data">
+            <mat-icon>inventory_2</mat-icon>
+            <p>Nenhum produto cadastrado</p>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Produto -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="fecharModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ isEditing ? 'Editar Produto' : 'Adicionar Novo Produto' }}</h2>
+                <button class="btn-close" (click)="fecharModal()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <form class="produto-form" (ngSubmit)="salvarProduto()">
+                <div class="form-group">
+                    <label for="nome">Nome do Produto *</label>
+                    <input 
+                        type="text" 
+                        id="nome" 
+                        [(ngModel)]="currentProduto.nome" 
+                        name="nome"
+                        required
+                        placeholder="Digite o nome do produto">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preco">Preço (R$) *</label>
+                        <input 
+                            type="number" 
+                            id="preco" 
+                            [(ngModel)]="currentProduto.preco" 
+                            name="preco"
+                            min="0"
+                            step="0.01"
+                            required
+                            placeholder="0,00">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estoque">Estoque *</label>
+                        <input 
+                            type="number" 
+                            id="estoque" 
+                            [(ngModel)]="currentProduto.estoque" 
+                            name="estoque"
+                            min="0"
+                            required
+                            placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <textarea 
+                        id="descricao" 
+                        [(ngModel)]="currentProduto.descricao" 
+                        name="descricao"
+                        rows="3"
+                        placeholder="Descrição opcional do produto"></textarea>
+                </div>
+
+                <div class="form-group-checkbox">
+                    <label class="checkbox-label">
+                        <input 
+                            type="checkbox" 
+                            [(ngModel)]="currentProduto.ativo" 
+                            name="ativo">
+                        <span class="checkmark"></span>
+                        Produto ativo
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar" (click)="fecharModal()">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-salvar">
+                        <mat-icon>save</mat-icon>
+                        {{ isEditing ? 'Atualizar' : 'Adicionar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

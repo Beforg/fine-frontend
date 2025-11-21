@@ -1,0 +1,48 @@
+<div class="gerenciamento-conteiner" *ngIf="showGerenciamento">
+    <div class="filtros-header">
+        <div class="filtros-container">
+            <a (click)="toggleTab(false, false, true, false)" *ngIf="isAdmin()"
+                [ngClass]="{'active-gerenciamento': showProdutos}">
+                <mat-icon>shopping_bag</mat-icon>
+                Produtos
+            </a>
+            <a (click)="toggleTab(false, true, false, false)" *ngIf="isAdmin()"
+                [ngClass]="{'active-gerenciamento': showServicos}">
+                <mat-icon>content_cut</mat-icon>
+                Serviços
+            </a>
+            <a (click)="toggleTab(true, false, false, false)" *ngIf="isAdmin()"
+                [ngClass]="{'active-gerenciamento': showBarbeiros}">
+                <mat-icon>person</mat-icon>
+                Barbeiros
+            </a>
+            <a (click)="toggleTab(false, false, false, true)" *ngIf="isAdmin()"
+                [ngClass]="{'active-gerenciamento': showDisponibilidade}">
+                <mat-icon>event_available</mat-icon>
+                Disponibilidade
+            </a>
+            <a (click)="toggleTab(false, false, false, false, true)" *ngIf="isAdmin()">
+                <mat-icon>people</mat-icon>
+                Clientes
+            </a>
+            <!-- <a *ngIf="isAdmin()">Disponibilidade</a> -->
+        </div>
+    </div>
+    <div class="gerenciamento-body">
+        <div class="gerenciamento-produtos" *ngIf="showProdutos && isAdmin()">
+            <app-produtos-gerenciamento></app-produtos-gerenciamento>
+        </div>
+        <div class="gerenciamento-servicos" *ngIf="showServicos && isAdmin()">
+            <app-servicos-gerenciamento></app-servicos-gerenciamento>
+        </div>
+        <div class="gerenciamento-barbeiros" *ngIf="showBarbeiros">
+            <app-barbeiros-gerenciamento [barbeiros]="barbeiros"
+                (barbeirosChange)="carregarBarbeiros()"></app-barbeiros-gerenciamento>
+        </div>
+        <div class="gerenciamento-disponibilidade" *ngIf="showDisponibilidade && isAdmin()">
+            <app-disponibilidade [barbeiros]="barbeiros"></app-disponibilidade>
+        </div>
+        <div class="class-gerenciamento-clientes" *ngIf="showClientes && isAdmin()">
+            <app-clientes></app-clientes>
+        </div>
+    </div>

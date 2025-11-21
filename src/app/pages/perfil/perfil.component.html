@@ -1,0 +1,40 @@
+<app-header></app-header>
+<div class="perfil-container">
+  <!-- Header da página -->
+  <div class="perfil-header">
+    <button class="back-button" mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="container-header-options">
+      <a 
+      class="header-option" 
+      [ngClass]="{'active': activeTab === 'p'}" 
+      (click)="toggleAgendamentos('p')"
+      [routerLink]="['/perfil']"
+      [queryParams]="{ tab: 'p' }">Perfil</a>
+      <a 
+      class="header-option" 
+      [ngClass]="{'active': activeTab === 'g'}" 
+      (click)="toggleAgendamentos('g')"
+      [routerLink]="['/perfil']"
+      [queryParams]="{ tab: 'g' }">Agendamentos</a>
+    </div>
+    <div class="header-spacer"></div>
+  </div>
+  <div class="perfil-content" *ngIf="!showAgendamentoContainer">
+    <app-perfil-form 
+    [userInfo]="userInfo" 
+    [userEmail]="getUserEmail()"
+    [userRole]="getRoleName()">
+    </app-perfil-form>
+    <app-barber-stats 
+    [userInfo]="userInfo" 
+    [isBarbeiro]="isBarbeiro()">
+  </app-barber-stats>
+  </div>
+  <div class="agendamentos-content" *ngIf="showAgendamentoContainer">
+    <app-agendamentos-gerenciamento [showAgendamentoContainer]="true"></app-agendamentos-gerenciamento>
+  </div>
+     
+</div>
+<app-footer></app-footer>

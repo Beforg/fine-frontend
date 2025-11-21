@@ -1,0 +1,288 @@
+// Importar variáveis
+@import '../../../variables';
+
+.form-register {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  padding: 0;
+  
+
+  .form-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+     p {
+      color: $texto_secundario;
+      font-size: 16px;
+      margin: 0 0 8px 0;
+    }
+
+    .login-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      justify-content: center;
+      gap: 5px;
+      color: $azul_principal;
+      margin-right: 5px;
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: $azul_principal;
+      }
+
+
+        &:hover {
+          text-decoration: underline;
+          transition: all 0.3s ease;
+          transform: scale(1.05);
+        }
+    }
+  }
+
+  // Cabeçalho do formulário
+  .form-header {
+    text-align: center;
+    margin-bottom: 32px;
+
+    .form-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 30px;
+      font-weight: 500;
+      color: $texto_principal;
+      margin: 0 0 8px 0;
+
+      .title-icon {
+        font-size: 28px;
+        color: $azul_principal;
+      }
+    }
+
+    .form-subtitle {
+      color: $texto_secundario;
+      font-size: 16px;
+      margin: 0;
+    }
+  }
+
+  // Mensagem de erro geral
+  .error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(220, 53, 69, 0.1);
+    color: $cor_erro;
+    padding: 12px 16px;
+    border-radius: $border_radius_medium;
+    border-left: 4px solid $cor_erro;
+    margin-bottom: 24px;
+    font-size: 14px;
+
+    .error-icon {
+      font-size: 20px;
+    }
+  }
+
+  // Campos do formulário
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 16px;
+
+    app-input-field {
+      width: 100%;
+    }
+
+    // centralizar os campos em telas menores
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-right: 20px;
+    }
+    
+
+  }
+
+  // Links do formulário
+  .form-links {
+    text-align: right;
+    margin-bottom: 24px;
+
+    .forgot-password-link {
+      color: $azul_principal;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all $transition_normal;
+
+      &:hover {
+        text-decoration: underline;
+        color: darken($azul_principal, 10%);
+      }
+    }
+
+    @media (max-width: 480px) {
+      text-align: center;
+      margin-bottom: 16px;
+
+      .forgot-password-link {
+        display: block;
+        margin-bottom: 8px;
+      }
+    }
+
+  }
+
+  // Botões de ação
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+
+    app-primary-button {
+      width: 100%;
+    }
+
+    // Responsividade para telas maiores
+    @media (min-width: 640px) {
+      flex-direction: row;
+      justify-content: space-between;
+      
+      app-primary-button {
+        flex: 1;
+        max-width: calc(50% - 6px);
+      }
+    }
+  }
+
+  // Divisor
+  .form-divider {
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: $cinza_claro;
+    }
+
+    span {
+      background-color: none;
+      padding: 0 16px;
+      color: $texto_secundario;
+      font-size: 14px;
+    }
+  }
+
+  // Link para cadastro
+  .form-register {
+    text-align: center;
+    
+    p {
+      color: $texto_secundario;
+      font-size: 14px;
+      margin: 0 0 8px 0;
+    }
+
+    .register-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: $verde_principal;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all $transition_normal;
+
+      &:hover {
+        text-decoration: underline;
+        color: darken($verde_principal, 10%);
+      }
+
+      mat-icon {
+        font-size: 18px;
+      }
+    }
+  }
+
+  // Debug info (apenas desenvolvimento)
+  .form-debug {
+    margin-top: 24px;
+    padding: 16px;
+    background-color: $bg_cinza_claro;
+    border-radius: $border_radius_medium;
+    font-size: 12px;
+    
+    h4 {
+      margin: 0 0 8px 0;
+      color: $texto_principal;
+    }
+    
+    p {
+      margin: 4px 0;
+      color: $texto_secundario;
+    }
+  }
+
+  // Estados de loading
+  &.loading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  // Animações
+  .form-header,
+  .form-fields,
+  .form-actions {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .form-fields {
+    animation-delay: 0.1s;
+  }
+
+  .form-actions {
+    animation-delay: 0.2s;
+  }
+}
+
+// Animação fade in up
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsividade mobile
+@media (max-width: 480px) {
+  .form-register {
+    padding: 0 16px;
+
+    .form-header .form-title {
+      font-size: 20px;
+    }
+
+    .form-actions {
+      gap: 8px;
+    }
+  }
+}

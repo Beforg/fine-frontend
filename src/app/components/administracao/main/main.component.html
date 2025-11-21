@@ -1,0 +1,19 @@
+  <main class="main-content">
+    <!-- Header da seção -->
+    <header class="content-header">
+      <h1 class="section-title">{{sectionTitle()}}</h1>
+    </header>
+
+    <!-- Área de conteúdo - onde serão inseridos os componentes -->
+    <section class="content-area">
+
+        <!-- <p class="placeholder-text">
+          Aqui vai ficar a tela de Gerenciamento e<br>
+          Agendamentos, Gerenciamento só<br>
+          pode ser acessada pelo Administração.
+
+        </p> -->
+        <app-agendamentos-gerenciamento [showAgendamentoContainer]="showAgendamentos"></app-agendamentos-gerenciamento>
+        <app-gerenciamento [showGerenciamento]="showGerenciamento"></app-gerenciamento>
+    </section>
+  </main>

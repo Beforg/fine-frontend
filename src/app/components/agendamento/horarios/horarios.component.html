@@ -1,0 +1,39 @@
+<section class="time-section">
+    <div class="time-container">
+      <div class="time-table-section">
+        <h4 class="subsection-title">
+          <mat-icon>access_time</mat-icon>
+          Horários Disponíveis</h4>
+        <table class="time-table">
+          <thead>
+            <tr>
+              <th>Manhã</th>
+              <th>Tarde</th>
+            </tr>
+          </thead>
+          <tbody class="data">
+            <tr *ngFor="let row of getTimeTableRows()">
+              <td>
+                <button 
+                  *ngIf="row.manha" 
+                  class="table-time-button"
+                  [class.selected]="selectedTime === row.manha"
+                  (click)="selectTime(row.manha)">
+                  {{ formatTime(row.manha) }}
+                </button>
+              </td>
+              <td>
+                <button 
+                  *ngIf="row.tarde" 
+                  class="table-time-button"
+                  [class.selected]="selectedTime === row.tarde"
+                  (click)="selectTime(row.tarde)">
+                  {{ formatTime(row.tarde) }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>

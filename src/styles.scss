@@ -1,1 +1,183 @@
-/* You can add global styles to this file, and also import other style files */
+/* Importar variáveis SCSS */
+@use '_variables' as *;
+
+/* Temas Angular Material disponíveis */
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+/* Estilos globais para layout com footer */
+html, body { 
+  height: 100%; 
+  margin: 0;
+}
+
+body { 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  display: flex;
+  flex-direction: column;
+  /* Removido padding-top global */
+}
+
+/* Garantir que o app-root ocupe toda a altura */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Classes utilitárias para layout */
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1;
+}
+
+/* Classe para páginas que precisam compensar o header fixo */
+.with-fixed-header {
+  padding-top: 80px;
+}
+
+/* Classe para páginas fullscreen (como login) */
+.fullscreen-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =================================
+   NOTIFICAÇÕES (SNACKBAR)
+   ================================= */
+
+// Notificação de sucesso
+.notification-success {
+  background-color: #4caf50 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button {
+    --mdc-text-button-label-text-color: white;
+  }
+}
+
+// Notificação de erro
+.notification-error {
+  background-color: #f44336 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button {
+    --mdc-text-button-label-text-color: white;
+  }
+}
+
+// Notificação de aviso
+.notification-warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button {
+    --mdc-text-button-label-text-color: white;
+  }
+}
+
+// Notificação informativa
+.notification-info {
+  background-color: #2196f3 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button {
+    --mdc-text-button-label-text-color: white;
+  }
+}
+
+// Customizações gerais do snackbar
+.mat-mdc-snack-bar-container {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  margin: 16px !important;
+  max-width: 400px !important;
+  
+  .mdc-snackbar__surface {
+    border-radius: 8px !important;
+  }
+  
+  .mat-mdc-snack-bar-label {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+}
+
+.divider {
+  margin-top: 120px;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+// Animações personalizadas
+.mat-mdc-snack-bar-container {
+  animation-duration: 0.3s !important;
+  animation-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+
+.active-gerenciamento {
+  background-color: rgb(219, 239, 255);
+  color: $cinza_escuro;
+}
+
+/* =================================
+   RESPONSIVIDADE DO HEADER FIXO
+   ================================= */
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 70px; 
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding-top: 60px; 
+  }
+}
+
+@keyframes fadeInTab {
+    from {
+        opacity: 0;
+        transform: translateY(-10px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); 
+    }
+}
+
+@keyframes fadeOutTab {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

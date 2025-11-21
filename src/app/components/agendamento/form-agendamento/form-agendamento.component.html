@@ -1,0 +1,198 @@
+<section class="form-section">
+    <div class="form-container">
+      <h3 class="section-title">Selecionar data</h3>
+      @if (validateCorteGratis()) {
+        <div class="fidelidade fidelidade-gratis">
+          <mat-icon class="fidelidade-icon">card_giftcard</mat-icon>
+          <h4 class="title-corte-gratis">Corte Grátis Disponível!</h4>
+        </div>
+        
+      } @else if (fidelidadeCliente && fidelidadeCliente.fidelidadeAplicada) {
+        <div class="fidelidade fidelidade-aplicada">
+          <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+          <h4 class="title-corte-gratis">Corte Grátis Já Aplicado em outro Agendamento!</h4>
+        </div>
+      } @else if (fidelidadeCliente && !fidelidadeCliente.fidelidadeAplicada) {
+        <div class="fidelidade fidelidade-progresso">
+          <mat-icon class="fidelidade-icon">loyalty</mat-icon>
+          <div class="fidelidade-info">
+            <h4>Cortes Realizados: {{fidelidadeCliente.sequencia}}/5</h4>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="(fidelidadeCliente.sequencia / 5) * 100"></div>
+            </div>
+            @if (fidelidadeCliente.validade != "Sem registro") {
+            <p class="text-proximo-corte">
+              <mat-icon class="small-icon">schedule</mat-icon>
+              Validade: {{fidelidadeCliente.validade | date: 'dd/MM/yyyy'}}
+            </p>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="fidelidade fidelidade-login">
+          <mat-icon class="fidelidade-icon">login</mat-icon>
+          <h4 class="title-corte-gratis">Faça login para acompanhar sua fidelidade!</h4>
+        </div>
+      }
+      
+      <div class="date-input-group">
+        <label for="data-agendamento" class="input-label">Insira a data</label>
+        <div class="date-input-wrapper">
+          <input 
+            type="date" 
+            id="data-agendamento" 
+            class="date-input"
+            placeholder="mm/dd/yyyy"
+            [(ngModel)]="selectedDate"
+            (ngModelChange)="onDateSelected($event)">
+          <mat-icon class="input-icon">calendar_today</mat-icon>
+        </div>
+        <!-- Mensagem de aviso quando data não estiver selecionada -->
+        <div class="date-info" *ngIf="!isDateSelected">
+          <small>Selecione uma data para começar!</small>
+        </div>
+      </div>
+      <div class="services-section">
+        <h4 class="subsection-title">Selecione os serviços</h4>
+        
+        <!-- Select para serviços -->
+        <div class="select-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Escolha um serviço</mat-label>
+            <mat-select 
+              (selectionChange)="addService($event.value)"
+              [disabled]="!isDateSelected"
+              (ngModelChange)="handleListarHorarios()">
+              <mat-option *ngFor="let servico of servicosDisponiveis" [value]="servico">
+                <div class="option-content">
+                  <span class="option-name">{{ servico.nome }}</span>
+                  <span class="option-price"> R$ {{ servico.preco.toFixed(2) }}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Serviços selecionados -->
+        <div class="selected-items" *ngIf="servicosSelecionados.length > 0">
+          <h5 class="selected-title">Serviços selecionados:</h5>
+          <div class="selected-item" *ngFor="let servico of servicosSelecionados; let i = index">
+            <span class="item-name">{{ servico.nome }}</span>
+            <span class="item-price">R$ {{ servico.preco.toFixed(2) }}</span>
+            <button 
+              type="button" 
+              class="remove-btn" 
+              (click)="removeService(i, servico.id)"
+              mat-icon-button 
+              color="warn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Tempo Estimado -->
+      <div class="estimated-time" *ngIf="servicosSelecionados.length > 0">
+        <mat-icon class="time-icon">schedule</mat-icon>
+        <div class="time-info">
+          <span class="time-label">Tempo estimado:</span>
+          <span class="time-value">{{ calcularTempoDeServico() }} minutos</span>
+        </div>
+      </div>
+
+        @if (descontoAplicado) {
+          <div class="fidelidade fidelidade-aplicada">
+            <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+            <h4>Fidelidade Aplicada!</h4>
+          </div>
+        }
+
+      <!-- Seção de Produtos -->
+      <div class="products-section">
+        <h4 class="subsection-title">Selecione os produtos (opcionais)</h4>
+        
+        <!-- Select para produtos -->
+        <div class="select-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Escolha um produto</mat-label>
+            <mat-select 
+              (selectionChange)="addProduct($event.value)"
+              [disabled]="!isDateSelected">
+              <mat-option *ngFor="let produto of produtosDisponiveis" [value]="produto">
+                <div class="option-content">
+                  <span class="option-name">{{ produto.nome }}</span>
+                  <span class="option-price"> R$ {{ produto.preco.toFixed(2) }}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Produtos selecionados -->
+        <div class="selected-items" *ngIf="produtosSelecionados.length > 0">
+          <h5 class="selected-title">Produtos selecionados:</h5>
+          <div class="selected-item" *ngFor="let produto of produtosSelecionados; let i = index">
+            <span class="item-name">{{ produto.nome }}</span>
+            <div class="quantity-controls">
+              <button 
+                type="button" 
+                class="quantity-btn" 
+                (click)="decreaseQuantity('produto', i)"
+                mat-icon-button>
+                <mat-icon>remove</mat-icon>
+              </button>
+              <span class="quantity">{{ produto.quantidade }}</span>
+              <button 
+                type="button" 
+                class="quantity-btn" 
+                (click)="increaseQuantity('produto', i)"
+                mat-icon-button>
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <span class="item-price">R$ {{ (produto.preco * produto.quantidade).toFixed(2) }}</span>
+            <button 
+              type="button" 
+              class="remove-btn" 
+              (click)="removeProduct(i)"
+              mat-icon-button 
+              color="warn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Observações -->
+      <div class="observacao-section">
+        <h4 class="subsection-title">Observações (opcional)</h4>
+        <div class="observacao-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Adicione observações sobre o agendamento</mat-label>
+            <textarea 
+              matInput 
+              [(ngModel)]="observacao"
+              (ngModelChange)="handleListarHorarios()"
+              placeholder="Ex: Detalhes sobre o corte, etc."
+              rows="4"
+              maxlength="255"></textarea>
+            <mat-hint align="end">{{ observacao.length || 0 }}/255</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="total-section">
+        <div class="total-line">
+          <span class="total-label">Total:</span>
+          <span class="total-price">R$ {{ totalGeral.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+    @if (horariosDisponiveis.length > 0) {
+      <app-horarios [horariosDisponiveis]="horariosDisponiveis" (timeSelected)="onTimeSelected($event)" *ngIf="horariosDisponiveis.length > 0"></app-horarios>
+    } @else {
+      <div class="no-data" *ngIf="isDateSelected && servicosSelecionados.length > 0 && horariosDisponiveis.length === 0">
+        <mat-icon>info</mat-icon>
+        <p>O Barbeiro está indisponível para a data selecionada.</p>
+      </div>
+    }
+  </section>

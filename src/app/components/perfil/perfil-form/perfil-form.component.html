@@ -1,0 +1,170 @@
+    <mat-card class="perfil-card" *ngIf="userInfo !== null; else loadingCard">
+      <!-- Avatar placeholder -->
+      <div class="avatar-section">
+        <div class="avatar-placeholder">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <!-- <button class="edit-avatar-btn" mat-mini-fab color="primary">
+          <mat-icon>edit</mat-icon>
+        </button> -->
+      </div>
+
+      <!-- Informações do usuário -->
+      <div class="user-info">
+        <h2 class="user-name">{{ userInfo.nome }}</h2>
+        <p class="user-role">{{ userRole }}</p>
+        
+        <div class="user-fidelidade">
+          <div class="fidelidade-header">
+            <mat-icon class="fidelidade-icon">card_membership</mat-icon>
+            <h3 class="fidelidade-title">Programa de Fidelidade</h3>
+          </div>
+          
+          @if (userInfo.fidelidade.sequencia! < 5) {
+            <div class="fidelidade-card fidelidade-progresso">
+              <div class="fidelidade-content">
+                <mat-icon class="status-icon">loyalty</mat-icon>
+                <div class="fidelidade-info">
+                  <span class="fidelidade-label">Progresso do Corte Grátis</span>
+                  <span class="fidelidade-sequence">{{ userInfo.fidelidade.sequencia }}/5 Cortes</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(userInfo.fidelidade.sequencia! / 5) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @else {
+            <div class="fidelidade-card fidelidade-disponivel">
+              <div class="fidelidade-content">
+                <mat-icon class="status-icon">card_giftcard</mat-icon>
+                <div class="fidelidade-info">
+                  <span class="fidelidade-label">Status</span>
+                  <span class="fidelidade-sequence">Corte Grátis Disponível!</span>
+                </div>
+              </div>
+            </div>
+          }
+          
+          <div class="fidelidade-validade">
+            <mat-icon class="validade-icon">schedule</mat-icon>
+            <span>Validade: {{ userInfo.fidelidade.validade }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulário de dados -->
+      <div class="form-section">
+        <h3 class="section-title">Informações Pessoais</h3>
+        
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput [value]="userInfo.nome" readonly>
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-mail</mat-label>
+            <input matInput [value]="userEmail" readonly>
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefone</mat-label>
+            <input matInput [value]="userInfo.telefone" readonly>
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <span class="date-field">
+            <mat-label>Membro Desde</mat-label>
+            <span class="date-value">
+              <p>{{ userInfo.dataCadastro | date:'dd/MM/yyyy' }}</p>
+              <mat-icon matSuffix>event</mat-icon>
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Ações -->
+      <!-- <div class="actions-section">
+        <app-primary-button icon="edit" (buttonClick)="abrirModalEdicao()" [text]="'Alterar Dados'">
+        </app-primary-button>
+      </div> -->
+    </mat-card>
+
+    <mat-card class="edit-container-overlay" *ngIf="showEditModal">
+      <div class="edit-content">
+        <div class="edit-content-header">
+          <h2 class="edit-title">
+            <mat-icon>person</mat-icon>
+            Editar Perfil</h2>
+          <button class="btn-close" (click)="fecharModalEdicao()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        
+        <div class="edit-inputs">
+          <form action="">
+            <app-input-field
+            label="Nome Completo"
+            placeholder="Digite seu nome completo"
+            type="text"
+            prefixIcon="person"
+            formControlName="nome"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="E-mail"
+            placeholder="Digite seu e-mail"
+            type="email"
+            prefixIcon="email"
+            formControlName="email"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="Telefone"
+            placeholder="Digite seu telefone"
+            type="tel"
+            prefixIcon="phone"
+            formControlName="telefone"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="Trocar senha"
+            placeholder="Digite sua nova senha"
+            type="password"
+            prefixIcon="lock"
+            formControlName="novaSenha"
+            [required]="true">
+          </app-input-field>
+          <app-input-field
+            label="Confirmar senha"
+            placeholder="Confirme sua nova senha"
+            type="password"
+            prefixIcon="lock"
+            formControlName="confirmarSenha"
+            [required]="true">
+          </app-input-field>
+          <div class="form-action">
+            <app-primary-button icon="'save'" (buttonClick)="onSaveChanges()" [text]="'Salvar Alterações'">
+            </app-primary-button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </mat-card>
+
+    <ng-template #loadingCard>
+      <mat-card class="perfil-card loading-card">
+        <div class="loading-content">
+          <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+          <p>Carregando informações do perfil...</p>
+        </div>
+      </mat-card>
+    </ng-template>

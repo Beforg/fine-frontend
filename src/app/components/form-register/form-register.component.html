@@ -1,0 +1,124 @@
+<form class="form-register" [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+  <!-- Título do formulário -->
+  <div class="form-header">
+    <h2 class="form-title">
+      Criar nova conta
+    </h2>
+    <p class="form-subtitle">Preencha seus dados para cadastrar-se</p>
+  </div>
+
+  <!-- Erro geral do formulário -->
+  <div class="error-message" *ngIf="formErrors.general">
+    <mat-icon class="error-icon">error</mat-icon>
+    <span>{{ formErrors.general }}</span>
+  </div>
+
+  <!-- Campos do formulário -->
+  <div class="form-fields">
+    <!-- Campo Nome Completo -->
+    <app-input-field
+      label="Nome completo"
+      placeholder="Digite seu nome completo"
+      type="text"
+      prefixIcon="person"
+      formControlName="nome"
+      [errorMessage]="getFieldError('nome')"
+      [required]="true">
+    </app-input-field>
+
+    <!-- Campo E-mail -->
+    <app-input-field
+      label="E-mail"
+      placeholder="Digite seu e-mail"
+      type="email"
+      prefixIcon="email"
+      formControlName="email"
+      [errorMessage]="getFieldError('email')"
+      [required]="true">
+    </app-input-field>
+
+    <!-- Campo Telefone -->
+    <app-input-field
+      label="Telefone"
+      placeholder="11 99999-9999 / 598 99 123 456"
+      type="tel"
+      prefixIcon="phone"
+      formControlName="telefone"
+      [errorMessage]="getFieldError('telefone')"
+      [required]="true">
+    </app-input-field>
+
+    <!-- Campo Senha -->
+    <app-input-field
+      label="Senha"
+      placeholder="Digite sua senha"
+      type="password"
+      prefixIcon="lock"
+      formControlName="senha"
+      [errorMessage]="getFieldError('senha')"
+      [required]="true">
+    </app-input-field>
+    <!-- Campo Confirmar Senha -->
+    <app-input-field
+      label="Confirmar senha"
+      placeholder="Digite novamente sua senha"
+      type="password"
+      prefixIcon="lock"
+      formControlName="confirmarSenha"
+      [errorMessage]="getFieldError('confirmarSenha')"
+      [required]="true">
+    </app-input-field>
+  </div>
+
+  <!-- Termos de uso -->
+  <div class="form-terms">
+    <p class="terms-text">
+      Ao criar uma conta, você concorda com nossos 
+      <a href="#" class="terms-link">Termos de Uso</a> e 
+      <a href="#" class="privacy-link">Política de Privacidade</a>.
+    </p>
+  </div>
+
+  <!-- Botões de ação -->
+  <div class="form-actions">
+    <!-- Botão de cadastro -->
+    <app-primary-button
+      text="Criar conta"
+      type="submit"
+      icon="person_add"
+      size="large"
+      variant="raised"
+      color="primary"
+      [disabled]="isLoading"
+      [loading]="isLoading">
+    </app-primary-button>
+
+    <!-- Botão cancelar -->
+    <app-primary-button
+      text="Cancelar"
+      type="button"
+      icon="close"
+      size="large"
+      variant="stroked"
+      color="warn"
+      [disabled]="isLoading"
+      (buttonClick)="onCancel()">
+    </app-primary-button>
+  </div>
+
+  <!-- Divisor -->
+  <div class="form-divider">
+    <span></span>
+  </div>
+
+  <!-- Link para login -->
+  <div class="form-login">
+    <p>Já tem uma conta?</p>
+    <a href="/login" class="login-link">
+      <mat-icon>login</mat-icon>
+      <p>Fazer login</p>
+    </a>
+  </div>
+
+  <!-- Debug info (apenas em desenvolvimento) -->
+</form>

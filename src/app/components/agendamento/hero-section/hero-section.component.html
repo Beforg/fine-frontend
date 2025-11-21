@@ -1,0 +1,19 @@
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="page-title">Agendar Corte</h1>
+        <div class="barbeiro-info">
+          <div class="barbeiro-avatar">
+            <img [src]="barbeiro?.urlFoto" alt="{{barbeiro?.nome}}" class="avatar-img">
+          </div>
+          <div class="barbeiro-details">
+            <h2 class="barbeiro-name">{{barbeiro?.nome}}</h2>
+            <p class="barbeiro-stats">{{barbeiro?.cortesRealizados}} corte(s)</p>
+        </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+  <hr class="divider">

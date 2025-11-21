@@ -1,0 +1,85 @@
+// Agendamento Component Styles
+.agendamento-container {
+  min-height: 100vh;
+  background: rgb(255, 255, 255);
+}
+
+// =============================================
+// ACTION SECTION
+// =============================================
+.action-section {
+  padding: 1rem 1rem;
+  margin: 1rem;
+
+}
+
+.action-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+// =============================================
+// RESPONSIVE DESIGN
+// =============================================
+@media (max-width: 768px) {
+  .agendamento-container {
+    margin: 0;
+  }
+  
+  .form-section,
+  .time-section,
+  .products-section,
+  .action-section {
+    margin: 1rem;
+    padding: 1.5rem 1rem;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .barbeiro-avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .barbeiro-name {
+    font-size: 1.5rem;
+  }
+  
+  .time-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .service-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .service-checkbox {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
+  }
+  
+  .time-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
+  
+  .time-table {
+    font-size: 0.8rem;
+  }
+}

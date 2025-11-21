@@ -1,0 +1,96 @@
+<form class="form-login" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+  <!-- Título do formulário -->
+  <div class="form-header">
+    <h2 class="form-title">
+      Entrar na sua conta
+    </h2>
+    <p class="form-subtitle">Bem-vindo de volta!</p>
+  </div>
+
+  <!-- Erro geral do formulário -->
+  <div class="error-message" *ngIf="formErrors.general">
+    <mat-icon class="error-icon">error</mat-icon>
+    <span>{{ formErrors.general }}</span>
+  </div>
+
+  <!-- Campos do formulário -->
+  <div class="form-fields">
+    <!-- Campo E-mail/Telefone -->
+    <app-input-field
+      label="E-mail/Telefone"
+      placeholder="Digite seu e-mail ou telefone"
+      type="text"
+      prefixIcon="login"
+      formControlName="login"
+      [errorMessage]="getFieldError('login')"
+      [required]="true">
+    </app-input-field>
+
+    <!-- Campo Senha -->
+    <app-input-field
+      label="Senha"
+      placeholder="Digite sua senha"
+      type="password"
+      prefixIcon="lock"
+      formControlName="senha"
+      [errorMessage]="getFieldError('senha')"
+      [required]="true">
+    </app-input-field>
+  </div>
+
+  <!-- Link "Esqueci minha senha" -->
+  <div class="form-links">
+    <a href="#" class="forgot-senha-link">
+      Esqueci minha senha
+    </a>
+  </div>
+
+  <!-- Botões de ação -->
+  <div class="form-actions">
+    <!-- Botão de login -->
+    <app-primary-button
+      text="Entrar"
+      type="submit"
+      icon="login"
+      size="large"
+      variant="raised"
+      color="primary"
+      [disabled]="isLoading"
+      [loading]="isLoading">
+    </app-primary-button>
+
+    <!-- Botão cancelar -->
+    <app-primary-button
+      text="Cancelar"
+      type="button"
+      icon="close"
+      size="large"
+      variant="stroked"
+      color="warn"
+      [disabled]="isLoading"
+      (buttonClick)="onCancel()">
+    </app-primary-button>
+  </div>
+
+  <!-- Divisor -->
+  <div class="form-divider">
+    <span></span>
+  </div>
+
+  <!-- Link para cadastro -->
+  <div class="form-register">
+    <p>Ainda não tem uma conta?</p>
+    <a href="/register" class="register-link">
+      <mat-icon>person_add</mat-icon>
+      Criar conta
+    </a>
+  </div>
+
+  <!-- Debug info (apenas em desenvolvimento) -->
+  <div class="form-debug" *ngIf="false">
+    <h4>Debug Info:</h4>
+    <p><strong>Form Valid:</strong> {{ loginForm.valid }}</p>
+    <p><strong>Form Values:</strong> {{ loginForm.value | json }}</p>
+    <p><strong>Form Errors:</strong> {{ formErrors | json }}</p>
+  </div>
+</form>

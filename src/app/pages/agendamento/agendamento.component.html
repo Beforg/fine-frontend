@@ -1,0 +1,47 @@
+<app-header></app-header>
+
+<div class="agendamento-container">
+  <section class="agendamento-section">
+    <app-hero-section-agendamento [barbeiro]="barbeiro"></app-hero-section-agendamento>
+    <app-form-agendamento
+    [produtosDisponiveis]="produtosDisponiveis" 
+    [servicosDisponiveis]="servicosDisponiveis"
+    [horariosDisponiveis]="horariosDisponiveis"
+    [fidelidadeCliente]="fidelidadeCliente"
+    (listarHorarios)="onListarHorarios($event)"
+    (timeSelected)="getSelectedTime($event)"
+    [isLoggedIn]="isLoggedIn()"
+    (produtosIdQuantidade)="getProdutosIdsQuantidade($event)"
+    (descontoAplicadoChange)="handleDescontoAplicadoChang($event)">
+    </app-form-agendamento>
+  </section>
+
+
+  <section class="action-section">
+    <div class="action-container">
+      <app-primary-button 
+        text="Confirmar Agendamento"
+        icon="check"
+        [disabled]="!isTimeSelected || agendamentoFinalizado"
+        [loading]="isLoading"
+        variant="raised"
+        size="large"
+        color="primary"
+        (buttonClick)="handleAbrirModalConfirmar()">
+      </app-primary-button>
+    </div>
+  </section>
+
+  <modal-form-agendamento
+    [modalVisible]="modalConfirmarVisible"
+    [data]="selectedDate!"
+    [horario]="selectedTime!"
+    [nomeBarbeiro]="barbeiro?.nome!"
+    (confirmar)="handleConfirmarModal()"
+    (cancelar)="handleCancelarModal()">
+
+  </modal-form-agendamento>
+
+</div>
+
+<app-footer></app-footer>

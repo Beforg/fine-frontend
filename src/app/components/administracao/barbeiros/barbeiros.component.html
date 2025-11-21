@@ -1,0 +1,292 @@
+<div class="barbeiros-container">
+    <div class="header-container">
+        <h1>{{ isAdmin() ? 'Gerenciamento de Barbeiros' : 'Meu Perfil' }}</h1>
+        <button *ngIf="isAdmin()" class="btn-adicionar" (click)="adicionarBarbeiro()">
+            <mat-icon>add</mat-icon>
+            Adicionar Barbeiro
+        </button>
+    </div>
+    
+    <div class="table-container">
+        <table class="barbeiros-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Foto</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Visualizações</th>
+                    <th>Cortes Realizados</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let barbeiro of barbeiros" class="table-row">
+                    <td class="td-id">#{{ barbeiro.barbeiroId }}</td>
+                    <td class="td-foto">
+                        <div class="foto-container">
+                            <img 
+                                *ngIf="barbeiro.urlFoto" 
+                                [src]="barbeiro.urlFoto" 
+                                [alt]="barbeiro.nome"
+                                class="barbeiro-foto">
+                            <div *ngIf="!barbeiro.urlFoto" class="foto-placeholder">
+                                <mat-icon>person</mat-icon>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="td-nome">
+                        <div class="barbeiro-info">
+                            <span class="barbeiro-nome">{{ barbeiro.nome }}</span>
+                        </div>
+                    </td>
+                    <td class="td-telefone">
+                        <span class="telefone-valor">{{ barbeiro.telefone }}</span>
+                    </td>
+                    <td class="td-visualizacoes">
+                        <span class="stat-valor">{{ barbeiro.visualizacoes }}</span>
+                    </td>
+                    <td class="td-cortes">
+                        <span class="stat-valor">{{ barbeiro.cortesRealizados }}</span>
+                    </td>
+                    <td class="td-actions">
+                        <div class="actions-container">
+                            <button class="btn-action btn-edit" title="Editar" (click)="editarBarbeiro(barbeiro)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button *ngIf="isAdmin()" class="btn-action btn-delete" title="Remover" (click)="removerBarbeiro(barbeiro.barbeiroId)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensagem quando não há barbeiros -->
+        <div *ngIf="!barbeiros || barbeiros.length === 0" class="no-data">
+            <mat-icon>person_off</mat-icon>
+            <p>{{ isAdmin() ? 'Nenhum barbeiro cadastrado' : 'Perfil não encontrado' }}</p>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Barbeiro -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="fecharModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ isEditing ? (isAdmin() ? 'Editar Barbeiro' : 'Editar Meu Perfil') : 'Adicionar Novo Barbeiro' }}</h2>
+                <button class="btn-close" (click)="fecharModal()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <form class="barbeiro-form" (ngSubmit)="salvarBarbeiro()">
+                <!-- Preview das Fotos -->
+                <div class="photos-preview-section">
+                    <div class="photo-preview-container">
+                        <h3>Foto do Perfil</h3>
+                        <div class="photo-preview">
+                            <div class="preview-image" *ngIf="previewFotoUrl">
+                                <img [src]="previewFotoUrl" alt="Preview da foto">
+                                <button type="button" class="btn-remove-photo" (click)="removerFoto()" title="Remover foto">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
+                            <div class="no-image-placeholder" *ngIf="!previewFotoUrl">
+                                <mat-icon>person</mat-icon>
+                                <span>Nenhuma foto selecionada</span>
+                            </div>
+                        </div>
+                        <div class="upload-controls">
+                            <input 
+                                type="file" 
+                                id="fotoInput" 
+                                accept="image/*" 
+                                (change)="onFotoSelected($event)"
+                                style="display: none;">
+                            <button type="button" class="btn-upload" (click)="abrirSeletorFoto()">
+                                <mat-icon>upload</mat-icon>
+                                Selecionar Foto
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="photo-preview-container">
+                        <h3>Foto de Background</h3>
+                        <div class="photo-preview background-preview">
+                            <div class="preview-image" *ngIf="previewBackgroundUrl">
+                                <img [src]="previewBackgroundUrl" alt="Preview do background">
+                                <button type="button" class="btn-remove-photo" (click)="removerBackground()" title="Remover background">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
+                            <div class="no-image-placeholder" *ngIf="!previewBackgroundUrl">
+                                <mat-icon>landscape</mat-icon>
+                                <span>Nenhum background selecionado</span>
+                            </div>
+                        </div>
+                        <div class="upload-controls">
+                            <input 
+                                type="file" 
+                                id="backgroundInput" 
+                                accept="image/*" 
+                                (change)="onBackgroundSelected($event)"
+                                style="display: none;">
+                            <button type="button" class="btn-upload" (click)="abrirSeletorBackground()">
+                                <mat-icon>upload</mat-icon>
+                                Selecionar Background
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nome">Nome do Barbeiro *</label>
+                    <input 
+                        type="text" 
+                        id="nome" 
+                        [(ngModel)]="currentBarbeiro.nome" 
+                        name="nome"
+                        required
+                        placeholder="Digite o nome do barbeiro">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone *</label>
+                    <input 
+                        type="tel" 
+                        id="telefone" 
+                        [(ngModel)]="currentBarbeiro.telefone" 
+                        name="telefone"
+                        required
+                        placeholder="(11) 99999-9999">
+                </div>
+
+                <!-- Campos adicionais para novo cadastro -->
+                <div *ngIf="!isEditing">
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            [(ngModel)]="cadastroEmail" 
+                            name="email"
+                            required
+                            placeholder="barbeiro@exemplo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha">Senha *</label>
+                        <input 
+                            type="password" 
+                            id="senha" 
+                            [(ngModel)]="cadastroSenha" 
+                            name="senha"
+                            required
+                            placeholder="Digite uma senha">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="especialidade">Especialidade *</label>
+                        <input 
+                            type="text" 
+                            id="especialidade" 
+                            [(ngModel)]="cadastroEspecialidade" 
+                            name="especialidade"
+                            required
+                            placeholder="Ex: Corte masculino, Barba">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Bio *</label>
+                        <textarea 
+                            id="bio" 
+                            [(ngModel)]="cadastroBio" 
+                            name="bio"
+                            required
+                            rows="3"
+                            placeholder="Descrição sobre o barbeiro"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row" *ngIf="isEditing">
+                    <div class="form-group">
+                        <label for="visualizacoes">Visualizações</label>
+                        <input readonly="true"
+                            type="number" 
+                            id="visualizacoes" 
+                            [(ngModel)]="currentBarbeiro.visualizacoes" 
+                            name="visualizacoes"
+                            min="0"
+                            placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="corteRealizados">Cortes Realizados</label>
+                        <input readonly="true"
+                            type="number" 
+                            id="corteRealizados" 
+                            [(ngModel)]="currentBarbeiro.cortesRealizados" 
+                            name="corteRealizados"
+                            min="0"
+                            placeholder="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="horariosDeTrabalho">Horários de Trabalho</label>
+                    <div *ngFor="let dia of diasDaSemana">
+                        <label>{{ dia.label }}</label>
+                        <mat-label>Selecione o Horário</mat-label>
+                        <mat-select [(ngModel)]="horariosPorDia[dia.key]" [name]="dia.key">
+                            <mat-option value="">Não trabalha</mat-option>
+                            <mat-option *ngFor="let horario of horariosDeTrabalho" [value]="horario">
+                                {{ horario }}
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                <div class="form-group-checkbox">
+                    <label class="checkbox-label">
+                        <input 
+                            type="checkbox" 
+                            [(ngModel)]="currentBarbeiro.ativo" 
+                            name="ativo">
+                        <span class="checkmark"></span>
+                        Barbeiro ativo
+                    </label>
+                </div>
+                
+                <!-- <div class="form-group">
+                    <label for="urlFoto">URL da Foto</label>
+                    <input 
+                        type="url" 
+                        id="urlFoto" 
+                        [(ngModel)]="currentBarbeiro.urlFoto" 
+                        name="urlFoto"
+                        placeholder="https://exemplo.com/foto.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="urlBackground">URL do Background</label>
+                    <input 
+                        type="url" 
+                        id="urlBackground" 
+                        [(ngModel)]="currentBarbeiro.urlBackground" 
+                        name="urlBackground"
+                        placeholder="https://exemplo.com/background.jpg">
+                </div> -->
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancelar" (click)="fecharModal()">
+                        <mat-icon>cancel</mat-icon>
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-salvar">
+                        <mat-icon>save</mat-icon>
+                        {{ isEditing ? 'Atualizar' : 'Adicionar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

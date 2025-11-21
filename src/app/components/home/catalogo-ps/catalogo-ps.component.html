@@ -1,0 +1,93 @@
+<section class="catalogo-section">
+  <div class="section-header">
+    <h2 class="section-title">Conheça Nossos Serviços e Produtos</h2>
+  </div>
+
+  <!-- PRODUTOS -->
+  <div class="categoria-section">
+    <div class="categoria-header">
+      <div class="title-container-ps">
+        
+        <h3 class="categoria-title">
+          <mat-icon>shopping_bag</mat-icon>
+          Produtos
+        </h3>
+        <hr>
+      </div>
+      
+      <div class="navigation-controls">
+        <button 
+          class="nav-btn prev-btn" 
+          (click)="previousProducts()"
+          [disabled]="!canGoPreviousProducts"
+          mat-mini-fab>
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button 
+          class="nav-btn next-btn" 
+          (click)="nextProducts()"
+          [disabled]="!canGoNextProducts"
+          mat-mini-fab>
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="cards-container">
+      <div class="cards-carousel" #produtosCarousel>
+        <app-card-ps 
+          *ngFor="let produto of produtos"
+          [nome]="produto.nome"
+          [descricao]="produto.descricao"
+          [preco]="produto.preco"
+          [urlImagem]="produto.urlImagem"
+          tipo="produto">
+        </app-card-ps>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <div class="categoria-section">
+    <div class="categoria-header">
+      <div class="title-container-ps">
+        
+        <h3 class="categoria-title">
+          <mat-icon>content_cut</mat-icon>
+          Serviços
+        </h3>
+        <hr>
+      </div>
+      <div class="navigation-controls">
+        <button 
+          class="nav-btn prev-btn" 
+          (click)="previousServices()"
+          [disabled]="!canGoPreviousServices"
+          mat-mini-fab>
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button 
+          class="nav-btn next-btn" 
+          (click)="nextServices()"
+          [disabled]="!canGoNextServices"
+          mat-mini-fab>
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="cards-container">
+      <div class="cards-carousel" #servicosCarousel>
+        <app-card-ps 
+          *ngFor="let servico of servicos"
+          [nome]="servico.nome"
+          [descricao]="servico.descricao"
+          [preco]="servico.preco"
+          [urlImagem]="'/assets/tmp/barbeiro1'"
+          [tempoEstimado]="servico.duracaoMinutos"
+          tipo="servico">
+        </app-card-ps>
+      </div>
+    </div>
+  </div>
+</section>

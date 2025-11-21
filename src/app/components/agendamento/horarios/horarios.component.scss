@@ -1,0 +1,141 @@
+@import '../../../../variables';
+
+.time-section {
+  padding: 1rem 1rem;
+  animation: fadeInTab 0.3s ease-in-out;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.time-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+// Time Grid
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.time-slot {
+  &.available {
+    opacity: 1;
+  }
+  
+  &.unavailable {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.time-button {
+  width: 100%;
+  padding: 12px 8px;
+  border: 2px solid #e0e6ed;
+  border-radius: 8px;
+  background: white;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: #3498db;
+    background-color: #ebf3fd;
+    transform: translateY(-2px);
+  }
+  
+  &.selected {
+    border-color: #012016;
+    background-color: #167551;
+    color: white;
+  }
+}
+
+// Time Table
+.time-table-section {
+  margin-top: 2rem;
+  text-align: center;
+  .subsection-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: $preto_principal;
+    margin-bottom: 1rem;
+    padding: 1.1rem;
+    gap: 5px;
+
+    mat-icon {
+      font-size: 1.5rem;
+      color: $preto_principal;
+    }
+  }
+}
+
+.time-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  
+  data {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  th {
+    background: $header_bg;
+    color: $branco_principal;
+    padding: 1rem;
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
+  td {
+    padding: 0.5rem;
+    text-align: center;
+    border-bottom: 1px solid #ecf0f1;
+    
+    &:last-child {
+      border-right: none;
+    }
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+}
+
+.table-time-button {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    border-color: #3498db;
+    background-color: #ebf3fd;
+    transform: translateY(-1px);
+  }
+  
+  &.selected {
+    border-color: $verde_fine;
+    background-color: rgb(238, 255, 238);
+    color: rgb(0, 0, 0);
+    
+  }
+}

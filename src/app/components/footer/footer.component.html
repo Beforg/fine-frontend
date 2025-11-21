@@ -1,0 +1,71 @@
+<footer class="footer">
+  <div class="footer-container">
+    
+    <!-- Seção principal do footer -->
+    <div class="footer-content">
+      
+      <!-- Logo e nome da empresa -->
+      <div class="footer-section logo-section">
+        <div class="logo-container">
+          <img src="{{ imgFooter }}" alt="Fine Barbearia Logo" class="footer-logo">
+          <h3 class="business-name">{{ businessInfo.name }}</h3>
+        </div>
+        <p class="business-description">
+          Cuidando do seu estilo com excelência e tradição.
+        </p>
+      </div>
+      
+      <!-- Informações de contato -->
+      <div class="footer-section contact-section">
+        <h4>
+          <mat-icon>contact_phone</mat-icon>
+          Contato
+        </h4>
+        <div class="contact-item">
+          <mat-icon>place</mat-icon>
+          <span>{{ businessInfo.address }}</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>phone</mat-icon>
+          <a [href]="'tel:' + getCleanPhone()">
+            {{ businessInfo.phone }}
+          </a>
+        </div>
+      </div>
+      
+      <!-- Horários de funcionamento -->
+      <div class="footer-section hours-section">
+        <h4>
+          <mat-icon>schedule</mat-icon>
+          Horário de Funcionamento
+        </h4>
+        <div class="hours-list">
+          <div *ngFor="let schedule of workingHours" class="hours-item">
+            <span class="days">{{ schedule.days }}:</span>
+            <span class="hours" [class.closed]="schedule.hours === 'Fechado'">
+              {{ schedule.hours }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Linha divisória -->
+    <div class="footer-divider"></div>
+    
+    <!-- Seção de copyright -->
+    <div class="footer-bottom">
+      <div class="copyright">
+        <p>© {{ currentYear }} {{ businessInfo.name }}. Todos os direitos reservados.</p>
+      </div>
+      <div class="developer">
+        <p>
+          <mat-icon>code</mat-icon>
+          Desenvolvido por <strong>{{ businessInfo.developer }}</strong>
+        </p>
+      </div>
+    </div>
+    
+  </div>
+</footer>
