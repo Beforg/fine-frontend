@@ -70,6 +70,105 @@ $verde_dark: #218838;
     gap: 20px;
     margin-bottom: 16px;
 
+    // Container dos seletores
+    .login-selectors {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+
+      .login-type-select,
+      .country-select {
+        flex: 1;
+
+        ::ng-deep {
+          .mat-mdc-text-field-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            
+            &:hover {
+              background: rgba(255, 255, 255, 1);
+            }
+          }
+
+          .mat-mdc-form-field-label {
+            color: rgba(0, 0, 0, 0.6) !important;
+            font-weight: 500;
+          }
+
+          .mat-mdc-select-value {
+            color: #1a1a1a;
+            font-weight: 600;
+          }
+
+          .mat-mdc-select-arrow {
+            color: $verde_principal;
+          }
+
+          .mat-mdc-form-field.mat-focused {
+            .mat-mdc-form-field-label {
+              color: $verde_principal !important;
+            }
+            
+            .mat-mdc-text-field-wrapper {
+              box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+            }
+          }
+        }
+      }
+
+      .login-type-select {
+        min-width: 150px;
+      }
+
+      .country-select {
+        min-width: 130px;
+      }
+
+      @media (max-width: 480px) {
+        flex-direction: column;
+
+        .login-type-select,
+        .country-select {
+          width: 100%;
+        }
+      }
+    }
+
+    // Estilos das opções dos selects
+    .select-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .option-icon {
+        font-size: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 20px !important;
+        color: $verde_principal;
+      }
+
+      span {
+        font-weight: 500;
+        color: #1a1a1a;
+      }
+    }
+
+    .country-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .flag {
+        font-size: 20px;
+      }
+
+      .code {
+        font-weight: 600;
+        color: #1a1a1a;
+      }
+    }
+
     app-input-field {
       width: 100%;
       
