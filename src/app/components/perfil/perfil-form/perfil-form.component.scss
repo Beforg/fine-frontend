@@ -160,6 +160,20 @@
               }
             }
 
+            &.fidelidade-aplicada {
+              background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+              border-color: $cinza_medio;
+
+              .status-icon {
+                color: $cinza_medio;
+              }
+
+              .fidelidade-sequence {
+                color: $cinza_escuro;
+                font-weight: 600;
+              }
+            }
+
             .fidelidade-content {
               display: flex;
               align-items: center;
@@ -195,6 +209,42 @@
             }
           }
 
+          // Categorias de fidelidade
+          .fidelidade-category {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: white;
+            border-radius: $border_radius_medium;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            .category-header {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 12px;
+              padding-bottom: 8px;
+              border-bottom: 2px solid $bg_cinza_claro;
+
+              .category-icon {
+                font-size: 24px;
+                width: 24px;
+                height: 24px;
+                color: $azul_principal;
+              }
+
+              .category-title {
+                margin: 0;
+                font-size: 16px;
+                font-weight: 600;
+                color: $azul_titulo_pagina;
+              }
+            }
+          }
+
           .fidelidade-validade {
             display: flex;
             align-items: center;
@@ -204,6 +254,7 @@
             background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
             border-radius: $border_radius_medium;
             border: 1px solid $cor_aviso;
+            margin-top: 8px;
 
             .validade-icon {
               font-size: 18px;
@@ -213,7 +264,7 @@
             }
 
             span {
-              font-size: 14px;
+              font-size: 13px;
               color: #856404;
               font-weight: 500;
             }
@@ -488,3 +539,165 @@
       }
 
     }
+
+// Responsividade
+@media (max-width: 768px) {
+  .perfil-card {
+    .user-info {
+      .user-fidelidade {
+        padding: 16px;
+
+        .fidelidade-header {
+          margin-bottom: 14px;
+
+          .fidelidade-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+
+          .fidelidade-title {
+            font-size: 16px;
+          }
+        }
+
+        .fidelidade-category {
+          padding: 14px;
+          margin-bottom: 16px;
+
+          .category-header {
+            .category-icon {
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+
+            .category-title {
+              font-size: 14px;
+            }
+          }
+        }
+
+        .fidelidade-card {
+          padding: 14px;
+
+          .fidelidade-content {
+            gap: 10px;
+
+            .status-icon {
+              font-size: 32px;
+              width: 32px;
+              height: 32px;
+            }
+
+            .fidelidade-info {
+              .fidelidade-label {
+                font-size: 11px;
+              }
+
+              .fidelidade-sequence {
+                font-size: 16px;
+              }
+            }
+          }
+        }
+
+        .fidelidade-validade {
+          padding: 6px 14px;
+
+          span {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-card {
+    padding: 20px;
+
+    .user-info {
+      .user-fidelidade {
+        padding: 14px;
+        margin-top: 20px;
+
+        .fidelidade-header {
+          margin-bottom: 12px;
+
+          .fidelidade-icon {
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
+          }
+
+          .fidelidade-title {
+            font-size: 15px;
+          }
+        }
+
+        .fidelidade-category {
+          padding: 12px;
+          margin-bottom: 14px;
+
+          .category-header {
+            margin-bottom: 10px;
+
+            .category-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+
+            .category-title {
+              font-size: 13px;
+            }
+          }
+        }
+
+        .fidelidade-card {
+          padding: 12px;
+
+          .fidelidade-content {
+            gap: 8px;
+
+            .status-icon {
+              font-size: 28px;
+              width: 28px;
+              height: 28px;
+            }
+
+            .fidelidade-info {
+              .fidelidade-label {
+                font-size: 10px;
+              }
+
+              .fidelidade-sequence {
+                font-size: 14px;
+              }
+
+              .progress-bar {
+                height: 6px;
+              }
+            }
+          }
+        }
+
+        .fidelidade-validade {
+          padding: 6px 12px;
+
+          .validade-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+          }
+
+          span {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+}

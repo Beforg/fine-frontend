@@ -214,13 +214,34 @@
                                                     {{ agendamento.status }}
                                                 </span>
                                             </div>
+                                            
+                                            <!-- Fidelidade Corte -->
                                             <div class="info-row">
-                                                <span class="label">Fidelidade Aplicada:</span>
+                                                <span class="label">Corte Grátis:</span>
                                                 <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.foiGratis" [class.fidelidade-nao]="!agendamento.foiGratis">
                                                     <mat-icon>{{ agendamento.foiGratis ? 'check_circle' : 'cancel' }}</mat-icon>
                                                     {{ agendamento.foiGratis ? 'Sim' : 'Não' }}
                                                 </span>
                                             </div>
+                                            
+                                            <!-- Fidelidade Barba -->
+                                            <div class="info-row">
+                                                <span class="label">Barba Grátis:</span>
+                                                <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.barbaGratis" [class.fidelidade-nao]="!agendamento.barbaGratis">
+                                                    <mat-icon>{{ agendamento.barbaGratis ? 'check_circle' : 'cancel' }}</mat-icon>
+                                                    {{ agendamento.barbaGratis ? 'Sim' : 'Não' }}
+                                                </span>
+                                            </div>
+                                            
+                                            <!-- Fidelidade Sobrancelha -->
+                                            <div class="info-row">
+                                                <span class="label">Sobrancelha Grátis:</span>
+                                                <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.sobrancelhaGratis" [class.fidelidade-nao]="!agendamento.sobrancelhaGratis">
+                                                    <mat-icon>{{ agendamento.sobrancelhaGratis ? 'check_circle' : 'cancel' }}</mat-icon>
+                                                    {{ agendamento.sobrancelhaGratis ? 'Sim' : 'Não' }}
+                                                </span>
+                                            </div>
+                                            
                                             <div class="total-display">
                                                 <span class="total-label">Total:</span>
                                                 <span class="total-value">R$ {{ calculateTotal(agendamento) | number:'1.2-2' }}</span>

@@ -20,34 +20,148 @@
             <h3 class="fidelidade-title">Programa de Fidelidade</h3>
           </div>
           
-          @if (userInfo.fidelidade.sequencia! < 5) {
-            <div class="fidelidade-card fidelidade-progresso">
-              <div class="fidelidade-content">
-                <mat-icon class="status-icon">loyalty</mat-icon>
-                <div class="fidelidade-info">
-                  <span class="fidelidade-label">Progresso do Corte Grátis</span>
-                  <span class="fidelidade-sequence">{{ userInfo.fidelidade.sequencia }}/5 Cortes</span>
-                  <div class="progress-bar">
-                    <div class="progress-fill" [style.width.%]="(userInfo.fidelidade.sequencia! / 5) * 100"></div>
+          <!-- Fidelidade Corte -->
+          <div class="fidelidade-category">
+            <div class="category-header">
+              <mat-icon class="category-icon">content_cut</mat-icon>
+              <h4 class="category-title">Corte de Cabelo</h4>
+            </div>
+            
+            @if (userInfo.fidelidade.sequencia! >= 5 && !userInfo.fidelidade.fidelidadeAplicada) {
+              <div class="fidelidade-card fidelidade-disponivel">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">card_giftcard</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Status</span>
+                    <span class="fidelidade-sequence">Corte Grátis Disponível!</span>
                   </div>
                 </div>
               </div>
-            </div>
-          } @else {
-            <div class="fidelidade-card fidelidade-disponivel">
-              <div class="fidelidade-content">
-                <mat-icon class="status-icon">card_giftcard</mat-icon>
-                <div class="fidelidade-info">
-                  <span class="fidelidade-label">Status</span>
-                  <span class="fidelidade-sequence">Corte Grátis Disponível!</span>
+            } @else if (userInfo.fidelidade.fidelidadeAplicada) {
+              <div class="fidelidade-card fidelidade-aplicada">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">check_circle</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Status</span>
+                    <span class="fidelidade-sequence">Corte Grátis Aplicado</span>
+                  </div>
                 </div>
               </div>
+            } @else {
+              <div class="fidelidade-card fidelidade-progresso">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">loyalty</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Progresso</span>
+                    <span class="fidelidade-sequence">{{ userInfo.fidelidade.sequencia }}/5 Cortes</span>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(userInfo.fidelidade.sequencia! / 5) * 100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            
+            <div class="fidelidade-validade">
+              <mat-icon class="validade-icon">schedule</mat-icon>
+              <span>Validade: {{ userInfo.fidelidade.validade }}</span>
             </div>
-          }
-          
-          <div class="fidelidade-validade">
-            <mat-icon class="validade-icon">schedule</mat-icon>
-            <span>Validade: {{ userInfo.fidelidade.validade }}</span>
+          </div>
+
+          <!-- Fidelidade Barba -->
+          <div class="fidelidade-category">
+            <div class="category-header">
+              <mat-icon class="category-icon">face</mat-icon>
+              <h4 class="category-title">Barba</h4>
+            </div>
+            
+            @if (userInfo.fidelidade.sequenciaBarba! >= 5 && !userInfo.fidelidade.fidelidadeBarbaAplicada) {
+              <div class="fidelidade-card fidelidade-disponivel">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">card_giftcard</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Status</span>
+                    <span class="fidelidade-sequence">Barba Grátis Disponível!</span>
+                  </div>
+                </div>
+              </div>
+            } @else if (userInfo.fidelidade.fidelidadeBarbaAplicada) {
+              <div class="fidelidade-card fidelidade-aplicada">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">check_circle</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Status</span>
+                    <span class="fidelidade-sequence">Barba Grátis Aplicada</span>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <div class="fidelidade-card fidelidade-progresso">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">loyalty</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Progresso</span>
+                    <span class="fidelidade-sequence">{{ userInfo.fidelidade.sequenciaBarba }}/5 Barbas</span>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(userInfo.fidelidade.sequenciaBarba! / 5) * 100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            
+            <div class="fidelidade-validade">
+              <mat-icon class="validade-icon">schedule</mat-icon>
+              <span>Validade: {{ userInfo.fidelidade.validadeBarba }}</span>
+            </div>
+          </div>
+
+          <!-- Fidelidade Sobrancelha -->
+          <div class="fidelidade-category">
+            <div class="category-header">
+              <mat-icon class="category-icon">visibility</mat-icon>
+              <h4 class="category-title">Sobrancelha</h4>
+            </div>
+            
+            @if (userInfo.fidelidade.sequenciaSobrancelha! >= 5 && !userInfo.fidelidade.fidelidadeSobrancelhaAplicada) {
+              <div class="fidelidade-card fidelidade-disponivel">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">card_giftcard</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Status</span>
+                    <span class="fidelidade-sequence">Sobrancelha Grátis Disponível!</span>
+                  </div>
+                </div>
+              </div>
+            } @else if (userInfo.fidelidade.fidelidadeSobrancelhaAplicada) {
+              <div class="fidelidade-card fidelidade-aplicada">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">check_circle</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Status</span>
+                    <span class="fidelidade-sequence">Sobrancelha Grátis Aplicada</span>
+                  </div>
+                </div>
+              </div>
+            } @else {
+              <div class="fidelidade-card fidelidade-progresso">
+                <div class="fidelidade-content">
+                  <mat-icon class="status-icon">loyalty</mat-icon>
+                  <div class="fidelidade-info">
+                    <span class="fidelidade-label">Progresso</span>
+                    <span class="fidelidade-sequence">{{ userInfo.fidelidade.sequenciaSobrancelha }}/5 Sobrancelhas</span>
+                    <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(userInfo.fidelidade.sequenciaSobrancelha! / 5) * 100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+            
+            <div class="fidelidade-validade">
+              <mat-icon class="validade-icon">schedule</mat-icon>
+              <span>Validade: {{ userInfo.fidelidade.validadeSobrancelha }}</span>
+            </div>
           </div>
         </div>
       </div>

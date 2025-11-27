@@ -71,7 +71,13 @@ export class PerfilComponent implements OnInit {
           let fidelidade: FidelidadeDTO = {
             validade: 'N/A',
             sequencia: 0,
-            fidelidadeAplicada: false 
+            fidelidadeAplicada: false,
+            validadeBarba: 'N/A',
+            sequenciaBarba: 0,
+            fidelidadeBarbaAplicada: false,
+            validadeSobrancelha: 'N/A',
+            sequenciaSobrancelha: 0,
+            fidelidadeSobrancelhaAplicada: false
           }
           this.userInfo = {
             nome: userData.name || userData.email || 'Usuário',

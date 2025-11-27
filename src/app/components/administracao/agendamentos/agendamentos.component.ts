@@ -37,6 +37,8 @@ interface Agendamento {
   status: string;
   foiGratis: boolean;
   observacoes: string;
+  barbaGratis: boolean;
+  sobrancelhaGratis: boolean;
 }
 
 

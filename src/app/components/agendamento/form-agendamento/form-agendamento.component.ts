@@ -30,8 +30,26 @@ import { ModalComponent } from "../modal/modal.component";
 export class FormAgendamentoComponent implements OnInit {
   
   @Input() isLoggedIn: boolean = false;
-  // Fidelidade dados
-  @Input() fidelidadeCliente: FidelidadeDTO | null = null;
+  
+  // Fidelidade dados com setter para detectar mudanças
+  private _fidelidadeCliente: FidelidadeDTO | null = null;
+  @Input() 
+  set fidelidadeCliente(value: FidelidadeDTO | null) {
+    this._fidelidadeCliente = value;
+    // Quando fidelidadeCliente é atualizado, revalidar os descontos
+    if (value && this.isLoggedIn) {
+      this.validateCorteGratis();
+      this.barbaGratis = this.validateBarbaGratis();
+      this.sobrancelhaGratis = this.validateSobrancelhaGratis();
+      console.log('Fidelidade recebida - Corte Grátis:', this.corteGratis);
+      console.log('Fidelidade recebida - Barba Grátis:', this.barbaGratis);
+      console.log('Fidelidade recebida - Sobrancelha Grátis:', this.sobrancelhaGratis);
+    }
+  }
+  get fidelidadeCliente(): FidelidadeDTO | null {
+    return this._fidelidadeCliente;
+  }
+  
   // Serviços disponíveis
   @Input() servicosDisponiveis: ServicoAgendamento[] = [];
   selectedDate: string | null = null;
@@ -56,20 +74,30 @@ export class FormAgendamentoComponent implements OnInit {
   observacao: string = '';
 
   corteGratis!: boolean;
+  barbaGratis!: boolean;
+  sobrancelhaGratis!: boolean;
+  
   // aplicar a fidelidade
-  descontoAplicado: boolean = false;
+  descontoCorteAplicado: boolean = false;
+  descontoBarbaAplicado: boolean = false;
+  descontoSobrancelhaAplicado: boolean = false;
+  
   @Output() descontoAplicadoChange = new EventEmitter<boolean>();
+  @Output() descontoCorteAplicadoChange = new EventEmitter<boolean>();
+  @Output() descontoBarbaAplicadoChange = new EventEmitter<boolean>();
+  @Output() descontoSobrancelhaAplicadoChange = new EventEmitter<boolean>();
 
-  idServicoAplicado: number | null = null;
+  idServicoCorteAplicado: number | null = null;
+  idServicoBarbaAplicado: number | null = null;
+  idServicoSobrancelhaAplicado: number | null = null;
 
 
   
   constructor() { }
 
     ngOnInit(): void {
-    if (this.isLoggedIn) {
-      this.validateCorteGratis();
-    }
+    // A validação agora é feita no setter do fidelidadeCliente
+    // quando os dados são recebidos do componente pai
   }
 
   handleListarHorarios(): void {
@@ -95,11 +123,7 @@ export class FormAgendamentoComponent implements OnInit {
   }
 
   validateCorteGratis(): boolean {
-
-    if (!this.isLoggedIn) {
-      this.corteGratis = false;
-      return this.corteGratis;
-    } else if (this.fidelidadeCliente == null) {
+    if (!this.isLoggedIn || !this.fidelidadeCliente) {
       this.corteGratis = false;
       return this.corteGratis;
     }
@@ -114,6 +138,36 @@ export class FormAgendamentoComponent implements OnInit {
       this.corteGratis = false;
     }
     return this.corteGratis;
+  }
+
+  validateBarbaGratis(): boolean {
+    if (!this.isLoggedIn || !this.fidelidadeCliente) {
+      return false;
+    }
+
+    const barbaDisponivel = this.fidelidadeCliente.sequenciaBarba >= 5 
+      && this.fidelidadeCliente.validadeBarba >= new Date().toISOString().split('T')[0]
+      && !this.fidelidadeCliente.fidelidadeBarbaAplicada;
+    
+    if (barbaDisponivel) {
+      console.log('Barba grátis disponível');
+    }
+    return barbaDisponivel;
+  }
+
+  validateSobrancelhaGratis(): boolean {
+    if (!this.isLoggedIn || !this.fidelidadeCliente) {
+      return false;
+    }
+
+    const sobrancelhaDisponivel = this.fidelidadeCliente.sequenciaSobrancelha >= 5 
+      && this.fidelidadeCliente.validadeSobrancelha >= new Date().toISOString().split('T')[0]
+      && !this.fidelidadeCliente.fidelidadeSobrancelhaAplicada;
+    
+    if (sobrancelhaDisponivel) {
+      console.log('Sobrancelha grátis disponível');
+    }
+    return sobrancelhaDisponivel;
   }
   
   
@@ -141,7 +195,12 @@ export class FormAgendamentoComponent implements OnInit {
     
     if (!jaExiste) {
       const servicoSelecionado: ServicoAgendamento = { ...servico };
+      
+      // Apply discount if eligible for any fidelidade category
       this.descontoCorteGratis(servicoSelecionado); 
+      this.descontoBarbaGratis(servicoSelecionado);
+      this.descontoSobrancelhaGratis(servicoSelecionado);
+      
       this.servicosSelecionados.push(servicoSelecionado);
       this.calculateTotal();
       this.handleListarHorarios();
@@ -151,23 +210,75 @@ export class FormAgendamentoComponent implements OnInit {
   descontoCorteGratis(servico: ServicoAgendamento): void {
     if (this.corteGratis 
       && (servico.nome.toLowerCase().includes('cabelo') || servico.nome.toLowerCase().includes('corte')) &&
-      !this.descontoAplicado) {
+      !this.descontoCorteAplicado) {
       servico.preco -= 35; 
       servico.nome = servico.nome + ' (Corte Grátis)';
-      this.idServicoAplicado = servico.id;
-      this.descontoAplicado = true;
-      this.descontoAplicadoChange.emit(this.descontoAplicado);
+      this.idServicoCorteAplicado = servico.id;
+      this.descontoCorteAplicado = true;
+      this.descontoAplicadoChange.emit(this.descontoCorteAplicado);
+      this.descontoCorteAplicadoChange.emit(true);
       console.log('Desconto aplicado ao serviço de cabelo grátis');
     }
   }
+
+  descontoBarbaGratis(servico: ServicoAgendamento): void {
+    if (this.barbaGratis 
+      && servico.nome.toLowerCase().includes('barba') &&
+      !this.descontoBarbaAplicado) {
+      servico.preco -= 15; 
+      servico.nome = servico.nome + ' (Barba Grátis)';
+      this.idServicoBarbaAplicado = servico.id;
+      this.descontoBarbaAplicado = true;
+      this.descontoAplicadoChange.emit(this.descontoBarbaAplicado);
+      this.descontoBarbaAplicadoChange.emit(true);
+      console.log('Desconto aplicado ao serviço de barba grátis');
+    }
+  }
+
+  descontoSobrancelhaGratis(servico: ServicoAgendamento): void {
+    if (this.sobrancelhaGratis 
+      && (servico.nome.toLowerCase().includes('sobrancelha') || servico.nome.toLowerCase().includes('sobrancelhas')) &&
+      !this.descontoSobrancelhaAplicado) {
+      servico.preco -= 15; 
+      servico.nome = servico.nome + ' (Sobrancelha Grátis)';
+      this.idServicoSobrancelhaAplicado = servico.id;
+      this.descontoSobrancelhaAplicado = true;
+      this.descontoAplicadoChange.emit(this.descontoSobrancelhaAplicado);
+      this.descontoSobrancelhaAplicadoChange.emit(true);
+      console.log('Desconto aplicado ao serviço de sobrancelha grátis');
+    }
+  }
+
   removeService(index: number, id: number): void {
     this.servicosSelecionados.splice(index, 1); 
-    if (this.idServicoAplicado != null && id === this.idServicoAplicado) {
-      this.descontoAplicado = false;
-      this.descontoAplicadoChange.emit(this.descontoAplicado);
-      this.idServicoAplicado = null;
+    
+    // Check if corte discount was applied
+    if (this.idServicoCorteAplicado != null && id === this.idServicoCorteAplicado) {
+      this.descontoCorteAplicado = false;
+      this.descontoAplicadoChange.emit(this.descontoCorteAplicado);
+      this.descontoCorteAplicadoChange.emit(false);
+      this.idServicoCorteAplicado = null;
       console.log('Desconto removido ao retirar o serviço de cabelo grátis');
     }
+    
+    // Check if barba discount was applied
+    if (this.idServicoBarbaAplicado != null && id === this.idServicoBarbaAplicado) {
+      this.descontoBarbaAplicado = false;
+      this.descontoAplicadoChange.emit(this.descontoBarbaAplicado);
+      this.descontoBarbaAplicadoChange.emit(false);
+      this.idServicoBarbaAplicado = null;
+      console.log('Desconto removido ao retirar o serviço de barba grátis');
+    }
+    
+    // Check if sobrancelha discount was applied
+    if (this.idServicoSobrancelhaAplicado != null && id === this.idServicoSobrancelhaAplicado) {
+      this.descontoSobrancelhaAplicado = false;
+      this.descontoAplicadoChange.emit(this.descontoSobrancelhaAplicado);
+      this.descontoSobrancelhaAplicadoChange.emit(false);
+      this.idServicoSobrancelhaAplicado = null;
+      console.log('Desconto removido ao retirar o serviço de sobrancelha grátis');
+    }
+    
     this.calculateTotal();
     if (this.servicosSelecionados.length > 0) {
       this.handleListarHorarios();

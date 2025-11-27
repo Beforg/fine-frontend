@@ -46,6 +46,11 @@ export class AgendamentoComponent implements OnInit {
   fidelidadeCliente!: FidelidadeDTO | null;
   fidelidadeAplicada: boolean = false; // Indica se a fidelidade foi aplicada ao serviço de corte
   
+  // Track which discounts were actually applied
+  descontoCorteAplicado: boolean = false;
+  descontoBarbaAplicado: boolean = false;
+  descontoSobrancelhaAplicado: boolean = false;
+  
   produtosDisponiveis: ProdutoAgendamento[] = [];
   servicosDisponiveis: ServicoAgendamento[] = [];
 
@@ -123,13 +128,45 @@ export class AgendamentoComponent implements OnInit {
   }
 
   handleDescontoAplicadoChang(aplicado: boolean): void {
+    // This method receives updates when any discount is applied
+    // We keep fidelidadeAplicada for backward compatibility
     this.fidelidadeAplicada = aplicado;
   }
 
+  handleDescontoCorteAplicado(aplicado: boolean): void {
+    this.descontoCorteAplicado = aplicado;
+    console.log('Desconto Corte Aplicado no componente pai:', aplicado);
+  }
+
+  handleDescontoBarbaAplicado(aplicado: boolean): void {
+    this.descontoBarbaAplicado = aplicado;
+    console.log('Desconto Barba Aplicado no componente pai:', aplicado);
+  }
+
+  handleDescontoSobrancelhaAplicado(aplicado: boolean): void {
+    this.descontoSobrancelhaAplicado = aplicado;
+    console.log('Desconto Sobrancelha Aplicado no componente pai:', aplicado);
+  }
+
   verificaCorteGratis(): boolean {
+    // Check if corte discount was actually applied AND meets fidelidade requirements
     return this.fidelidadeCliente?.sequencia! >= 5 
     && this.fidelidadeCliente?.fidelidadeAplicada == false
-    && this.fidelidadeAplicada;
+    && this.descontoCorteAplicado;
+  }
+
+  verificaBarbaGratis(): boolean {
+    // Check if barba discount was actually applied AND meets fidelidade requirements
+    return this.fidelidadeCliente?.sequenciaBarba! >= 5 
+    && this.fidelidadeCliente?.fidelidadeBarbaAplicada == false
+    && this.descontoBarbaAplicado;
+  }
+
+  verificaSobrancelhaGratis(): boolean {
+    // Check if sobrancelha discount was actually applied AND meets fidelidade requirements
+    return this.fidelidadeCliente?.sequenciaSobrancelha! >= 5 
+    && this.fidelidadeCliente?.fidelidadeSobrancelhaAplicada == false
+    && this.descontoSobrancelhaAplicado;
   }
 
   getFidelidadeCliente(): void {
@@ -242,7 +279,9 @@ export class AgendamentoComponent implements OnInit {
           dataHoraInicio: dataHora,
           produtos: this.produtos,
           observacoes: this.observacao,
-          foiGratis: this.verificaCorteGratis()
+          foiGratis: this.verificaCorteGratis(),
+          barbaGratis: this.verificaBarbaGratis(),
+          sobrancelhaGratis: this.verificaSobrancelhaGratis()
         }
         console.log('Dados do agendamento:', novoAgendamento);
         this.agendamentoService.criarAgendamento(novoAgendamento).subscribe({
