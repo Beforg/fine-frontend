@@ -39,6 +39,7 @@ interface Agendamento {
   observacoes: string;
   barbaGratis: boolean;
   sobrancelhaGratis: boolean;
+  valorTotal: number;
 }
 
 
@@ -145,6 +146,37 @@ export class AgendamentosComponent implements OnInit {
 
   calculateServiceTime(agendamento: Agendamento): number {
     return agendamento.servicos.reduce((total, servico) => total + servico.duracaoMinutos, 0);
+  }
+
+  // Calcular total de descontos
+  calculateTotalDiscount(agendamento: Agendamento): number {
+    let totalDiscount = 0;
+    
+    if (agendamento.foiGratis) {
+      totalDiscount += 35; // Corte grátis
+    }
+    
+    if (agendamento.barbaGratis) {
+      totalDiscount += 15; // Barba grátis
+    }
+    
+    if (agendamento.sobrancelhaGratis) {
+      totalDiscount += 15; // Sobrancelha grátis
+    }
+    
+    return totalDiscount;
+  }
+
+  // Calcular subtotal dos serviços (sem desconto)
+  calculateSubtotalServicos(agendamento: Agendamento): number {
+    return agendamento.servicos.reduce((sum, servico) => sum + servico.preco, 0);
+  }
+
+  // Calcular total dos serviços com desconto
+  calculateTotalServicosComDesconto(agendamento: Agendamento): number {
+    const subtotal = this.calculateSubtotalServicos(agendamento);
+    const desconto = this.calculateTotalDiscount(agendamento);
+    return subtotal - desconto;
   }
 
   // Obter classe CSS para status

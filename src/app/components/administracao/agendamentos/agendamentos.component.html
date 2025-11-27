@@ -81,7 +81,7 @@
                         </td>
                         
                         <td class="td-total">
-                            <span class="total-valor">R$ {{ calculateTotal(agendamento) | number:'1.2-2' }}</span>
+                            <span class="total-valor">R$ {{ agendamento.valorTotal | number:'1.2-2' }}</span>
                         </td>
                         
                         <td class="td-status">
@@ -186,6 +186,36 @@
                                                 <span class="label">{{ servico.nome }}</span>
                                                 <span class="value">R$ {{ servico.preco | number:'1.2-2' }}</span>
                                             </div>
+
+                                            <!-- Descontos aplicados -->
+                                            <ng-container *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                                <div class="info-row discount-row" *ngIf="agendamento.foiGratis">
+                                                    <span class="label">Corte Grátis (Fidelidade)</span>
+                                                    <span class="value discount-value">- R$ 35,00</span>
+                                                </div>
+                                                <div class="info-row discount-row" *ngIf="agendamento.barbaGratis">
+                                                    <span class="label">Barba Grátis (Fidelidade)</span>
+                                                    <span class="value discount-value">- R$ 15,00</span>
+                                                </div>
+                                                <div class="info-row discount-row" *ngIf="agendamento.sobrancelhaGratis">
+                                                    <span class="label">Sobrancelha Grátis (Fidelidade)</span>
+                                                    <span class="value discount-value">- R$ 15,00</span>
+                                                </div>
+                                            </ng-container>
+
+                                            <!-- Totais -->
+                                            <div class="info-row total-row" *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                                <span class="label">Subtotal (sem desconto):</span>
+                                                <span class="value">R$ {{ calculateSubtotalServicos(agendamento) | number:'1.2-2' }}</span>
+                                            </div>
+                                            <div class="info-row total-row" *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                                <span class="label">Total de Descontos:</span>
+                                                <span class="value discount-value">- R$ {{ calculateTotalDiscount(agendamento) | number:'1.2-2' }}</span>
+                                            </div>
+                                            <div class="info-row total-final-row" *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                                <span class="label">Total (com desconto):</span>
+                                                <span class="value final-value">R$ {{ calculateTotalServicosComDesconto(agendamento) | number:'1.2-2' }}</span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -244,7 +274,7 @@
                                             
                                             <div class="total-display">
                                                 <span class="total-label">Total:</span>
-                                                <span class="total-value">R$ {{ calculateTotal(agendamento) | number:'1.2-2' }}</span>
+                                                <span class="total-value">R$ {{ agendamento.valorTotal| number:'1.2-2' }}</span>
                                             </div>
                                         </div>
                                     </div>
