@@ -21,7 +21,8 @@
                 <mat-icon>event_available</mat-icon>
                 Disponibilidade
             </a>
-            <a (click)="toggleTab(false, false, false, false, true)" *ngIf="isAdmin()">
+            <a (click)="toggleTab(false, false, false, false, true)" *ngIf="isAdmin()"
+                [ngClass]="{'active-gerenciamento': showClientes}">
                 <mat-icon>people</mat-icon>
                 Clientes
             </a>
