@@ -131,6 +131,7 @@ export class AuthService {
    */
   logout(): void {
     this.removeToken();
+  
   }
 
   /**
@@ -292,7 +293,7 @@ export class AuthService {
       
       return userData;
     } catch (error) {
-      console.error('❌ Erro ao decodificar token:', error);
+      console.error('Erro ao decodificar token:', error);
       return null;
     }
   }
