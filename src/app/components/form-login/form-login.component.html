@@ -15,15 +15,47 @@
 
   <!-- Campos do formulário -->
   <div class="form-fields">
+    <!-- Seletores de tipo de login e país -->
+    <div class="login-selectors">
+      <mat-form-field appearance="outline" class="login-type-select">
+        <mat-label>Tipo de login</mat-label>
+        <mat-select [(value)]="loginType" (selectionChange)="onLoginTypeChange()">
+          <mat-option value="email">
+            <span class="select-option">
+              <span>E-mail</span> 
+            </span>
+          </mat-option>
+          <mat-option value="telefone">
+            <span class="select-option">
+              <span>Telefone</span>
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="country-select" *ngIf="loginType === 'telefone'">
+        <mat-label>País</mat-label>
+        <mat-select [(value)]="selectedCountry" (selectionChange)="onCountryChange()">
+          <mat-option *ngFor="let country of countries" [value]="country.code">
+            <span class="country-option">
+              <span class="flag">{{ country.flag }}</span>
+              <span class="code">{{ country.code }}</span>
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
     <!-- Campo E-mail/Telefone -->
     <app-input-field
-      label="E-mail/Telefone"
-      placeholder="Digite seu e-mail ou telefone"
-      type="text"
-      prefixIcon="login"
+      [label]="getLoginLabel()"
+      [placeholder]="getLoginPlaceholder()"
+      [type]="getLoginInputType()"
+      [prefixIcon]="getLoginIcon()"
       formControlName="login"
       [errorMessage]="getFieldError('login')"
-      [required]="true">
+      [required]="true"
+      (valueChange)="onLoginInput($event)">
     </app-input-field>
 
     <!-- Campo Senha -->

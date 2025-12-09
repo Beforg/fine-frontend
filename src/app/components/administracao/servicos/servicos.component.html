@@ -10,7 +10,8 @@
 
   <!-- Tabela de Serviços -->
   <div class="table-container">
-    <table class="servicos-table" *ngIf="servicos.length > 0">
+    <!-- Versão Desktop - Tabela -->
+    <table class="servicos-table desktop-view" *ngIf="servicos.length > 0">
       <thead>
         <tr>
           <th>ID</th>
@@ -73,6 +74,52 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- Versão Mobile - Cards -->
+    <div class="servicos-cards mobile-view" *ngIf="servicos.length > 0">
+      <div *ngFor="let servico of servicos" class="servico-card">
+        <div class="card-header">
+          <div class="card-title-row">
+            <h3 class="servico-nome">{{ servico.nome }}</h3>
+            <span class="servico-id">#{{ servico.id }}</span>
+          </div>
+          <div class="status-badge" [class.ativo]="servico.ativo" [class.inativo]="!servico.ativo">
+            <mat-icon>{{ servico.ativo ? 'check_circle' : 'cancel' }}</mat-icon>
+            <span>{{ servico.ativo ? 'Ativo' : 'Inativo' }}</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <p class="servico-descricao">{{ servico.descricao }}</p>
+          
+          <div class="info-row">
+            <mat-icon>attach_money</mat-icon>
+            <span class="label">Preço:</span>
+            <span class="value preco">{{ formatarPreco(servico.preco) }}</span>
+          </div>
+          <div class="info-row">
+            <mat-icon>schedule</mat-icon>
+            <span class="label">Duração:</span>
+            <span class="value duracao">{{ formatarDuracao(servico.duracaoMinutos) }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-action btn-status" (click)="toggleStatus(servico)" [class.ativo]="servico.ativo">
+            <mat-icon>{{ servico.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+            {{ servico.ativo ? 'Desativar' : 'Ativar' }}
+          </button>
+          <button class="btn-action btn-edit" (click)="editarServico(servico)">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </button>
+          <button class="btn-action btn-delete" (click)="removerServico(servico)">
+            <mat-icon>delete</mat-icon>
+            Remover
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Mensagem quando não há dados -->
     <div class="no-data" *ngIf="servicos.length === 0">

@@ -37,16 +37,36 @@
       [required]="true">
     </app-input-field>
 
-    <!-- Campo Telefone -->
-    <app-input-field
-      label="Telefone"
-      placeholder="11 99999-9999 / 598 99 123 456"
-      type="tel"
-      prefixIcon="phone"
-      formControlName="telefone"
-      [errorMessage]="getFieldError('telefone')"
-      [required]="true">
-    </app-input-field>
+    <!-- Campo Telefone com seleção de país -->
+    <div class="phone-field-container">
+      <mat-form-field appearance="outline" class="country-select">
+        <mat-select [(value)]="selectedCountry" (selectionChange)="onCountryChange()">
+          <mat-option *ngFor="let country of countries" [value]="country.code">
+            <span class="country-option">
+              <span class="flag">{{ country.flag }}</span>
+              <span class="code">{{ country.code }}</span>
+            </span>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="phone-input">
+        <mat-label>Telefone</mat-label>
+        <mat-icon matPrefix>phone</mat-icon>
+        <input 
+          matInput
+          type="tel"
+          [placeholder]="getPhonePlaceholder()"
+          formControlName="telefone"
+          (input)="onPhoneInput($event)"
+          [required]="true">
+        <mat-error *ngIf="getFieldError('telefone')">{{ getFieldError('telefone') }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="error-message" *ngIf="getFieldError('telefone')">
+      <mat-icon class="error-icon">error</mat-icon>
+      <span>{{ getFieldError('telefone') }}</span>
+    </div>
 
     <!-- Campo Senha -->
     <app-input-field
@@ -116,7 +136,7 @@
     <p>Já tem uma conta?</p>
     <a href="/login" class="login-link">
       <mat-icon>login</mat-icon>
-      <p>Fazer login</p>
+      Fazer login
     </a>
   </div>
 

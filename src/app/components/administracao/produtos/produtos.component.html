@@ -8,7 +8,8 @@
     </div>
     
     <div class="table-container">
-        <table class="produtos-table">
+        <!-- Versão Desktop - Tabela -->
+        <table class="produtos-table desktop-view" *ngIf="produtos && produtos.length > 0">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -62,6 +63,54 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Versão Mobile - Cards -->
+        <div class="produtos-cards mobile-view" *ngIf="produtos && produtos.length > 0">
+            <div *ngFor="let produto of produtos" class="produto-card">
+                <div class="card-header">
+                    <div class="card-title-row">
+                        <h3 class="produto-nome">{{ produto.nome }}</h3>
+                        <span class="produto-id">#{{ produto.id }}</span>
+                    </div>
+                    <div class="status-badge" [class.ativo]="produto.ativo" [class.inativo]="!produto.ativo">
+                        <mat-icon>{{ produto.ativo ? 'check_circle' : 'cancel' }}</mat-icon>
+                        <span>{{ produto.ativo ? 'Ativo' : 'Inativo' }}</span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <p class="produto-descricao" *ngIf="produto.descricao">{{ produto.descricao }}</p>
+                    
+                    <div class="info-row">
+                        <mat-icon>inventory_2</mat-icon>
+                        <span class="label">Estoque:</span>
+                        <span class="value estoque" [ngClass]="{'estoque-baixo': produto.estoque < 10}">
+                            {{ produto.estoque }} unidades
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <mat-icon>attach_money</mat-icon>
+                        <span class="label">Preço:</span>
+                        <span class="value preco">{{ produto.preco | currency:'BRL':'symbol':'1.2-2' }}</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-action btn-status" (click)="toggleStatus(produto)" [class.ativo]="produto.ativo">
+                        <mat-icon>{{ produto.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                        {{ produto.ativo ? 'Desativar' : 'Ativar' }}
+                    </button>
+                    <button class="btn-action btn-edit" (click)="editarProduto(produto)">
+                        <mat-icon>edit</mat-icon>
+                        Editar
+                    </button>
+                    <button class="btn-action btn-delete" (click)="removerProduto(produto.id)">
+                        <mat-icon>delete</mat-icon>
+                        Remover
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Mensagem quando não há produtos -->
         <div *ngIf="!produtos || produtos.length === 0" class="no-data">

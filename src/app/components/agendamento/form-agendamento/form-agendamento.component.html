@@ -1,30 +1,90 @@
 <section class="form-section">
     <div class="form-container">
       <h3 class="section-title">Selecionar data</h3>
-      @if (validateCorteGratis()) {
-        <div class="fidelidade fidelidade-gratis">
-          <mat-icon class="fidelidade-icon">card_giftcard</mat-icon>
-          <h4 class="title-corte-gratis">Corte Grátis Disponível!</h4>
-        </div>
-        
-      } @else if (fidelidadeCliente && fidelidadeCliente.fidelidadeAplicada) {
-        <div class="fidelidade fidelidade-aplicada">
-          <mat-icon class="fidelidade-icon">check_circle</mat-icon>
-          <h4 class="title-corte-gratis">Corte Grátis Já Aplicado em outro Agendamento!</h4>
-        </div>
-      } @else if (fidelidadeCliente && !fidelidadeCliente.fidelidadeAplicada) {
-        <div class="fidelidade fidelidade-progresso">
-          <mat-icon class="fidelidade-icon">loyalty</mat-icon>
-          <div class="fidelidade-info">
-            <h4>Cortes Realizados: {{fidelidadeCliente.sequencia}}/5</h4>
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="(fidelidadeCliente.sequencia / 5) * 100"></div>
+      
+      @if (isLoggedIn && fidelidadeCliente) {
+        <div class="fidelidade-container">
+          <!-- Fidelidade Corte -->
+          <div class="fidelidade-item">
+            <div class="fidelidade-header-small">
+              <mat-icon class="service-icon">content_cut</mat-icon>
+              <span class="service-name">Corte</span>
             </div>
-            @if (fidelidadeCliente.validade != "Sem registro") {
-            <p class="text-proximo-corte">
-              <mat-icon class="small-icon">schedule</mat-icon>
-              Validade: {{fidelidadeCliente.validade | date: 'dd/MM/yyyy'}}
-            </p>
+            @if (fidelidadeCliente.sequencia! >= 5 && !fidelidadeCliente.fidelidadeAplicada && !descontoCorteAplicado) {
+              <div class="fidelidade fidelidade-gratis">
+                <mat-icon class="fidelidade-icon">card_giftcard</mat-icon>
+                <span class="fidelidade-text">Grátis Disponível!</span>
+              </div>
+            } @else if (fidelidadeCliente.fidelidadeAplicada || descontoCorteAplicado) {
+              <div class="fidelidade fidelidade-aplicada">
+                <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+                <span class="fidelidade-text">Aplicado</span>
+              </div>
+            } @else {
+              <div class="fidelidade fidelidade-progresso">
+                <div class="progress-content">
+                  <span class="progress-text">{{fidelidadeCliente.sequencia}}/5</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(fidelidadeCliente.sequencia / 5) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Fidelidade Barba -->
+          <div class="fidelidade-item">
+            <div class="fidelidade-header-small">
+              <mat-icon class="service-icon">face</mat-icon>
+              <span class="service-name">Barba</span>
+            </div>
+            @if (fidelidadeCliente.sequenciaBarba! >= 5 && !fidelidadeCliente.fidelidadeBarbaAplicada && !descontoBarbaAplicado) {
+              <div class="fidelidade fidelidade-gratis">
+                <mat-icon class="fidelidade-icon">card_giftcard</mat-icon>
+                <span class="fidelidade-text">Grátis Disponível!</span>
+              </div>
+            } @else if (fidelidadeCliente.fidelidadeBarbaAplicada || descontoBarbaAplicado) {
+              <div class="fidelidade fidelidade-aplicada">
+                <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+                <span class="fidelidade-text">Aplicado</span>
+              </div>
+            } @else {
+              <div class="fidelidade fidelidade-progresso">
+                <div class="progress-content">
+                  <span class="progress-text">{{fidelidadeCliente.sequenciaBarba}}/5</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(fidelidadeCliente.sequenciaBarba / 5) * 100"></div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Fidelidade Sobrancelha -->
+          <div class="fidelidade-item">
+            <div class="fidelidade-header-small">
+              <mat-icon class="service-icon">visibility</mat-icon>
+              <span class="service-name">Sobrancelha</span>
+            </div>
+            @if (fidelidadeCliente.sequenciaSobrancelha! >= 5 && !fidelidadeCliente.fidelidadeSobrancelhaAplicada && !descontoSobrancelhaAplicado) {
+              <div class="fidelidade fidelidade-gratis">
+                <mat-icon class="fidelidade-icon">card_giftcard</mat-icon>
+                <span class="fidelidade-text">Grátis Disponível!</span>
+              </div>
+            } @else if (fidelidadeCliente.fidelidadeSobrancelhaAplicada || descontoSobrancelhaAplicado) {
+              <div class="fidelidade fidelidade-aplicada">
+                <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+                <span class="fidelidade-text">Aplicado</span>
+              </div>
+            } @else {
+              <div class="fidelidade fidelidade-progresso">
+                <div class="progress-content">
+                  <span class="progress-text">{{fidelidadeCliente.sequenciaSobrancelha}}/5</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="(fidelidadeCliente.sequenciaSobrancelha / 5) * 100"></div>
+                  </div>
+                </div>
+              </div>
             }
           </div>
         </div>
@@ -99,12 +159,29 @@
         </div>
       </div>
 
-        @if (descontoAplicado) {
-          <div class="fidelidade fidelidade-aplicada">
-            <mat-icon class="fidelidade-icon">check_circle</mat-icon>
-            <h4>Fidelidade Aplicada!</h4>
-          </div>
-        }
+      <!-- Descontos Aplicados -->
+      @if (descontoCorteAplicado || descontoBarbaAplicado || descontoSobrancelhaAplicado) {
+        <div class="fidelidade-aplicada-section">
+          @if (descontoCorteAplicado) {
+            <div class="fidelidade fidelidade-aplicada">
+              <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+              <h4>Fidelidade Corte Aplicada!</h4>
+            </div>
+          }
+          @if (descontoBarbaAplicado) {
+            <div class="fidelidade fidelidade-aplicada">
+              <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+              <h4>Fidelidade Barba Aplicada!</h4>
+            </div>
+          }
+          @if (descontoSobrancelhaAplicado) {
+            <div class="fidelidade fidelidade-aplicada">
+              <mat-icon class="fidelidade-icon">check_circle</mat-icon>
+              <h4>Fidelidade Sobrancelha Aplicada!</h4>
+            </div>
+          }
+        </div>
+      }
 
       <!-- Seção de Produtos -->
       <div class="products-section">

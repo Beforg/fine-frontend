@@ -55,7 +55,7 @@ export class PerfilCardComponent implements OnInit {
   onLogout(): void {
     console.log('🚪 Realizando logout...');
     this.authService.logout();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
     this.close.emit();
   }
 

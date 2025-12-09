@@ -6,6 +6,7 @@ import { LoginFormData, LoginResponse, BackendLoginResponse } from '../interface
 import { environment } from '../../environments/environment';
 import { RegisterFormData } from '../interfaces/register-form.interface';
 import { BackendResponse } from '../interfaces/response.interface';
+import { UserRole } from '../enums/user-role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -130,6 +131,7 @@ export class AuthService {
    */
   logout(): void {
     this.removeToken();
+  
   }
 
   /**
@@ -291,8 +293,13 @@ export class AuthService {
       
       return userData;
     } catch (error) {
-      console.error('❌ Erro ao decodificar token:', error);
+      console.error('Erro ao decodificar token:', error);
       return null;
     }
+  }
+
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user && user.role === UserRole.ADMIN;
   }
 }
