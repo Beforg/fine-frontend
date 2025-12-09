@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 import { LoginForm, LoginFormData, LoginFormErrors } from '../../interfaces/login-form.interface';
 import { InputFieldComponent } from '../input-field/input-field.component';
@@ -24,6 +25,7 @@ import { FormUtils } from '../../utils/form-utils';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     InputFieldComponent,
     PrimaryButtonComponent
   ],
@@ -39,6 +41,16 @@ export class FormLoginComponent implements OnInit, OnDestroy {
   
   // Erros de validação
   formErrors: LoginFormErrors = {};
+
+  // Controle de tipo de login
+  loginType: 'email' | 'telefone' = 'email';
+  
+  // Controle de país para telefone
+  selectedCountry: string = '+55';
+  countries = [
+    { code: '+55', name: 'Brasil', flag: '🇧🇷' },
+    { code: '+598', name: 'Uruguai', flag: '🇺🇾' }
+  ];
   
   // Controle de destroy para unsubscribe
   private destroy$ = new Subject<void>();
@@ -205,5 +217,92 @@ export class FormLoginComponent implements OnInit, OnDestroy {
     this.isSubmitted = false;
     this.isLoading = false;
     this.clearErrors();
+  }
+
+  /**
+   * Muda o tipo de login e limpa o campo
+   */
+  onLoginTypeChange(): void {
+    this.loginForm.patchValue({ login: '' });
+  }
+
+  /**
+   * Muda o país e limpa o campo de telefone
+   */
+  onCountryChange(): void {
+    this.loginForm.patchValue({ login: '' });
+  }
+
+  /**
+   * Handler de input que aplica formatação se for telefone
+   */
+  onLoginInput(value: string): void {
+    if (this.loginType === 'telefone') {
+      const cleanValue = value.replace(/\D/g, '');
+      let formattedValue = '';
+      
+      if (this.selectedCountry === '+55') {
+        // Formato Brasil: (11) 99999-9999 ou (11) 9999-9999
+        if (cleanValue.length <= 2) {
+          formattedValue = cleanValue;
+        } else if (cleanValue.length <= 6) {
+          formattedValue = `(${cleanValue.slice(0, 2)}) ${cleanValue.slice(2)}`;
+        } else if (cleanValue.length <= 10) {
+          formattedValue = `(${cleanValue.slice(0, 2)}) ${cleanValue.slice(2, 6)}-${cleanValue.slice(6)}`;
+        } else {
+          formattedValue = `(${cleanValue.slice(0, 2)}) ${cleanValue.slice(2, 7)}-${cleanValue.slice(7, 11)}`;
+        }
+      } else if (this.selectedCountry === '+598') {
+        // Formato Uruguai: 99 123 456 ou 9 1234 5678
+        if (cleanValue.length <= 2) {
+          formattedValue = cleanValue;
+        } else if (cleanValue.length <= 5) {
+          formattedValue = `${cleanValue.slice(0, 2)} ${cleanValue.slice(2)}`;
+        } else if (cleanValue.length <= 7) {
+          formattedValue = `${cleanValue.slice(0, 2)} ${cleanValue.slice(2, 5)} ${cleanValue.slice(5)}`;
+        } else if (cleanValue.length <= 8) {
+          formattedValue = `${cleanValue.slice(0, 1)} ${cleanValue.slice(1, 5)} ${cleanValue.slice(5)}`;
+        } else {
+          formattedValue = `${cleanValue.slice(0, 1)} ${cleanValue.slice(1, 5)} ${cleanValue.slice(5, 9)}`;
+        }
+      }
+      
+      if (formattedValue !== value) {
+        this.loginForm.patchValue({ login: formattedValue }, { emitEvent: false });
+      }
+    }
+  }
+
+  /**
+   * Retorna o placeholder baseado no tipo de login e país
+   */
+  getLoginPlaceholder(): string {
+    if (this.loginType === 'email') {
+      return 'Digite seu e-mail';
+    }
+    return this.selectedCountry === '+55' 
+      ? '(11) 99999-9999'
+      : '99 123 456';
+  }
+
+  /**
+   * Retorna o tipo de input baseado no tipo de login
+   */
+  getLoginInputType(): 'email' | 'tel' | 'text' {
+    return this.loginType === 'email' ? 'email' : 'tel';
+  }
+
+  /**
+   * Retorna o ícone baseado no tipo de login
+   */
+  getLoginIcon(): string {
+    return this.loginType === 'email' ? 'email' : 'phone';
+  }
+
+  /**
+   * Retorna o label baseado no tipo de login
+   */
+  getLoginLabel(): string {
+    return this.loginType === 'email' ? 'E-mail' : 'Telefone';
   }
 }

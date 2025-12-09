@@ -112,11 +112,17 @@ export class DisponibilidadeComponent implements OnInit {
   // Getter para facilitar acesso aos controles do form
   get f() { return this.bloqueioForm.controls; }
 
-  // Método para obter a data de hoje no formato YYYY-MM-DD
-  // getTodayDate(): string {
-  //   const today = new Date();
-  //   return today.toISOString().split('T')[0];
-  // }
+  // Método para formatar data no formato YYYY-MM-DD esperado pelo backend
+  formatarData(data: Date | string): string {
+    if (!data) return '';
+    
+    const dataObj = typeof data === 'string' ? new Date(data) : data;
+    const ano = dataObj.getFullYear();
+    const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+    const dia = String(dataObj.getDate()).padStart(2, '0');
+    
+    return `${ano}-${mes}-${dia}`;
+  }
 
   openModal() {
     this.isModalOpen = true;
@@ -132,6 +138,9 @@ export class DisponibilidadeComponent implements OnInit {
     if (this.bloqueioForm.valid) {
       const formData = this.bloqueioForm.value;
       
+      // Formatar a data para o formato esperado pelo backend (YYYY-MM-DD)
+      const dataFormatada = this.formatarData(formData.data);
+      
       // Encontrar o nome do barbeiro se for bloqueio específico
       let barbeiroNome = '';
       if (formData.tipoBloqueio === 'barbeiro') {
@@ -139,7 +148,7 @@ export class DisponibilidadeComponent implements OnInit {
         barbeiroNome = barbeiro?.nome || '';
         const novaIndisponibilidade: RegistroIndisponibilidade = {
           barbeiroId: formData.barbeiroId,
-          data: formData.data,
+          data: dataFormatada,
           horaInicio: formData.horaInicio,
           horaFim: formData.horaFim,
           motivo: formData.motivo
@@ -159,7 +168,7 @@ export class DisponibilidadeComponent implements OnInit {
       } else {
         const novaIndisponibilidade: RegistroIndisponibilidade[] = this.barbeiros.map(b => ({
           barbeiroId: b.barbeiroId,
-          data: formData.data,
+          data: dataFormatada,
           horaInicio: formData.horaInicio,
           horaFim: formData.horaFim,
           motivo: formData.motivo

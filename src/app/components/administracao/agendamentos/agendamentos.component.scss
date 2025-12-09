@@ -544,6 +544,50 @@
                             font-size: 0.95rem;
                         }
 
+                        // Linha de desconto
+                        &.discount-row {
+                            .discount-value {
+                                color: #d84315;
+                                font-weight: 700;
+                            }
+                        }
+
+                        // Linha de total
+                        &.total-row {
+                            margin-top: 0.5rem;
+                            padding-top: 0.75rem;
+                            border-top: 1px solid #e8e8e8;
+                            
+                            .label {
+                                font-weight: 600;
+                            }
+                        }
+
+                        // Linha de total final (com destaque)
+                        &.total-final-row {
+                            margin-top: 0.5rem;
+                            padding: 0.75rem;
+                            border-top: 2px solid $verde_principal;
+                            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+                            border-radius: 6px;
+                            border-bottom: none !important;
+
+                            .label {
+                                font-weight: 700;
+                                color: $cinza_escuro;
+                                font-size: 1rem;
+                            }
+
+                            .final-value {
+                                font-weight: 700;
+                                color: $verde_principal;
+                                font-size: 1.1rem;
+                            }
+                        }
+                    }
+
+                    .info-row {
+
                         .status-display {
                             padding: 0.25rem 0.75rem;
                             border-radius: 20px;

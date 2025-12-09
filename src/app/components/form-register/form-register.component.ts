@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 
 import { RegisterForm, RegisterFormData, RegisterFormErrors } from '../../interfaces/register-form.interface';
 import { InputFieldComponent } from '../input-field/input-field.component';
@@ -27,6 +28,7 @@ import { NotificationService } from '../../services/notification.service';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     InputFieldComponent,
     PrimaryButtonComponent
   ],
@@ -44,6 +46,13 @@ export class FormRegisterComponent implements OnInit, OnDestroy {
 
   // Erros de validação
   formErrors: RegisterFormErrors = {};
+
+  // Controle de país para telefone
+  selectedCountry: string = '+55';
+  countries = [
+    { code: '+55', name: 'Brasil', flag: '🇧🇷' },
+    { code: '+598', name: 'Uruguai', flag: '🇺🇾' }
+  ];
 
   // Controle de destroy para unsubscribe
   private destroy$ = new Subject<void>();
@@ -171,6 +180,61 @@ export class FormRegisterComponent implements OnInit, OnDestroy {
       (fieldName) => this.updateFieldError(fieldName as keyof RegisterForm),
       this.destroy$
     );
+  }
+
+  /**
+   * Formata telefone conforme o país selecionado
+   */
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    let formattedValue = '';
+    
+    if (this.selectedCountry === '+55') {
+      // Formato Brasil: (11) 99999-9999 ou (11) 9999-9999
+      if (value.length <= 2) {
+        formattedValue = value;
+      } else if (value.length <= 6) {
+        formattedValue = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+      } else if (value.length <= 10) {
+        formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 6)}-${value.slice(6)}`;
+      } else {
+        formattedValue = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+      }
+    } else if (this.selectedCountry === '+598') {
+      // Formato Uruguai: 99 123 456 ou 9 1234 5678
+      if (value.length <= 2) {
+        formattedValue = value;
+      } else if (value.length <= 5) {
+        formattedValue = `${value.slice(0, 2)} ${value.slice(2)}`;
+      } else if (value.length <= 7) {
+        formattedValue = `${value.slice(0, 2)} ${value.slice(2, 5)} ${value.slice(5)}`;
+      } else if (value.length <= 8) {
+        formattedValue = `${value.slice(0, 1)} ${value.slice(1, 5)} ${value.slice(5)}`;
+      } else {
+        formattedValue = `${value.slice(0, 1)} ${value.slice(1, 5)} ${value.slice(5, 9)}`;
+      }
+    }
+    
+    this.registerForm.patchValue({ telefone: formattedValue }, { emitEvent: false });
+    // Atualizar o valor do input diretamente
+    input.value = formattedValue;
+  }
+
+  /**
+   * Muda o país e limpa o campo de telefone
+   */
+  onCountryChange(): void {
+    this.registerForm.patchValue({ telefone: '' });
+  }
+
+  /**
+   * Retorna o placeholder baseado no país selecionado
+   */
+  getPhonePlaceholder(): string {
+    return this.selectedCountry === '+55' 
+      ? '(11) 99999-9999'
+      : '99 123 456';
   }
 
 

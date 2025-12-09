@@ -181,3 +181,57 @@ app-root {
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+/* =================================
+   ESTILOS DOS SELETORES CUSTOMIZADOS
+   ================================= */
+
+.mat-mdc-select-panel {
+  // Opções de tipo de login
+  .select-option {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+
+    .option-icon {
+      font-size: 20px !important;
+      width: 20px !important;
+      height: 20px !important;
+      line-height: 20px !important;
+      color: #28a745 !important;
+      vertical-align: middle !important;
+    }
+
+    span {
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+  }
+
+  // Opções de país
+  .country-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+
+    .flag {
+      font-size: 20px;
+    }
+
+    .code {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+  }
+
+  .mat-mdc-option {
+    &:hover {
+      background-color: rgba(40, 167, 69, 0.08) !important;
+    }
+
+    &.mat-mdc-option-active {
+      background-color: rgba(40, 167, 69, 0.12) !important;
+    }
+  }
+}

@@ -97,6 +97,12 @@ export interface FidelidadeDTO {
     validade: string;
     sequencia: number;
     fidelidadeAplicada: boolean;
+    validadeBarba: string;
+    sequenciaBarba: number;
+    fidelidadeBarbaAplicada: boolean;
+    validadeSobrancelha: string;
+    sequenciaSobrancelha: number;
+    fidelidadeSobrancelhaAplicada: boolean;
 }
 
 export interface UserInfo {
@@ -128,6 +134,8 @@ export interface AgendamentoRequest {
   produtos?: ItemProduto[]; 
   foiGratis: boolean;
   observacoes: string;
+  barbaGratis: boolean;
+  sobrancelhaGratis: boolean;
 }
 
 export interface Agendamento {

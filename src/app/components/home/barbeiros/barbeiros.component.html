@@ -1,34 +1,43 @@
 <section class="barbeiros-section">
   <div class="section-header">
-    <p class="barbeiros-text">Agende seu horário e descubra por que, desde 2020, tantos clientes escolhem viver essa experiência com a gente.</p>
+    <div class="section-label">
+      <mat-icon>content_cut</mat-icon>
+      <span>Equipe Profissional</span>
+    </div>
     <h2 class="section-title">Nossos Barbeiros</h2>
     <p class="section-subtitle">Profissionais experientes para cuidar do seu estilo</p>
+    <p class="barbeiros-text">Agende seu horário e descubra por que, desde 2020, tantos clientes escolhem viver essa experiência com a gente.</p>
   </div>
 
   <div class="barbeiros-grid">
-    
-    <!-- Barbeiro 1 , todo: fazer uma lista depois para iterar os barbeiros.-->
-     <!-- todo: colocar essas imagens no s3 -->
-    <div class="barbeiro-card" *ngFor="let barbeiro of barbeiros">
+    <div class="barbeiro-card" *ngFor="let barbeiro of barbeiros; let i = index" [attr.data-index]="i">
       <div class="barbeiro-image-container">
         <div class="barbeiro-image" [ngStyle]="{'background-image': 'url(' + barbeiro.urlBackground + ')'}">
           <div class="image-overlay"></div>
         </div>
         <div class="barbeiro-avatar">
           <img [src]="barbeiro.urlFoto" [alt]="barbeiro.nome" class="avatar-img">
+          <div class="avatar-badge">
+            <mat-icon>verified</mat-icon>
+          </div>
         </div>
       </div>
       <div class="barbeiro-info">
         <h3 class="barbeiro-name">{{ barbeiro.nome }}</h3>
         <div class="barbeiro-stats">
-          <span class="stat-item">
-            <mat-icon>search</mat-icon>
-            {{ barbeiro.visualizacoes }}
-          </span>
+          <div class="stat-item">
+            <mat-icon>visibility</mat-icon>
+            <span>{{ barbeiro.visualizacoes }}</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <mat-icon>content_cut</mat-icon>
+            <span>{{ barbeiro.cortesRealizados || 0 }} cortes</span>
+          </div>
         </div>
-        <button [routerLink]="['/agendamento', barbeiro.barbeiroId]" class="agendar-btn" mat-stroked-button color="primary">
+        <button [routerLink]="['/agendamento', barbeiro.barbeiroId]" class="agendar-btn">
           <mat-icon>schedule</mat-icon>
-          Agendar
+          <span>Agendar com {{ barbeiro.nome }}</span>
         </button>
       </div>
     </div>

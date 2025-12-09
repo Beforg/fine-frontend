@@ -8,7 +8,8 @@
     </div>
     
     <div class="table-container">
-        <table class="barbeiros-table">
+        <!-- Versão Desktop - Tabela -->
+        <table class="barbeiros-table desktop-view">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -62,6 +63,57 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Versão Mobile - Cards -->
+        <div class="barbeiros-cards mobile-view">
+            <div *ngFor="let barbeiro of barbeiros" class="barbeiro-card">
+                <div class="card-header">
+                    <div class="foto-container">
+                        <img 
+                            *ngIf="barbeiro.urlFoto" 
+                            [src]="barbeiro.urlFoto" 
+                            [alt]="barbeiro.nome"
+                            class="barbeiro-foto">
+                        <div *ngIf="!barbeiro.urlFoto" class="foto-placeholder">
+                            <mat-icon>person</mat-icon>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3 class="barbeiro-nome">{{ barbeiro.nome }}</h3>
+                        <p class="barbeiro-id">#{{ barbeiro.barbeiroId }}</p>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="info-row">
+                        <mat-icon>phone</mat-icon>
+                        <span class="label">Telefone:</span>
+                        <span class="value">{{ barbeiro.telefone }}</span>
+                    </div>
+                    <div class="info-row">
+                        <mat-icon>visibility</mat-icon>
+                        <span class="label">Visualizações:</span>
+                        <span class="value">{{ barbeiro.visualizacoes }}</span>
+                    </div>
+                    <div class="info-row">
+                        <mat-icon>content_cut</mat-icon>
+                        <span class="label">Cortes Realizados:</span>
+                        <span class="value">{{ barbeiro.cortesRealizados }}</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-action btn-edit" (click)="editarBarbeiro(barbeiro)">
+                        <mat-icon>edit</mat-icon>
+                        Editar
+                    </button>
+                    <button *ngIf="isAdmin()" class="btn-action btn-delete" (click)="removerBarbeiro(barbeiro.barbeiroId)">
+                        <mat-icon>delete</mat-icon>
+                        Remover
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Mensagem quando não há barbeiros -->
         <div *ngIf="!barbeiros || barbeiros.length === 0" class="no-data">
