@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:staging": "ng build --configuration staging",
+    "vercel-build": "ng build --configuration staging"
   },
   "private": true,
   "dependencies": {
@@ -36,4 +38,6 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.7.2"
   }
+  
+  
 }
