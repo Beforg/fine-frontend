@@ -1,8 +1,12 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://sua-api-producao.com/api/v1',
+  production: false,
+  staging: true,
+  apiUrl: 'https://sua-api-staging.com/api/v1',
   authEndpoint: '/auth',
   barbeirosEndpoint: '/barbeiros',
+  produtosEndpoint: '/produtos',
   servicosEndpoint: '/servicos',
+  perfilEndpoint: '/perfil',
+  agendamentoEndpoint: '/agendamentos',
   IndisponibilidadeEndpoint: '/indisponibilidade'
 };
