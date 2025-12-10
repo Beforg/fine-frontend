@@ -41,4 +41,4 @@ jobs:
     # ATENÇÃO: Verifique se a pasta dist/ tem uma subpasta com o nome do projeto.
     # Ex: dist/barbearia-fine-front. Se tiver, ajuste o caminho abaixo.
     - name: Deploy to S3
-      run: aws s3 sync ./dist/fine-fronmtend/browser s3://${{ secrets.S3_BUCKET_NAME }} --delete
+      run: aws s3 sync ./dist/fine-frontend/browser s3://${{ secrets.S3_BUCKET_NAME }} --delete
