@@ -1,23 +1,17 @@
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-@Injectable()
-export class BaseUrlInterceptor implements HttpInterceptor {
+export const baseUrlInterceptor: HttpInterceptorFn = (req, next) => {
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    // Se já tiver http/https, não mexe
-    if (req.url.startsWith('http')) {
-      return next.handle(req);
-    }
-
-    // Adiciona automaticamente a baseURL
-    const apiReq = req.clone({
-      url: `${environment.apiUrl}${req.url}`
-    });
-
-    return next.handle(apiReq);
+  // Se já for URL completa, não altera
+  if (req.url.startsWith('http')) {
+    return next(req);
   }
-}
+
+  // Adiciona a baseURL
+  const apiReq = req.clone({
+    url: `${environment.apiUrl}${req.url}`
+  });
+
+  return next(apiReq);
+};
