@@ -1,0 +1,52 @@
+<div class="notification-container">
+  <button 
+    class="notification-button" 
+    [class.has-notifications]="hasUnreadNotifications"
+    (click)="toggleNotifications()">
+    <mat-icon class="notification-icon">notifications</mat-icon>
+    <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+  </button>
+
+  <div class="notification-panel" *ngIf="isOpen">
+    <div class="notification-header">
+      <h3>Notificações</h3>
+      <button class="close-button" (click)="toggleNotifications()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="notification-list" *ngIf="notifications.length > 0; else noNotifications">
+      <div 
+        class="notification-item" 
+        *ngFor="let notification of notifications"
+        [class.unread]="!notification.read"
+        (click)="markAsRead(notification)">
+        <div class="notification-icon-wrapper">
+          <mat-icon [class]="'icon-' + notification.tipo">{{ getIcon(notification.tipo) }}</mat-icon>
+        </div>
+        <div class="notification-content">
+          <p class="notification-title">
+            <strong>{{ notification.clienteNome }}</strong> - {{ notification.barbeiroNome }}
+          </p>
+          <p class="notification-message">{{ notification.mensagem }}</p>
+          <span class="notification-time">{{ notification.dataHoraInicio | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noNotifications>
+      <div class="no-notifications">
+        <mat-icon>notifications_none</mat-icon>
+        <p>Nenhuma notificação</p>
+      </div>
+    </ng-template>
+
+    <div class="notification-footer" *ngIf="notifications.length > 0">
+      <button class="mark-all-read" (click)="markAllAsRead()">
+        Marcar todas como lidas
+      </button>
+    </div>
+  </div>
+</div>
+
+
