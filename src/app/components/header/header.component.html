@@ -35,10 +35,12 @@
       </a>
     }
     @if (isLoggedIn()) {
+      <app-notification></app-notification>
       <button class="nav-link profile-button" (click)="togglePerfilCard()">
         <mat-icon>account_circle</mat-icon>
         Minha Conta
       </button>
+      
      } @else {
     <a routerLink="/login" class="nav-link login-button">
       <mat-icon>login</mat-icon>
