@@ -309,6 +309,31 @@
                     </div>
                 </div>
 
+                <!-- Campos de Especialidade e Bio para edição -->
+                <div *ngIf="isEditing">
+                    <div class="form-group">
+                        <label for="especialidadeEdit">Especialidade *</label>
+                        <input 
+                            type="text" 
+                            id="especialidadeEdit" 
+                            [(ngModel)]="currentBarbeiro.especialidade" 
+                            name="especialidadeEdit"
+                            required
+                            placeholder="Ex: Corte masculino, Barba">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bioEdit">Bio *</label>
+                        <textarea 
+                            id="bioEdit" 
+                            [(ngModel)]="currentBarbeiro.bio" 
+                            name="bioEdit"
+                            required
+                            rows="3"
+                            placeholder="Descrição sobre o barbeiro"></textarea>
+                    </div>
+                </div>
+
                 <div class="form-row" *ngIf="isEditing">
                     <div class="form-group">
                         <label for="visualizacoes">Visualizações</label>

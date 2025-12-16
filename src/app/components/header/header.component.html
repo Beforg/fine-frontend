@@ -55,10 +55,12 @@
 
   
   <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu-overlay" [class.open]="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+  <div class="mobile-menu-overlay" [class.open]="mobileMenuOpen" (click)="closeMobileMenu()">
+  </div>
   
   <!-- Mobile Navigation Menu -->
   <nav class="mobile-nav" [class.open]="mobileMenuOpen">
+    
     <!-- <a routerLink="/products" class="mobile-nav-link" (click)="closeMobileMenu()">
       <mat-icon>shopping_bag</mat-icon>
       Produtos
@@ -74,6 +76,7 @@
       </a>
     }
     @if (isLoggedIn()) {
+      
       <a class="mobile-nav-link profile-button" (click)="togglePerfilCard(); closeMobileMenu()">
         <mat-icon>account_circle</mat-icon>
         Perfil e Agendamentos
