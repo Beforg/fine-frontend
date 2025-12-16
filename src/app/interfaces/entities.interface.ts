@@ -48,7 +48,7 @@ export interface Produto {
     nome: string;
     descricao: string;
     preco: number;
-    urlImagem: string;
+    urlFoto: string;
     ativo: boolean;
     estoque: number; // Adicionado para representar o estoque
     // estoque
@@ -59,7 +59,7 @@ export interface CadastroProduto {
   descricao: string;
   estoque: number;
   preco: number;
-  urlImagem: string;
+  urlFoto: string;
 }
 
 export interface ProdutoAgendamento {

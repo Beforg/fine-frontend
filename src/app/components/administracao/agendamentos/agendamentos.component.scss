@@ -1,5 +1,11 @@
 @import '../../../../variables';
 
+.loading-cell {
+  text-align: center;
+  padding: 60px 20px;
+  background: transparent;
+}
+
 .agendamentos-container {
     display: flex;
     flex-direction: column;

@@ -234,44 +234,35 @@ $verde_dark: #218838;
     .gerenciamento-conteiner {
         .filtros-header {
             padding: 1rem;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.75rem;
 
             .filtros-container {
-                flex-direction: column;
-                gap: 0.65rem;
-                width: 100%;
+                gap: 0.5rem;
+                justify-content: center;
 
                 a {
-                    width: 100%;
-                    justify-content: center;
-                    padding: 0.875rem 1rem;
-                    font-size: 0.9rem;
+                    padding: 0.65rem 0.9rem;
+                    font-size: 0.85rem;
+                    border-radius: 12px;
+                    flex: 0 1 auto;
 
                     mat-icon {
-                        font-size: 20px;
-                        width: 20px;
-                        height: 20px;
+                        font-size: 18px;
+                        width: 18px;
+                        height: 18px;
                     }
                 }
 
                 .filtros-checkbox {
                     margin-left: 0;
-                    flex-direction: column;
-                    gap: 0.65rem;
                     width: 100%;
+                    justify-content: center;
 
                     label {
-                        padding: 0.65rem;
-                        background: white;
-                        border-radius: 8px;
-                        border: 1px solid #e9ecef;
-                        font-size: 0.875rem;
+                        font-size: 0.85rem;
 
-                        &:hover {
-                            border-color: $verde_light;
-                            background: rgba(40, 167, 69, 0.05);
+                        input[type="checkbox"] {
+                            width: 15px;
+                            height: 15px;
                         }
                     }
                 }
@@ -283,35 +274,41 @@ $verde_dark: #218838;
 @media (max-width: 480px) {
     .gerenciamento-conteiner {
         .filtros-header {
-            padding: 0.875rem;
-            gap: 0.65rem;
+            padding: 0.75rem 0.5rem;
 
             .filtros-container {
-                gap: 0.6rem;
+                gap: 0.4rem;
 
                 a {
-                    padding: 0.8rem 0.875rem;
-                    font-size: 0.85rem;
-                    border-radius: 12px;
+                    padding: 0.6rem 0.75rem;
+                    font-size: 0.8rem;
+                    border-radius: 10px;
+                    gap: 0.35rem;
 
                     mat-icon {
-                        font-size: 18px;
-                        width: 18px;
-                        height: 18px;
+                        font-size: 16px;
+                        width: 16px;
+                        height: 16px;
+                    }
+
+                    // Ocultar texto e mostrar apenas ícone em telas muito pequenas
+                    span {
+                        display: none;
                     }
                 }
 
                 .filtros-checkbox {
-                    gap: 0.6rem;
+                    gap: 0.4rem;
+                    margin-top: 0.5rem;
 
                     label {
-                        padding: 0.6rem;
-                        font-size: 0.8rem;
+                        padding: 0.5rem;
+                        font-size: 0.75rem;
 
                         input[type="checkbox"] {
-                            width: 15px;
-                            height: 15px;
-                            margin-right: 0.4rem;
+                            width: 14px;
+                            height: 14px;
+                            margin-right: 0.35rem;
                         }
                     }
                 }
@@ -321,6 +318,30 @@ $verde_dark: #218838;
         .gerenciamento-body {
             &::-webkit-scrollbar {
                 width: 6px;
+            }
+        }
+    }
+}
+
+// Media query adicional para telas extra pequenas (só ícones)
+@media (max-width: 380px) {
+    .gerenciamento-conteiner {
+        .filtros-header {
+            padding: 0.65rem 0.4rem;
+
+            .filtros-container {
+                gap: 0.3rem;
+                justify-content: space-around;
+
+                a {
+                    padding: 0.65rem;
+                    min-width: auto;
+                    flex: 0 0 auto;
+
+                    mat-icon {
+                        margin: 0;
+                    }
+                }
             }
         }
     }

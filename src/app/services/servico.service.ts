@@ -51,4 +51,16 @@ export class ServicoService {
     );
   }
 
+  excluirServico(servicoId: number): Observable<BackendResponse> {
+    return this.http.delete<BackendResponse>(`${environment.apiUrl}${environment.servicosEndpoint}/excluir/${servicoId}`, { headers: this.authService.getHeaders() }).pipe(
+      tap(response => {
+        console.log("Serviço excluído:", response);
+      }),
+      catchError(error => {
+        console.error('Erro ao excluir serviço:', error);
+        // Return a default BackendResponse object in case of error
+        return of({ message: 'Erro ao excluir serviço.', httpStatus: 'ERROR' });
+      })
+    );
+  }
 }

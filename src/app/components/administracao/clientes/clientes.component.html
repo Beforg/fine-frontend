@@ -4,6 +4,11 @@
     </div>
     
     <div class="table-container">
+        @if (isLoading) {
+          <div class="loading-wrapper">
+            <app-loading message="Carregando clientes..."></app-loading>
+          </div>
+        } @else {
         <table class="clientes-table">
             <thead>
                 <tr>
@@ -44,10 +49,11 @@
         </table>
 
         <!-- Mensagem quando não há clientes -->
-        <div *ngIf="!clientes || clientes.length === 0" class="no-data">
+        <div *ngIf="!isLoading && (!clientes || clientes.length === 0)" class="no-data">
             <mat-icon>people_off</mat-icon>
             <p>Nenhum cliente cadastrado</p>
         </div>
+        }
     </div>
 
     <!-- Paginação -->

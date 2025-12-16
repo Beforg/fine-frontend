@@ -10,6 +10,11 @@
     
     <!-- Tabela de Indisponibilidades -->
     <div class="table-container">
+        @if (isLoading) {
+          <div class="loading-wrapper">
+            <app-loading message="Carregando indisponibilidades..."></app-loading>
+          </div>
+        } @else {
         <table class="disponibilidade-table">
             <thead>
                 <tr>
@@ -51,10 +56,11 @@
         </table>
 
         <!-- Mensagem quando não há dados -->
-        <div *ngIf="!indisponibilidades || indisponibilidades.length === 0" class="no-data">
+        <div *ngIf="!isLoading && (!indisponibilidades || indisponibilidades.length === 0)" class="no-data">
             <mat-icon>event_busy</mat-icon>
             <p>Nenhuma indisponibilidade cadastrada</p>
         </div>
+        }
     </div>
     <!-- Modal de Adicionar Indisponibilidade -->
     <div class="modal-overlay" *ngIf="isModalOpen">
