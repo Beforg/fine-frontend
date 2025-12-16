@@ -99,8 +99,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   private initializeNotificationSound(): void {
     this.notificationAudio = new Audio();
     
-    // Usa arquivo de som personalizado (você pode baixar de https://notificationsounds.com/)
-    // Ou usar o beep sintético abaixo como fallback
+
     this.notificationAudio.src = this.audioPath;
     
     // Fallback: Se não encontrar o arquivo, usa um beep base64

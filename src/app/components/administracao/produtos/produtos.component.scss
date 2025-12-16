@@ -4,6 +4,14 @@
 $verde_light: #2ecc71;
 $verde_dark: #218838;
 
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+}
+
 // Animações
 @keyframes fadeInUp {
     from {
@@ -29,17 +37,13 @@ $verde_dark: #218838;
         align-items: center;
         margin-bottom: 2rem;
         padding-bottom: 1.5rem;
-        border-bottom: 3px solid rgba(40, 167, 69, 0.2);
+        border-bottom: 2px solid #e9ecef;
 
         h1 {
             color: #2c3e50;
             font-size: 2rem;
             font-weight: 700;
             margin: 0;
-            background: linear-gradient(135deg, #2c3e50, $verde_principal);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .btn-adicionar {
@@ -695,10 +699,6 @@ $verde_dark: #218838;
                 font-size: 1.5rem;
                 font-weight: 700;
                 margin: 0;
-                background: linear-gradient(135deg, #2c3e50, #3498db);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
             }
 
             .btn-close {
@@ -730,6 +730,129 @@ $verde_dark: #218838;
 
         .produto-form {
             padding: 2rem;
+
+            // =============================================
+            // SEÇÃO DE PREVIEW DE IMAGEM
+            // =============================================
+            .photo-preview-section {
+                margin-bottom: 2rem;
+
+                .photo-preview-container {
+                    h3 {
+                        font-size: 1rem;
+                        font-weight: 600;
+                        color: #2c3e50;
+                        margin-bottom: 1rem;
+                    }
+
+                    .photo-preview {
+                        position: relative;
+                        width: 100%;
+                        height: 250px;
+                        border: 2px dashed #e9ecef;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        margin-bottom: 1rem;
+                        background: #f8f9fa;
+
+                        .preview-image {
+                            width: 100%;
+                            height: 100%;
+                            position: relative;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: contain;
+                                background: white;
+                            }
+
+                            .btn-remove-photo {
+                                position: absolute;
+                                top: 10px;
+                                right: 10px;
+                                width: 36px;
+                                height: 36px;
+                                border: none;
+                                background: rgba(231, 76, 60, 0.9);
+                                color: white;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+                                &:hover {
+                                    background: #c0392b;
+                                    transform: scale(1.1) rotate(90deg);
+                                }
+
+                                mat-icon {
+                                    font-size: 20px;
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+
+                        .no-image-placeholder {
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            color: #95a5a6;
+
+                            mat-icon {
+                                font-size: 64px;
+                                width: 64px;
+                                height: 64px;
+                                margin-bottom: 1rem;
+                                opacity: 0.5;
+                            }
+
+                            span {
+                                font-size: 0.9rem;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+
+                    .upload-controls {
+                        .btn-upload {
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 0.5rem;
+                            padding: 0.75rem 1.5rem;
+                            background: linear-gradient(135deg, $verde_principal, $verde_light);
+                            color: white;
+                            border: none;
+                            border-radius: 8px;
+                            font-weight: 600;
+                            font-size: 0.9rem;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+
+                            &:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+                            }
+
+                            mat-icon {
+                                font-size: 20px;
+                                width: 20px;
+                                height: 20px;
+                            }
+                        }
+                    }
+                }
+            }
 
             .form-group {
                 margin-bottom: 1.5rem;

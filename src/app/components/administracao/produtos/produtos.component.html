@@ -8,6 +8,12 @@
     </div>
     
     <div class="table-container">
+        <!-- Loading -->
+        @if (isLoading) {
+          <div class="loading-wrapper">
+            <app-loading message="Carregando produtos..."></app-loading>
+          </div>
+        } @else {
         <!-- Versão Desktop - Tabela -->
         <table class="produtos-table desktop-view" *ngIf="produtos && produtos.length > 0">
             <thead>
@@ -113,10 +119,11 @@
         </div>
 
         <!-- Mensagem quando não há produtos -->
-        <div *ngIf="!produtos || produtos.length === 0" class="no-data">
+        <div *ngIf="!isLoading && (!produtos || produtos.length === 0)" class="no-data">
             <mat-icon>inventory_2</mat-icon>
             <p>Nenhum produto cadastrado</p>
         </div>
+        }
     </div>
 
     <!-- Modal de Adicionar/Editar Produto -->
@@ -130,6 +137,37 @@
             </div>
 
             <form class="produto-form" (ngSubmit)="salvarProduto()">
+                <!-- Preview da Imagem do Produto -->
+                <div class="photo-preview-section">
+                    <div class="photo-preview-container">
+                        <h3>Imagem do Produto</h3>
+                        <div class="photo-preview">
+                            <div class="preview-image" *ngIf="previewImageUrl">
+                                <img [src]="previewImageUrl" alt="Preview da imagem">
+                                <button type="button" class="btn-remove-photo" (click)="removerImagem()" title="Remover imagem">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </div>
+                            <div class="no-image-placeholder" *ngIf="!previewImageUrl">
+                                <mat-icon>image</mat-icon>
+                                <span>Nenhuma imagem selecionada</span>
+                            </div>
+                        </div>
+                        <div class="upload-controls">
+                            <input 
+                                type="file" 
+                                id="imageInput" 
+                                accept="image/*" 
+                                (change)="onImageSelected($event)"
+                                style="display: none;">
+                            <button type="button" class="btn-upload" (click)="abrirSeletorImagem()">
+                                <mat-icon>upload</mat-icon>
+                                Selecionar Imagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label for="nome">Nome do Produto *</label>
                     <input 

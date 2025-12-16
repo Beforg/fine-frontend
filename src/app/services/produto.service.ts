@@ -63,4 +63,16 @@ export class ProdutoService {
     );
   }
 
+  excluirProduto(id: number): Observable<BackendResponse> {
+    return this.http.delete<BackendResponse>(`${environment.apiUrl}${environment.produtosEndpoint}/excluir/${id}`, { headers: this.authService.getHeaders() }).pipe(
+      tap(response => {
+        console.log("Produto excluído:", response);
+      }),
+      catchError(error => {
+        console.error('Erro ao excluir produto:', error);
+        throw error;
+      })
+    );
+  }
+
   }

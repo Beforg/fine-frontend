@@ -1,115 +1,74 @@
 import { Injectable } from '@angular/core';
+import { UploadS3Service } from './upload-s3.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  constructor() { }
+  constructor(private uploadS3Service: UploadS3Service) { }
 
   /**
-   * Upload de foto para barbeiro
+   * Upload de foto para barbeiro usando S3
    * @param file Arquivo de imagem
    * @param barbeiroId ID do barbeiro
    * @param isBackground Se é foto de background ou perfil
-   * @returns URL da imagem salva
+   * @returns Observable com a URL da imagem salva no S3
    */
-  uploadBarbeiroPhoto(file: File, barbeiroId: number, isBackground: boolean = false): string {
-    try {
-      // Simular o salvamento da imagem
-      const fileName = isBackground ? `bg${barbeiroId}.png` : `${barbeiroId}.png`;
-      const urlPath = `/assets/tmp/barbeiro/${fileName}`;
-      
-      // Aqui você implementaria a lógica real de salvamento
-      // Por exemplo, usando FileReader para converter para base64 e salvar
-      console.log(`📸 Salvando imagem do barbeiro: ${file.name} -> ${urlPath}`);
-      
-      // Simular delay de processamento
-      setTimeout(() => {
-        console.log(`✅ Imagem salva com sucesso: ${urlPath}`);
-      }, 1000);
-      
-      return urlPath;
-    } catch (error) {
-      console.error('Erro ao fazer upload da imagem do barbeiro:', error);
-      throw error;
-    }
+  uploadBarbeiroPhoto(file: File, barbeiroId: number, isBackground: boolean = false): Observable<string> {
+    return new Observable(observer => {
+      this.uploadS3Service.uploadBarbeiroPhoto(file, barbeiroId, isBackground).subscribe({
+        next: (result) => {
+          if (result.success && result.publicUrl) {
+            console.log(`✅ Imagem do barbeiro salva no S3: ${result.publicUrl}`);
+            observer.next(result.publicUrl);
+            observer.complete();
+          } else {
+            observer.error(new Error('Falha ao fazer upload da imagem'));
+          }
+        },
+        error: (error) => {
+          console.error('❌ Erro ao fazer upload da imagem do barbeiro:', error);
+          observer.error(error);
+        }
+      });
+    });
   }
 
   /**
-   * Upload de foto para produto
+   * Upload de foto para produto usando S3
    * @param file Arquivo de imagem
    * @param produtoId ID do produto
-   * @returns URL da imagem salva
+   * @returns Observable com a URL da imagem salva no S3
    */
-  uploadProdutoPhoto(file: File, produtoId: number): string {
-    try {
-      const fileName = `${produtoId}.png`;
-      const urlPath = `assets/tmp/produto/${fileName}`;
-      
-      console.log(`📸 Salvando imagem do produto: ${file.name} -> ${urlPath}`);
-      
-      // Simular delay de processamento
-      setTimeout(() => {
-        console.log(`✅ Imagem salva com sucesso: ${urlPath}`);
-      }, 1000);
-      
-      return urlPath;
-    } catch (error) {
-      console.error('Erro ao fazer upload da imagem do produto:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Método genérico de upload (mantido para compatibilidade)
-   */
-  uploadPhoto(file: File): string {
-    // Lógica genérica para upload
-    const timestamp = Date.now();
-    const fileName = `${timestamp}-${file.name}`;
-    return `/assets/tmp/generic/${fileName}`;
-  }
-
-  /**
-   * Remove foto do barbeiro
-   */
-  removeBarbeiroPhoto(barbeiroId: number, isBackground: boolean = false): void {
-    const fileName = isBackground ? `bg${barbeiroId}.png` : `${barbeiroId}.png`;
-    const urlPath = `/assets/tmp/barbeiro/${fileName}`;
-    
-    console.log(`🗑️ Removendo imagem do barbeiro: ${urlPath}`);
-    // Implementar lógica de remoção real
-  }
-
-  /**
-   * Remove foto do produto
-   */
-  removeProdutoPhoto(produtoId: number): void {
-    const fileName = `${produtoId}.png`;
-    const urlPath = `/assets/tmp/produto/${fileName}`;
-    
-    console.log(`🗑️ Removendo imagem do produto: ${urlPath}`);
-    // Implementar lógica de remoção real
-  }
-
-  removePhoto(fileName: string): void {
-    // Lógica para remover a foto
-    console.log(`🗑️ Removendo foto: ${fileName}`);
+  uploadProdutoPhoto(file: File, produtoNome: string): Observable<string> {
+    return new Observable(observer => {
+      this.uploadS3Service.uploadProdutoPhoto(file, produtoNome).subscribe({
+        next: (result) => {
+          if (result.success && result.publicUrl) {
+            console.log(`✅ Imagem do produto salva no S3: ${result.publicUrl}`);
+            observer.next(result.publicUrl);
+            observer.complete();
+          } else {
+            observer.error(new Error('Falha ao fazer upload da imagem'));
+          }
+        },
+        error: (error) => {
+          console.error('❌ Erro ao fazer upload da imagem do produto:', error);
+          observer.error(error);
+        }
+      });
+    });
   }
 
   /**
    * Valida se o arquivo é uma imagem válida
+   * Delega para o UploadS3Service
    */
   validateImageFile(file: File, maxSizeMB: number = 5): { valid: boolean; error?: string } {
-    // Verificar se é imagem
-    if (!file.type.startsWith('image/')) {
-      return { valid: false, error: 'Arquivo deve ser uma imagem.' };
-    }
-
-    // Verificar tamanho
-    const maxSizeBytes = maxSizeMB * 1024 * 1024;
-    if (file.size > maxSizeBytes) {
+    // Verificar tamanho do arquivo
+    if (file.size > maxSizeMB * 1024 * 1024) {
       return { valid: false, error: `Arquivo deve ter no máximo ${maxSizeMB}MB.` };
     }
 
@@ -120,5 +79,26 @@ export class ImageService {
     }
 
     return { valid: true };
+  }
+
+  /**
+   * Gera preview local da imagem antes do upload
+   */
+  generatePreview(file: File): Promise<string> {
+    return this.uploadS3Service.generatePreview(file);
+  }
+
+  /**
+   * Obtém URL da imagem com fallback
+   */
+  getImageUrl(url: string | null | undefined, fallback: string = '/assets/fine-logo.jpeg'): string {
+    return this.uploadS3Service.getImageUrl(url, fallback);
+  }
+
+  /**
+   * Verifica se uma URL é válida
+   */
+  isValidImageUrl(url: string | null | undefined): boolean {
+    return this.uploadS3Service.isValidImageUrl(url);
   }
 }

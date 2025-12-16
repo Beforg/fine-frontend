@@ -4,7 +4,7 @@
       <div class="sobre-text">
         <div class="section-label">
           <mat-icon>info</mat-icon>
-          <span>Conheça Nossa História</span>
+          <span>Nossa História</span>
         </div>
         
         <h2 class="sobre-title">Tradição e Excelência Desde 2020</h2>
@@ -64,13 +64,14 @@
       <div class="sobre-image">
         <div class="image-decoration"></div>
         <div class="image-container">
-          <img src="assets/bg_tmp.jpg" alt="Ambiente Barbearia Fine" class="fachada-img">
+          <video autoplay loop muted playsinline class="fachada-img" [muted]="true" [volume]="0">
+            <source src="assets/fine.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos HTML5.
+          </video>
           <div class="image-badge">
             <mat-icon>event_available</mat-icon>
-            <div class="badge-content">
-              <span class="badge-number">5+</span>
-              <span class="badge-text">Anos de Experiência</span>
-            </div>
+            <span class="badge-number">5+</span>
+            <span class="badge-text">Anos de Experiência</span>
           </div>
         </div>
       </div>

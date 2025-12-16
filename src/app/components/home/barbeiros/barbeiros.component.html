@@ -8,8 +8,8 @@
     <p class="section-subtitle">Profissionais experientes para cuidar do seu estilo</p>
     <p class="barbeiros-text">Agende seu horário e descubra por que, desde 2020, tantos clientes escolhem viver essa experiência com a gente.</p>
   </div>
-
-  <div class="barbeiros-grid">
+  @if (!isLoading) {
+      <div class="barbeiros-grid" *ngIf="barbeiros && barbeiros.length > 0">
     <div class="barbeiro-card" *ngFor="let barbeiro of barbeiros; let i = index" [attr.data-index]="i">
       <div class="barbeiro-image-container">
         <div class="barbeiro-image" [ngStyle]="{'background-image': 'url(' + barbeiro.urlBackground + ')'}">
@@ -42,4 +42,14 @@
       </div>
     </div>
   </div>
+  <div class="empty-message" *ngIf="!barbeiros || barbeiros.length === 0">
+    <mat-icon>person_off</mat-icon>
+    <p>Nenhum barbeiro disponível no momento</p>
+  </div>
+  } @else {
+    <div class="loading-wrapper">
+      <app-loading size="large" message="Carregando barbeiros..."></app-loading>
+    </div>
+  }
+
 </section>

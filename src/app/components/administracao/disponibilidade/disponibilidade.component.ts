@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { IndisponibilidadeService } from '../../../services/indisponibilidade.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { LoadingComponent } from '../../loading/loading.component';
 
 @Component({
   selector: 'app-disponibilidade',
@@ -25,7 +26,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatButtonModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    LoadingComponent
   ],
   templateUrl: './disponibilidade.component.html',
   styleUrl: './disponibilidade.component.scss'
@@ -33,6 +35,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 export class DisponibilidadeComponent implements OnInit {
   indisponibilidades: Indisponibilidade[] = [];
   isModalOpen: boolean = false;
+  isLoading: boolean = true;
   bloqueioForm!: FormGroup;
   minDate = new Date();
   // Dados para os selects
@@ -51,12 +54,15 @@ export class DisponibilidadeComponent implements OnInit {
   }
 
   carregarIndisponibilidades() {
+    this.isLoading = true;
     this.indisponibilidadeService.listarIndisponibilidades().subscribe({
       next: (data) => {
         this.indisponibilidades = data;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Erro ao carregar indisponibilidades:', error);
+        this.isLoading = false;
       }
     });
   }

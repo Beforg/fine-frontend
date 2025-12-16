@@ -91,4 +91,16 @@ export class BarbeiroService {
      );
    }
 
+   excluirBarbeiro(id: number): Observable<BackendResponse> {
+     return this.http.delete<BackendResponse>(`${this.apiUrl}/excluir/${id}`, { headers: this.authService.getHeaders() }).pipe(
+       tap(response => {
+         console.log("Barbeiro excluído:", response);
+       }),
+       catchError(error => {
+         console.error('Erro ao excluir barbeiro:', error);
+         throw error;
+       })
+     );
+   }
+
 }

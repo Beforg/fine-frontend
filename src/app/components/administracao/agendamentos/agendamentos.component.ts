@@ -9,6 +9,7 @@ import { UserRole } from '../../../enums/user-role.enum';
 import {MatRadioModule} from '@angular/material/radio'
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../../services/notification.service';
+import { LoadingComponent } from '../../loading/loading.component';
 
 // Interfaces para tipagem
 interface Servico {
@@ -50,7 +51,8 @@ interface Agendamento {
     MatIconModule,
     MatButtonModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+    LoadingComponent
   ],
   templateUrl: './agendamentos.component.html',
   styleUrl: './agendamentos.component.scss'
@@ -68,6 +70,8 @@ export class AgendamentosComponent implements OnInit {
   pageSize: number = 10;
   totalElements: number = 0;
   totalPages: number = 0;
+
+  isLoading: boolean = true;
   
   // Para exposição no template
   Math = Math;
@@ -118,6 +122,7 @@ export class AgendamentosComponent implements OnInit {
 
 // Trocar o id pelo selecionado (Pelo ADMIN somente)
   loadAgendamentos() {
+
     const data = {
       id: "7", 
       page: (this.currentPage + 1).toString(), 
@@ -130,9 +135,11 @@ export class AgendamentosComponent implements OnInit {
         this.totalElements = response.totalElements;
         this.totalPages = response.totalPages;
         this.agendamentosFiltrados = [...this.agendamentos]; // Inicialmente sem filtro
+        this.isLoading = false;
       },
       error: (error) => {
         this.notification.error(error.error.message || "Erro ao carregar agendamentos.");
+        this.isLoading = false;
       }
     });
   }

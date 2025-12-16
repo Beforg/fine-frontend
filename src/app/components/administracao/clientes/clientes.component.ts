@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { PerfilService } from '../../../services/perfil.service';
+import { LoadingComponent } from '../../loading/loading.component';
 import { ClienteInfo } from '../../../interfaces/entities.interface';
 
 interface Cliente {
@@ -14,12 +15,13 @@ interface Cliente {
 
 @Component({
   selector: 'app-clientes',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, LoadingComponent],
   templateUrl: './clientes.component.html',
   styleUrl: './clientes.component.scss'
 })
 export class ClientesComponent implements OnInit {
   clientes: ClienteInfo[] = [];
+  isLoading: boolean = true;
   
   // Paginação
   currentPage = 0;
@@ -37,11 +39,19 @@ export class ClientesComponent implements OnInit {
   }
 
   loadClientes(): void {
-    this.perfilService.getClientesInfo(this.currentPage).subscribe(response => {
-      // response.content é um array de objetos com formato: {clienteInfo: {...}, ativo: boolean}
-      this.clientes = response.content;
-      this.totalElements = response.totalElements;
-      this.totalPages = response.totalPages;
+    this.isLoading = true;
+    this.perfilService.getClientesInfo(this.currentPage).subscribe({
+      next: (response) => {
+        // response.content é um array de objetos com formato: {clienteInfo: {...}, ativo: boolean}
+        this.clientes = response.content;
+        this.totalElements = response.totalElements;
+        this.totalPages = response.totalPages;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar clientes:', err);
+        this.isLoading = false;
+      }
     });
   }
 

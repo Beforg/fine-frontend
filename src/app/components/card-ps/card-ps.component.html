@@ -1,6 +1,6 @@
 <div class="card" [class.produto]="tipo === 'produto'" [class.servico]="tipo === 'servico'" (click)="onCardClick()">
   <div class="card-image">
-    <img [src]="urlImagem" [alt]="nome" (error)="onImageError($event)">
+    <img [src]="urlImagem" [alt]="nome" (error)="onImageError($event, tipo)">
     <div class="card-overlay">
       <mat-icon>{{ tipo === 'produto' ? 'shopping_bag' : 'content_cut' }}</mat-icon>
       <span class="card-type">{{ tipo | titlecase }}</span>
@@ -11,12 +11,6 @@
     <h4 class="card-title">{{ nome }}</h4>
     <p class="card-description">{{ descricao == "" ? 'Sem Descrição' : descricao }}</p>
     
-    <div class="card-details" *ngIf="tipo === 'servico'">
-      <div class="detail-item">
-        <mat-icon>timer</mat-icon>
-        <span>{{tempoEstimado}} min</span>
-      </div>
-    </div>
 
     <div class="card-footer">
       <div class="card-price">
@@ -35,13 +29,19 @@
         Comprar
       </button> -->
       
-      <button 
+      <!-- <button 
         *ngIf="tipo === 'servico'"
         class="card-action-btn" 
         (click)="onCardClick(); $event.stopPropagation();">
         <mat-icon>event_available</mat-icon>
         <span>Agendar</span>
-      </button>
+      </button> -->
+        <div class="card-details" *ngIf="tipo === 'servico'">
+      <div class="detail-item">
+        <mat-icon>timer</mat-icon>
+        <span>{{tempoEstimado}} min</span>
+      </div>
+    </div>
     </div>
   </div>
 </div>
