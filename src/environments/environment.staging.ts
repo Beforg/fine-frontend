@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   staging: true,
   apiUrl: 'http://barbearia-fine-api.us-east-2.elasticbeanstalk.com/api/v1',
   webSocketUrl: 'http://barbearia-fine-api.us-east-2.elasticbeanstalk.com/ws',

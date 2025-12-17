@@ -35,7 +35,10 @@
       </a>
     }
     @if (isLoggedIn()) {
-      <app-notification></app-notification>
+      @if (isAdmin()) {
+        <app-notification></app-notification>
+      }
+      
       <button class="nav-link profile-button" (click)="togglePerfilCard()">
         <mat-icon>account_circle</mat-icon>
         Minha Conta
