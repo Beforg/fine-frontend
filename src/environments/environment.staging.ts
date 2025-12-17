@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
   staging: true,
-  apiUrl: 'http://barbearia-fine-api.us-east-2.elasticbeanstalk.com/api/v1',
-  webSocketUrl: 'http://barbearia-fine-api.us-east-2.elasticbeanstalk.com/ws',
+  apiUrl: 'https://barbearia-fine-api.us-east-2.elasticbeanstalk.com/api/v1',
+  webSocketUrl: 'wss://barbearia-fine-api.us-east-2.elasticbeanstalk.com/ws',
   authEndpoint: '/auth',
   barbeirosEndpoint: '/barbeiros',
   produtosEndpoint: '/produtos',
