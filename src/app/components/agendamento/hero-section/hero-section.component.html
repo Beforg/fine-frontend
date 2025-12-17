@@ -1,5 +1,5 @@
   <section class="hero-section">
-    <div class="hero-background">
+    <div class="hero-background" [style.background-image]="'url(' + (barbeiro?.urlBackground || '/assets/tmp/bgBarbeiro1.png') + ')'">
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <h1 class="page-title">Agendar Corte</h1>
@@ -9,11 +9,15 @@
           </div>
           <div class="barbeiro-details">
             <h2 class="barbeiro-name">{{barbeiro?.nome}}</h2>
-            <p class="barbeiro-stats">{{barbeiro?.cortesRealizados}} corte(s)</p>
+            <p class="barbeiro-especialidade">{{barbeiro?.especialidade}}</p>
+            <p class="barbeiro-bio" [title]="barbeiro?.bio">{{barbeiro?.bio}}</p>
+            <p class="barbeiro-stats">
+              <mat-icon>cut</mat-icon> {{barbeiro?.cortesRealizados}} corte(s)
+            </p>
         </div>
         </div>
         
       </div>
     </div>
   </section>
-  <hr class="divider">
+  <div class="teste"></div>

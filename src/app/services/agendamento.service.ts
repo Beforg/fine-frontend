@@ -57,6 +57,19 @@ export class AgendamentoService {
     );
   }
 
+  editarValorTotal(agendamentoId: number, novoValor: number): Observable<any> {
+    const data: {id: number, valor: number} = { id: agendamentoId, valor: novoValor };
+    return this.http.put<any>(`${this.apiUrl}/editar`, data, { headers: this.authService.getHeaders() }).pipe(
+      tap((response: any) => {
+        console.log('Valor total do agendamento editado com sucesso:', response);
+      }),
+      catchError((erros: HttpErrorResponse) => {
+        console.error('Erro ao editar valor total do agendamento:', erros);
+        throw erros;
+      })
+    );
+  }
+
   alterarStatusAgendamento(status: AgendamentoStatus, id: string, comprouProdutos: boolean): Observable<any> {
     console.log('Headers sendo enviados:', this.authService.getHeaders());
     console.log('Status:', status, 'ID:', id);

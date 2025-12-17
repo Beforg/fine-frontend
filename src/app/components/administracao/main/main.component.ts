@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { AgendamentosComponent } from "../agendamentos/agendamentos.component";
 import { GerenciamentoComponent } from "../gerenciamento/gerenciamento.component";
+import { NotificationComponent } from "../../../core/notification/notification.component";
 
 @Component({
   selector: 'app-main-gerenciamento',
-  imports: [AgendamentosComponent, GerenciamentoComponent],
+  imports: [AgendamentosComponent, GerenciamentoComponent, NotificationComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

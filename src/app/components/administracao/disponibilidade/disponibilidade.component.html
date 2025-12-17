@@ -10,6 +10,11 @@
     
     <!-- Tabela de Indisponibilidades -->
     <div class="table-container">
+        @if (isLoading) {
+          <div class="loading-wrapper">
+            <app-loading message="Carregando indisponibilidades..."></app-loading>
+          </div>
+        } @else {
         <table class="disponibilidade-table">
             <thead>
                 <tr>
@@ -23,7 +28,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of indisponibilidades" class="table-row">
-                    <td class="td-id">#{{ item.barbeiroId }}</td>
+                    <td class="td-id">#{{ item.id }}</td>
                     <td class="td-barbeiro">
                         <div class="barbeiro-info">
                             <span class="barbeiro-nome">{{ item.barbeiroNome }}</span>
@@ -38,10 +43,7 @@
                     </td>
                     <td class="td-actions">
                         <div class="actions-container">
-                            <button class="btn-action btn-edit" title="Editar">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button class="btn-action btn-delete" title="Remover">
+                            <button class="btn-action btn-delete" title="Remover" (click)="removerBloqueio(item.id)">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>
@@ -51,10 +53,11 @@
         </table>
 
         <!-- Mensagem quando não há dados -->
-        <div *ngIf="!indisponibilidades || indisponibilidades.length === 0" class="no-data">
+        <div *ngIf="!isLoading && (!indisponibilidades || indisponibilidades.length === 0)" class="no-data">
             <mat-icon>event_busy</mat-icon>
             <p>Nenhuma indisponibilidade cadastrada</p>
         </div>
+        }
     </div>
     <!-- Modal de Adicionar Indisponibilidade -->
     <div class="modal-overlay" *ngIf="isModalOpen">

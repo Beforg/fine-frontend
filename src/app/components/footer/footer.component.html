@@ -54,15 +54,30 @@
     <!-- Linha divisória -->
     <div class="footer-divider"></div>
     
+    <!-- Links legais -->
+
+    
     <!-- Seção de copyright -->
     <div class="footer-bottom">
+      
       <div class="copyright">
         <p>© {{ currentYear }} {{ businessInfo.name }}. Todos os direitos reservados.</p>
       </div>
+          <div class="footer-legal">
+      <a href="/politicas-termos" class="legal-link">
+        <mat-icon>policy</mat-icon>
+        Política de Privacidade
+      </a>
+      <span class="separator">•</span>
+      <a href="/politicas-termos" class="legal-link">
+        <mat-icon>description</mat-icon>
+        Termos de Uso
+      </a>
+    </div>
       <div class="developer">
         <p>
           <mat-icon>code</mat-icon>
-          Desenvolvido por <strong>{{ businessInfo.developer }}</strong>
+          Desenvolvido por <strong (click)="goToLinkedIn()">{{ businessInfo.developer }}</strong>
         </p>
       </div>
     </div>

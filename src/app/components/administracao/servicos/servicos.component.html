@@ -10,6 +10,12 @@
 
   <!-- Tabela de Serviços -->
   <div class="table-container">
+    <!-- Loading -->
+    @if (isLoading) {
+      <div class="loading-wrapper">
+        <app-loading message="Carregando serviços..."></app-loading>
+      </div>
+    } @else {
     <!-- Versão Desktop - Tabela -->
     <table class="servicos-table desktop-view" *ngIf="servicos.length > 0">
       <thead>
@@ -122,10 +128,11 @@
     </div>
 
     <!-- Mensagem quando não há dados -->
-    <div class="no-data" *ngIf="servicos.length === 0">
+    <div class="no-data" *ngIf="!isLoading && servicos.length === 0">
       <mat-icon>design_services</mat-icon>
       <p>Nenhum serviço cadastrado</p>
     </div>
+    }
   </div>
 </div>
 

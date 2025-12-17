@@ -1,5 +1,13 @@
 @import '../../../../variables';
 
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+}
+
 // Variáveis de tema verde
 $verde_light: #2ecc71;
 $verde_dark: #218838;
@@ -29,17 +37,13 @@ $verde_dark: #218838;
         align-items: center;
         margin-bottom: 2rem;
         padding-bottom: 1.5rem;
-        border-bottom: 3px solid rgba(40, 167, 69, 0.2);
+        border-bottom: 2px solid #e9ecef;
 
         h1 {
             color: #2c3e50;
             font-size: 2rem;
             font-weight: 700;
             margin: 0;
-            background: linear-gradient(135deg, #2c3e50, $verde_principal);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .btn-adicionar {
@@ -349,10 +353,7 @@ $verde_dark: #218838;
                 font-size: 1.5rem;
                 font-weight: 700;
                 margin: 0;
-                background: linear-gradient(135deg, #2c3e50, #3498db);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+
             }
 
             .btn-close {

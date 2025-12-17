@@ -1,0 +1,42 @@
+name: Deploy Frontend to S3
+
+# Quando isso vai rodar?
+on:
+  push:
+    branches:
+      - dev  # Ou 'master', verifique o nome da sua branch principal
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Baixa o código do repositório
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Prepara o Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # Use a versão compatível com seu Angular
+
+    # 3. Instala as dependências
+    - name: Install Dependencies
+      run: npm install
+
+    # 4. Faz o Build de Produção
+    - name: Build Angular App
+      run: npm run build -- --configuration staging
+
+    # 5. Configura as credenciais da AWS (usando as secrets)
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    # 6. Sobe para o S3
+    - name: Deploy to S3
+      run: aws s3 sync ./dist/fine-frontend/browser s3://${{ secrets.S3_BUCKET_NAME }} --delete

@@ -55,6 +55,7 @@ export class PerfilComponent implements OnInit {
       const tab = (params.get('tab') as 'p' | 'g') ?? 'p';
       this.setActiveTab(tab);
     });
+     window.scrollTo(0, 0);
   }
 
   getUserInfos(): void {

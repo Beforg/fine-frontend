@@ -6,10 +6,11 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { PerfilCardComponent } from '../perfil-card/perfil-card.component';
 import { UserRole } from '../../enums/user-role.enum';
+import { NotificationComponent } from "../../core/notification/notification.component";
 
 @Component({
   selector: 'app-header',
-  imports: [MatIconModule, MatButtonModule, CommonModule, RouterModule, PerfilCardComponent],
+  imports: [MatIconModule, MatButtonModule, CommonModule, RouterModule, PerfilCardComponent, NotificationComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

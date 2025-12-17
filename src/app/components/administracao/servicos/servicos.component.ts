@@ -6,10 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { Servico, CadastroServico } from '../../../interfaces/entities.interface';
 import { ServicoService } from '../../../services/servico.service';
 import { NotificationService } from '../../../services/notification.service';
+import { LoadingComponent } from '../../loading/loading.component';
 
 @Component({
   selector: 'app-servicos-gerenciamento',
-  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, FormsModule, MatIconModule, MatButtonModule, LoadingComponent],
   templateUrl: './servicos.component.html',
   styleUrl: './servicos.component.scss'
 })
@@ -18,6 +19,7 @@ export class ServicosComponent implements OnInit {
   modalAberto = false;
   servicoSelecionado: Servico | null = null;
   novoServico: Partial<Servico> = {};
+  isLoading: boolean = true;
 
   constructor(
     private servicoService: ServicoService,
@@ -31,9 +33,17 @@ export class ServicosComponent implements OnInit {
   }
 
   carregarServicos() {
+    this.isLoading = true;
     // Carregando serviços do backend
-    this.servicoService.getServicos().subscribe(servicos => {
-      this.servicos = servicos;
+    this.servicoService.getServicos().subscribe({
+      next: (servicos) => {
+        this.servicos = servicos;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar serviços:', err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -92,7 +102,7 @@ export class ServicosComponent implements OnInit {
       this.servicoService.editarServico(servicoCompleto).subscribe(response => {
         if (response) {
           this.carregarServicos();
-          this.notificationService.success(`Serviço "${this.novoServico.nome}" editado com sucesso!`);
+          this.notificationService.success(`Serviço "${servicoCompleto.nome}" editado com sucesso!`);
         } else {
           this.notificationService.error('Erro ao editar serviço');
         }
@@ -109,7 +119,7 @@ export class ServicosComponent implements OnInit {
       this.servicoService.cadastrarServico(novoServico).subscribe(response => {
         if (response.httpStatus === "CREATED") {
           this.carregarServicos();
-          this.notificationService.success(`Serviço "${this.novoServico.nome}" cadastrado com sucesso!`);
+          this.notificationService.success(`Serviço "${novoServico.nome}" cadastrado com sucesso!`);
         } else {
           this.notificationService.error(response.message || 'Erro ao cadastrar serviço');
         }
@@ -125,6 +135,12 @@ export class ServicosComponent implements OnInit {
 
   removerServico(servico: Servico) {
     if (confirm(`Tem certeza que deseja remover o serviço "${servico.nome}"?`)) {
+      this.servicoService.excluirServico(servico.id).subscribe(() => {
+        this.notificationService.success(`Serviço "${servico.nome}" removido com sucesso!`);
+        this.carregarServicos();
+      });
+      
+      // Remover localmente para resposta mais rápida
       const index = this.servicos.findIndex(s => s.id === servico.id);
       if (index !== -1) {
         this.servicos.splice(index, 1);

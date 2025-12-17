@@ -18,6 +18,7 @@
                     <th>Telefone</th>
                     <th>Visualizações</th>
                     <th>Cortes Realizados</th>
+                    <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -28,7 +29,7 @@
                         <div class="foto-container">
                             <img 
                                 *ngIf="barbeiro.urlFoto" 
-                                [src]="barbeiro.urlFoto" 
+                                [src]="barbeiro.urlFoto == '' ? 'assets/user-ico.png' : barbeiro.urlFoto" 
                                 [alt]="barbeiro.nome"
                                 class="barbeiro-foto">
                             <div *ngIf="!barbeiro.urlFoto" class="foto-placeholder">
@@ -50,14 +51,27 @@
                     <td class="td-cortes">
                         <span class="stat-valor">{{ barbeiro.cortesRealizados }}</span>
                     </td>
+                    <td class="td-status">
+                        <div class="status-container">
+                            <button 
+                                class="status-toggle" 
+                                [class.ativo]="barbeiro.ativo"
+                                [class.inativo]="!barbeiro.ativo"
+                                (click)="toggleStatus(barbeiro)"
+                                title="{{ barbeiro.ativo ? 'Clique para desativar' : 'Clique para ativar' }}">
+                                <mat-icon>{{ barbeiro.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                                <span>{{ barbeiro.ativo ? 'Ativo' : 'Inativo' }}</span>
+                            </button>
+                        </div>
+                    </td>
                     <td class="td-actions">
                         <div class="actions-container">
                             <button class="btn-action btn-edit" title="Editar" (click)="editarBarbeiro(barbeiro)">
                                 <mat-icon>edit</mat-icon>
                             </button>
-                            <button *ngIf="isAdmin()" class="btn-action btn-delete" title="Remover" (click)="removerBarbeiro(barbeiro.barbeiroId)">
+                            <!-- <button *ngIf="isAdmin()" class="btn-action btn-delete" title="Remover" (click)="removerBarbeiro(barbeiro.barbeiroId)">
                                 <mat-icon>delete</mat-icon>
-                            </button>
+                            </button> -->
                         </div>
                     </td>
                 </tr>
@@ -81,6 +95,10 @@
                     <div class="card-info">
                         <h3 class="barbeiro-nome">{{ barbeiro.nome }}</h3>
                         <p class="barbeiro-id">#{{ barbeiro.barbeiroId }}</p>
+                        <div class="status-badge" [class.ativo]="barbeiro.ativo" [class.inativo]="!barbeiro.ativo">
+                            <mat-icon>{{ barbeiro.ativo ? 'check_circle' : 'cancel' }}</mat-icon>
+                            <span>{{ barbeiro.ativo ? 'Ativo' : 'Inativo' }}</span>
+                        </div>
                     </div>
                 </div>
 
@@ -103,14 +121,18 @@
                 </div>
 
                 <div class="card-actions">
+                    <button class="btn-action btn-status" (click)="toggleStatus(barbeiro)" [class.ativo]="barbeiro.ativo">
+                        <mat-icon>{{ barbeiro.ativo ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+                        {{ barbeiro.ativo ? 'Desativar' : 'Ativar' }}
+                    </button>
                     <button class="btn-action btn-edit" (click)="editarBarbeiro(barbeiro)">
                         <mat-icon>edit</mat-icon>
                         Editar
                     </button>
-                    <button *ngIf="isAdmin()" class="btn-action btn-delete" (click)="removerBarbeiro(barbeiro.barbeiroId)">
+                    <!-- <button *ngIf="isAdmin()" class="btn-action btn-delete" (click)="removerBarbeiro(barbeiro.barbeiroId)">
                         <mat-icon>delete</mat-icon>
                         Remover
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -205,13 +227,28 @@
 
                 <div class="form-group">
                     <label for="telefone">Telefone *</label>
-                    <input 
-                        type="tel" 
-                        id="telefone" 
-                        [(ngModel)]="currentBarbeiro.telefone" 
-                        name="telefone"
-                        required
-                        placeholder="(11) 99999-9999">
+                    <div class="phone-input-group">
+                        <mat-form-field appearance="outline" class="country-select">
+                            <mat-label>País</mat-label>
+                            <mat-select [(value)]="selectedCountry" (selectionChange)="onCountryChange()">
+                                <mat-option *ngFor="let country of countries" [value]="country.code">
+                                    <span class="country-option">
+                                        <span class="flag">{{ country.flag }}</span>
+                                        <span class="code">{{ country.code }}</span>
+                                    </span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <input 
+                            type="tel" 
+                            id="telefone" 
+                            [(ngModel)]="currentBarbeiro.telefone"
+                            (ngModelChange)="onTelefoneInput($event)"
+                            name="telefone"
+                            required
+                            class="phone-input"
+                            [placeholder]="getTelefonePlaceholder()">
+                    </div>
                 </div>
 
                 <!-- Campos adicionais para novo cadastro -->
@@ -239,6 +276,17 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="confirmarSenha">Confirmar Senha *</label>
+                        <input 
+                            type="password" 
+                            id="confirmarSenha" 
+                            [(ngModel)]="cadastroConfirmarSenha" 
+                            name="confirmarSenha"
+                            required
+                            placeholder="Confirme a senha">
+                    </div>
+
+                    <div class="form-group">
                         <label for="especialidade">Especialidade *</label>
                         <input 
                             type="text" 
@@ -255,6 +303,31 @@
                             id="bio" 
                             [(ngModel)]="cadastroBio" 
                             name="bio"
+                            required
+                            rows="3"
+                            placeholder="Descrição sobre o barbeiro"></textarea>
+                    </div>
+                </div>
+
+                <!-- Campos de Especialidade e Bio para edição -->
+                <div *ngIf="isEditing">
+                    <div class="form-group">
+                        <label for="especialidadeEdit">Especialidade *</label>
+                        <input 
+                            type="text" 
+                            id="especialidadeEdit" 
+                            [(ngModel)]="currentBarbeiro.especialidade" 
+                            name="especialidadeEdit"
+                            required
+                            placeholder="Ex: Corte masculino, Barba">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bioEdit">Bio *</label>
+                        <textarea 
+                            id="bioEdit" 
+                            [(ngModel)]="currentBarbeiro.bio" 
+                            name="bioEdit"
                             required
                             rows="3"
                             placeholder="Descrição sobre o barbeiro"></textarea>

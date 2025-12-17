@@ -3,34 +3,51 @@ export interface BloqueioInfo {
     counter: number;
     blocked: boolean;
     expiration: Date | null;
+    lastResetDate: string; // Data do último reset (formato YYYY-MM-DD)
 }
 
 export class BloqueioAgendamentoUtils {
     private static readonly STORAGE_KEY = 'ba-bf';
-    private static readonly MAX_TENTATIVAS = 3;
+    private static readonly MAX_AGENDAMENTOS_DIA = 3;
     private static readonly HORAS_BLOQUEIO = 8;
 
+    private static obterDataAtual(): string {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        return `${ano}-${mes}-${dia}`; // Formato YYYY-MM-DD no fuso horário local
+    }
+
     private static validarBloqueio(bloqueio: BloqueioInfo): boolean {
-        if (!bloqueio.blocked) {
-            return true;
-        }
-
         const agora = new Date();
-        const expiration = bloqueio.expiration ? new Date(bloqueio.expiration) : null;
+        const dataAtual = this.obterDataAtual();
 
-        // Libera se a data atual for depois da expiração
-        if (expiration && agora > expiration) {
-            return true;
+        // Se mudou de dia, deve resetar
+        if (bloqueio.lastResetDate !== dataAtual) {
+            return true; // Libera para resetar
         }
 
-        return false;
+        // Se está bloqueado, verifica a expiração
+        if (bloqueio.blocked) {
+            const expiration = bloqueio.expiration ? new Date(bloqueio.expiration) : null;
+            
+            // Libera se a data atual for depois da expiração
+            if (expiration && agora > expiration) {
+                return true;
+            }
+            return false;
+        }
+
+        return true;
     }
 
     private static criarBloqueio(): BloqueioInfo {
         return {
             counter: 0,
             blocked: false,
-            expiration: null
+            expiration: null,
+            lastResetDate: this.obterDataAtual()
         };
     }
 
@@ -46,6 +63,10 @@ export class BloqueioAgendamentoUtils {
             if (bloqueio.expiration) {
                 bloqueio.expiration = new Date(bloqueio.expiration);
             }
+            // Garante que lastResetDate existe (para compatibilidade com versões antigas)
+            if (!bloqueio.lastResetDate) {
+                bloqueio.lastResetDate = this.obterDataAtual();
+            }
             return bloqueio;
         }
         return this.criarBloqueio();
@@ -53,13 +74,14 @@ export class BloqueioAgendamentoUtils {
 
     public static obterBloqueioAtual(): BloqueioInfo {
         const bloqueio = this.carregarBloqueio();
+        const dataAtual = this.obterDataAtual();
 
-        // Verifica se deve liberar o bloqueio
-        if (bloqueio.blocked && !this.validarBloqueio(bloqueio)) {
-            return bloqueio; // Retorna bloqueado
+        // Se mudou de dia, reseta automaticamente
+        if (bloqueio.lastResetDate !== dataAtual) {
+            return this.liberar();
         }
 
-        // Se passou da expiração, libera o bloqueio
+        // Verifica se deve liberar o bloqueio (expiração das 8 horas)
         if (bloqueio.blocked && this.validarBloqueio(bloqueio)) {
             return this.liberar();
         }
@@ -78,8 +100,8 @@ export class BloqueioAgendamentoUtils {
         // Incrementa o contador
         bloqueio.counter += 1;
 
-        // Se ultrapassou o limite, bloqueia por 8 horas
-        if (bloqueio.counter > this.MAX_TENTATIVAS) {
+        // Se atingiu o limite de agendamentos do dia, bloqueia por 8 horas
+        if (bloqueio.counter >= this.MAX_AGENDAMENTOS_DIA) {
             const agora = new Date();
             bloqueio.blocked = true;
             bloqueio.expiration = new Date(agora.getTime() + this.HORAS_BLOQUEIO * 60 * 60 * 1000);

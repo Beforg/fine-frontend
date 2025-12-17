@@ -40,7 +40,7 @@ $verde_overlay: linear-gradient(135deg, rgba(64, 77, 67, 0.9), rgba(18, 13, 43, 
   position: relative;
   min-height: 75vh;
   height: 75vh;
-  background-image: url('/assets/bg_tmp.jpg');
+  background-image: url('/assets/bg_home.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -303,7 +303,7 @@ $verde_overlay: linear-gradient(135deg, rgba(64, 77, 67, 0.9), rgba(18, 13, 43, 
 
   @media (max-width: 480px) {
     min-height: 60vh;
-
+     background-image: url('/assets/bg_home_mobile.JPG');
     .hero-section {
       padding: 1.5rem 5%;
 

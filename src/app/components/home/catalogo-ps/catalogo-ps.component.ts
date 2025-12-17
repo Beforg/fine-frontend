@@ -6,16 +6,20 @@ import { CardPsComponent } from '../../card-ps/card-ps.component';
 import { Produto, Servico } from '../../../interfaces/entities.interface';
 import { ServicoService } from '../../../services/servico.service';
 import { ProdutoService } from '../../../services/produto.service';
+import { LoadingComponent } from '../../loading/loading.component';
 
 @Component({
   selector: 'app-catalogo-ps',
-  imports: [MatIconModule, MatButtonModule, CommonModule, CardPsComponent],
+  imports: [MatIconModule, MatButtonModule, CommonModule, CardPsComponent, LoadingComponent],
   templateUrl: './catalogo-ps.component.html',
   styleUrl: './catalogo-ps.component.scss'
 })
 export class CatalogoPsComponent implements OnInit {
   @ViewChild('produtosCarousel', { static: false }) produtosCarousel!: ElementRef;
   @ViewChild('servicosCarousel', { static: false }) servicosCarousel!: ElementRef;
+
+  isLoadingServicos: boolean = true;
+  isLoadingProdutos: boolean = true;
 
   produtos: Produto[] = [];
   servicos: Servico[] = [];
@@ -29,12 +33,24 @@ export class CatalogoPsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.servicoService.getServicos().subscribe(servicos => {
-     this.servicos = servicos.filter(servico => servico.ativo);
-   });
-   this.produtoService.getProdutos().subscribe(produtos => {
+
+   this.servicoService.getServicos().subscribe({next: (servicos) => {
+    this.servicos = servicos.filter(servico => servico.ativo);
+    this.isLoadingServicos = false; 
+   },
+    error: (err) => {
+      this.isLoadingServicos = false;
+      console.error('Erro ao carregar serviços:', err);
+    }});
+
+   this.produtoService.getProdutos().subscribe({next: (produtos) => {
      this.produtos = produtos.filter(produto => produto.ativo);
-   });
+     this.isLoadingProdutos = false;
+   },
+    error: (err) => {
+      this.isLoadingProdutos = false;
+      console.error('Erro ao carregar produtos:', err);
+    }});
   }
 
   nextProducts(): void {

@@ -1,0 +1,69 @@
+.politica-privacidade,
+.termos-uso {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  line-height: 1.6;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  ul {
+    margin: 1rem 0;
+    padding-left: 20px;
+
+    li {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 40px 0;
+}
+
+@media (max-width: 768px) {
+  .politica-privacidade,
+  .termos-uso {
+    padding: 30px 15px;
+
+    h1 {
+      font-size: 1.7rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+  }
+}

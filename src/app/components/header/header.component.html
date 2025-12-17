@@ -35,24 +35,35 @@
       </a>
     }
     @if (isLoggedIn()) {
+      @if (isAdmin()) {
+        <app-notification></app-notification>
+      }
+      
       <button class="nav-link profile-button" (click)="togglePerfilCard()">
         <mat-icon>account_circle</mat-icon>
         Minha Conta
       </button>
+      
      } @else {
     <a routerLink="/login" class="nav-link login-button">
       <mat-icon>login</mat-icon>
       Login
+    </a>
+    <a routerLink="/register" class="nav-link">
+      <mat-icon>person_add</mat-icon>
+      Criar Conta
     </a>
     }
   </nav>
 
   
   <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu-overlay" [class.open]="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+  <div class="mobile-menu-overlay" [class.open]="mobileMenuOpen" (click)="closeMobileMenu()">
+  </div>
   
   <!-- Mobile Navigation Menu -->
   <nav class="mobile-nav" [class.open]="mobileMenuOpen">
+    
     <!-- <a routerLink="/products" class="mobile-nav-link" (click)="closeMobileMenu()">
       <mat-icon>shopping_bag</mat-icon>
       Produtos
@@ -68,14 +79,19 @@
       </a>
     }
     @if (isLoggedIn()) {
+      
       <a class="mobile-nav-link profile-button" (click)="togglePerfilCard(); closeMobileMenu()">
         <mat-icon>account_circle</mat-icon>
-        Minha Conta
+        Perfil e Agendamentos
       </a>
     } @else {
     <a routerLink="/login" class="mobile-nav-link login-button" (click)="closeMobileMenu()">
       <mat-icon>login</mat-icon>
       Login
+    </a>
+    <a routerLink="/register" class="mobile-nav-link" (click)="closeMobileMenu()">
+      <mat-icon>person_add</mat-icon>
+      Criar Conta
     </a>
   }
   </nav>

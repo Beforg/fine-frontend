@@ -27,7 +27,11 @@ export class CardPsComponent {
     console.log(`Card clicado: ${this.nome} (${this.tipo})`);
   }
 
-  onImageError(event: any): void {
-    event.target.src = 'assets/fine-logo.jpeg';
+  onImageError(event: any, tipo: string): void {
+    if (tipo === 'produto') {
+      event.target.src = 'assets/fine-logo.jpeg';
+    } else if (tipo === 'servico') {
+      event.target.src = 'assets/servico-img.jpg';
+    }
   }
 }

@@ -1,11 +1,9 @@
- <div class="agendamentos-container" *ngIf="showAgendamentoContainer">
+<div class="agendamentos-container" *ngIf="showAgendamentoContainer">
     <div class="filtros-header">
         <div class="filtros-container">
             <div class="filtros-checkbox">
                 <label for="filtros">Filtros:</label>
-                <mat-radio-group
-                    aria-labelledby="filtros"
-                    [(ngModel)]="filtroSelecionado"
+                <mat-radio-group aria-labelledby="filtros" [(ngModel)]="filtroSelecionado"
                     (change)="filtrarAgendamentos()">
                     <mat-radio-button value="opcao1" value='Agendado,Realizado'>Todos</mat-radio-button>
                     <mat-radio-button value="opcao1" value='Agendado'>Agendados</mat-radio-button>
@@ -32,28 +30,34 @@
                     <th>Ações</th>
                 </tr>
             </thead>
+            @if (!isLoading) {
             <tbody>
+
                 <ng-container *ngFor="let agendamento of agendamentosFiltrados">
                     <tr class="table-row" [class.expanded]="agendamentoSelecionado?.id === agendamento.id">
                         <td class="td-id">#{{ agendamento.id }}</td>
-                        
+
                         <td class="td-cliente">
                             <div class="cliente-info">
                                 <span class="cliente-nome">{{ agendamento.nomeCliente }}</span>
                             </div>
                         </td>
-                        
+
                         <td class="td-barbeiro">
                             <span class="barbeiro-nome">{{ agendamento.nomeBarbeiro }}</span>
                         </td>
-                        
+
                         <td class="td-datetime">
                             <div class="datetime-info">
                                 <span class="data">{{ agendamento.dataHoraInicio | date:'dd/MM/yyyy' }}</span>
-                                <span class="hora">{{ agendamento.dataHoraInicio | date:'HH:mm' }}</span>
+                                <div class="time-container">
+                                    <span class="hora">{{ agendamento.dataHoraInicio | date:'HH:mm' }}</span>
+                                    <span class="duracao"><mat-icon>access_time</mat-icon>{{ calculateServiceTime(agendamento) }}min</span>
+                                </div>
+                                <span class="isToday" *ngIf="isAgendamentoHoje(agendamento)">Hoje</span>
                             </div>
                         </td>
-                        
+
                         <td class="td-servicos">
                             <div class="servicos-list">
                                 <div *ngFor="let servico of agendamento.servicos" class="servico-item">
@@ -65,7 +69,7 @@
                                 </div>
                             </div>
                         </td>
-                        
+
                         <td class="td-produtos">
                             <div class="produtos-list">
                                 <div *ngFor="let produto of agendamento.produtos" class="produto-item">
@@ -79,38 +83,32 @@
                                 </div>
                             </div>
                         </td>
-                        
+
                         <td class="td-total">
-                            <span class="total-valor">R$ {{ agendamento.valorTotal | number:'1.2-2' }}</span>
+                            <span class="total-valor" (click)="editarValorTotal(agendamento.id)">R$ {{ agendamento.valorTotal | number:'1.2-2' }}</span>
                         </td>
-                        
+
                         <td class="td-status">
                             <span class="status-badge" [ngClass]="getStatusClass(agendamento.status)">
                                 {{ agendamento.status }}
                             </span>
                         </td>
-                        
+
                         <td class="td-actions">
                             <div class="actions-container">
-                                <button 
-                                    class="btn-action btn-view" 
+                                <button class="btn-action btn-view"
                                     [class.active]="agendamentoSelecionado?.id === agendamento.id"
-                                    title="Visualizar Detalhes" 
-                                    (click)="toggleDetalhes(agendamento)">
-                                    <mat-icon>{{ agendamentoSelecionado?.id === agendamento.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+                                    title="Visualizar Detalhes" (click)="toggleDetalhes(agendamento)">
+                                    <mat-icon>{{ agendamentoSelecionado?.id === agendamento.id ? 'expand_less' :
+                                        'expand_more' }}</mat-icon>
                                 </button>
-                                <button 
-                                    *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()" 
-                                    class="btn-action btn-edit" 
-                                    title="Concluir" 
+                                <button *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
+                                    class="btn-action btn-edit" title="Concluir"
                                     (click)="finalizarAgendamento(agendamento.id)">
                                     <mat-icon>check</mat-icon>
                                 </button>
-                                <button
-                                    *ngIf="agendamento.status == 'Agendado'"  
-                                    class="btn-action btn-delete" 
-                                    title="Cancelar" 
-                                    (click)="cancelarAgendamento(agendamento.id)">
+                                <button *ngIf="agendamento.status == 'Agendado'" class="btn-action btn-delete"
+                                    title="Cancelar" (click)="cancelarAgendamento(agendamento.id)">
                                     <mat-icon>cancel</mat-icon>
                                 </button>
                             </div>
@@ -163,15 +161,18 @@
                                         <div class="section-content">
                                             <div class="info-row">
                                                 <span class="label">Data:</span>
-                                                <span class="value">{{ agendamento.dataHoraInicio | date:'dd/MM/yyyy' }}</span>
+                                                <span class="value">{{ agendamento.dataHoraInicio | date:'dd/MM/yyyy'
+                                                    }}</span>
                                             </div>
                                             <div class="info-row">
                                                 <span class="label">Horário:</span>
-                                                <span class="value">{{ agendamento.dataHoraInicio | date:'HH:mm' }}</span>
+                                                <span class="value">{{ agendamento.dataHoraInicio | date:'HH:mm'
+                                                    }}</span>
                                             </div>
                                             <div class="info-row">
                                                 <span class="label">Duração Estimada:</span>
-                                                <span class="value">{{ calculateServiceTime(agendamento) }} minutos</span>
+                                                <span class="value">{{ calculateServiceTime(agendamento) }}
+                                                    minutos</span>
                                             </div>
                                         </div>
                                     </div>
@@ -188,7 +189,8 @@
                                             </div>
 
                                             <!-- Descontos aplicados -->
-                                            <ng-container *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                            <ng-container
+                                                *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
                                                 <div class="info-row discount-row" *ngIf="agendamento.foiGratis">
                                                     <span class="label">Corte Grátis (Fidelidade)</span>
                                                     <span class="value discount-value">- R$ 35,00</span>
@@ -197,24 +199,32 @@
                                                     <span class="label">Barba Grátis (Fidelidade)</span>
                                                     <span class="value discount-value">- R$ 15,00</span>
                                                 </div>
-                                                <div class="info-row discount-row" *ngIf="agendamento.sobrancelhaGratis">
+                                                <div class="info-row discount-row"
+                                                    *ngIf="agendamento.sobrancelhaGratis">
                                                     <span class="label">Sobrancelha Grátis (Fidelidade)</span>
                                                     <span class="value discount-value">- R$ 15,00</span>
                                                 </div>
                                             </ng-container>
 
                                             <!-- Totais -->
-                                            <div class="info-row total-row" *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                            <div class="info-row total-row"
+                                                *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
                                                 <span class="label">Subtotal (sem desconto):</span>
-                                                <span class="value">R$ {{ calculateSubtotalServicos(agendamento) | number:'1.2-2' }}</span>
+                                                <span class="value">R$ {{ calculateSubtotalServicos(agendamento) |
+                                                    number:'1.2-2' }}</span>
                                             </div>
-                                            <div class="info-row total-row" *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                            <div class="info-row total-row"
+                                                *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
                                                 <span class="label">Total de Descontos:</span>
-                                                <span class="value discount-value">- R$ {{ calculateTotalDiscount(agendamento) | number:'1.2-2' }}</span>
+                                                <span class="value discount-value">- R$ {{
+                                                    calculateTotalDiscount(agendamento) | number:'1.2-2' }}</span>
                                             </div>
-                                            <div class="info-row total-final-row" *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
+                                            <div class="info-row total-final-row"
+                                                *ngIf="agendamento.foiGratis || agendamento.barbaGratis || agendamento.sobrancelhaGratis">
                                                 <span class="label">Total (com desconto):</span>
-                                                <span class="value final-value">R$ {{ calculateTotalServicosComDesconto(agendamento) | number:'1.2-2' }}</span>
+                                                <span class="value final-value">R$ {{
+                                                    calculateTotalServicosComDesconto(agendamento) | number:'1.2-2'
+                                                    }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -226,8 +236,10 @@
                                         </div>
                                         <div class="section-content">
                                             <div class="info-row" *ngFor="let produto of agendamento.produtos">
-                                                <span class="label">{{ produto.nome }} ({{ produto.quantidade }}x)</span>
-                                                <span class="value">R$ {{ (produto.preco * produto.quantidade) | number:'1.2-2' }}</span>
+                                                <span class="label">{{ produto.nome }} ({{ produto.quantidade
+                                                    }}x)</span>
+                                                <span class="value">R$ {{ (produto.preco * produto.quantidade) |
+                                                    number:'1.2-2' }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -240,41 +252,52 @@
                                         <div class="section-content">
                                             <div class="info-row">
                                                 <span class="label">Status:</span>
-                                                <span class="status-display" [ngClass]="getStatusClass(agendamento.status)">
+                                                <span class="status-display"
+                                                    [ngClass]="getStatusClass(agendamento.status)">
                                                     {{ agendamento.status }}
                                                 </span>
                                             </div>
-                                            
+
                                             <!-- Fidelidade Corte -->
                                             <div class="info-row">
                                                 <span class="label">Corte Grátis:</span>
-                                                <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.foiGratis" [class.fidelidade-nao]="!agendamento.foiGratis">
-                                                    <mat-icon>{{ agendamento.foiGratis ? 'check_circle' : 'cancel' }}</mat-icon>
+                                                <span class="fidelidade-badge"
+                                                    [class.fidelidade-sim]="agendamento.foiGratis"
+                                                    [class.fidelidade-nao]="!agendamento.foiGratis">
+                                                    <mat-icon>{{ agendamento.foiGratis ? 'check_circle' : 'cancel'
+                                                        }}</mat-icon>
                                                     {{ agendamento.foiGratis ? 'Sim' : 'Não' }}
                                                 </span>
                                             </div>
-                                            
+
                                             <!-- Fidelidade Barba -->
                                             <div class="info-row">
                                                 <span class="label">Barba Grátis:</span>
-                                                <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.barbaGratis" [class.fidelidade-nao]="!agendamento.barbaGratis">
-                                                    <mat-icon>{{ agendamento.barbaGratis ? 'check_circle' : 'cancel' }}</mat-icon>
+                                                <span class="fidelidade-badge"
+                                                    [class.fidelidade-sim]="agendamento.barbaGratis"
+                                                    [class.fidelidade-nao]="!agendamento.barbaGratis">
+                                                    <mat-icon>{{ agendamento.barbaGratis ? 'check_circle' : 'cancel'
+                                                        }}</mat-icon>
                                                     {{ agendamento.barbaGratis ? 'Sim' : 'Não' }}
                                                 </span>
                                             </div>
-                                            
+
                                             <!-- Fidelidade Sobrancelha -->
                                             <div class="info-row">
                                                 <span class="label">Sobrancelha Grátis:</span>
-                                                <span class="fidelidade-badge" [class.fidelidade-sim]="agendamento.sobrancelhaGratis" [class.fidelidade-nao]="!agendamento.sobrancelhaGratis">
-                                                    <mat-icon>{{ agendamento.sobrancelhaGratis ? 'check_circle' : 'cancel' }}</mat-icon>
+                                                <span class="fidelidade-badge"
+                                                    [class.fidelidade-sim]="agendamento.sobrancelhaGratis"
+                                                    [class.fidelidade-nao]="!agendamento.sobrancelhaGratis">
+                                                    <mat-icon>{{ agendamento.sobrancelhaGratis ? 'check_circle' :
+                                                        'cancel' }}</mat-icon>
                                                     {{ agendamento.sobrancelhaGratis ? 'Sim' : 'Não' }}
                                                 </span>
                                             </div>
-                                            
+
                                             <div class="total-display">
                                                 <span class="total-label">Total:</span>
-                                                <span class="total-value">R$ {{ agendamento.valorTotal| number:'1.2-2' }}</span>
+                                                <span class="total-value">R$ {{ agendamento.valorTotal| number:'1.2-2'
+                                                    }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -294,14 +317,14 @@
                                 </div>
 
                                 <div class="expanded-footer" *ngIf="agendamento.status == 'Agendado'">
-                                    <button
-                                    *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
-                                    class="btn-action-expanded btn-edit-expanded" 
-                                    (click)="finalizarAgendamento(agendamento.id)">
+                                    <button *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
+                                        class="btn-action-expanded btn-edit-expanded"
+                                        (click)="finalizarAgendamento(agendamento.id)">
                                         <mat-icon>check</mat-icon>
                                         Concluir Agendamento
                                     </button>
-                                    <button class="btn-action-expanded btn-cancel-expanded" (click)="cancelarAgendamento(agendamento.id)">
+                                    <button class="btn-action-expanded btn-cancel-expanded"
+                                        (click)="cancelarAgendamento(agendamento.id)">
                                         <mat-icon>cancel</mat-icon>
                                         Cancelar Agendamento
                                     </button>
@@ -310,11 +333,21 @@
                         </td>
                     </tr>
                 </ng-container>
+
             </tbody>
+            } @else {
+            <tbody>
+                <tr>
+                    <td colspan="9" class="loading-cell">
+                        <app-loading message="Carregando agendamentos..."></app-loading>
+                    </td>
+                </tr>
+            </tbody>
+            }
         </table>
-        
+
         <!-- Mensagem quando não há dados -->
-        <div *ngIf="!agendamentos || agendamentos.length === 0" class="no-data">
+        <div *ngIf="(!agendamentos || agendamentos.length === 0) && !isLoading" class="no-data">
             <mat-icon>event_busy</mat-icon>
             <p>Nenhum agendamento encontrado</p>
         </div>
@@ -323,7 +356,8 @@
     <!-- Paginação -->
     <div class="pagination-container" *ngIf="totalPages > 1">
         <div class="pagination-info">
-            Mostrando {{ (currentPage * pageSize) + 1 }} a {{ Math.min((currentPage + 1) * pageSize, totalElements) }} de {{ totalElements }} registros
+            Mostrando {{ (currentPage * pageSize) + 1 }} a {{ Math.min((currentPage + 1) * pageSize, totalElements) }}
+            de {{ totalElements }} registros
         </div>
         <div class="pagination-controls">
             <button class="btn-pagination" [disabled]="currentPage === 0" (click)="goToPage(0)">
@@ -333,10 +367,12 @@
                 <mat-icon>chevron_left</mat-icon>
             </button>
             <span class="page-info">Página {{ currentPage + 1 }} de {{ totalPages }}</span>
-            <button class="btn-pagination" [disabled]="currentPage === totalPages - 1" (click)="goToPage(currentPage + 1)">
+            <button class="btn-pagination" [disabled]="currentPage === totalPages - 1"
+                (click)="goToPage(currentPage + 1)">
                 <mat-icon>chevron_right</mat-icon>
             </button>
-            <button class="btn-pagination" [disabled]="currentPage === totalPages - 1" (click)="goToPage(totalPages - 1)">
+            <button class="btn-pagination" [disabled]="currentPage === totalPages - 1"
+                (click)="goToPage(totalPages - 1)">
                 <mat-icon>last_page</mat-icon>
             </button>
         </div>

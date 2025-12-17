@@ -32,4 +32,8 @@ export class FooterComponent {
   getCleanPhone(): string {
     return this.businessInfo.phone.replace(/\D/g, '');
   }
+
+  goToLinkedIn(): void {
+    window.open('https://www.linkedin.com/in/beforg/', '_blank');
+  }
 }

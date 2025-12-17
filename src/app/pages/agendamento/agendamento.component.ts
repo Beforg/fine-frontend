@@ -288,7 +288,12 @@ export class AgendamentoComponent implements OnInit {
           next: (response) => {
             console.log('Agendamento confirmado para o horário:', this.selectedTime);
             this.isLoading = false;
-            this.notificationService.success("Agendamento criado com sucesso! no dia " + this.selectedDate + " às " + this.selectedTime);
+            
+            // Formatar data e hora
+            const dataFormatada = this.selectedDate ? new Date(this.selectedDate).toLocaleDateString('pt-BR') : '';
+            const horaFormatada = this.selectedTime || '';
+            
+            this.notificationService.success(`Agendamento criado com sucesso! Dia ${dataFormatada} às ${horaFormatada}`);
             // refresh page after 3 seconds
             setTimeout(() => {
               this.router.navigate([`/perfil`], { queryParams: { tab: 'g' } });
@@ -297,10 +302,10 @@ export class AgendamentoComponent implements OnInit {
 
           },
           error: (error) => {
-            console.error('Erro ao criar agendamento:', error);
+
             this.isLoading = false;
             this.agendamentoFinalizado = false;
-            this.notificationService.error("Erro ao criar agendamento. Por favor, tente novamente mais tarde.");
+            this.notificationService.error("Erro ao criar agendamento: " + error.error.message);
           }
         });
       } else {

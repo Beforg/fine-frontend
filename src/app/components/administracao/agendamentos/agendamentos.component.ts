@@ -9,6 +9,7 @@ import { UserRole } from '../../../enums/user-role.enum';
 import {MatRadioModule} from '@angular/material/radio'
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../../services/notification.service';
+import { LoadingComponent } from '../../loading/loading.component';
 
 // Interfaces para tipagem
 interface Servico {
@@ -50,7 +51,8 @@ interface Agendamento {
     MatIconModule,
     MatButtonModule,
     MatRadioModule,
-    FormsModule
+    FormsModule,
+    LoadingComponent
   ],
   templateUrl: './agendamentos.component.html',
   styleUrl: './agendamentos.component.scss'
@@ -68,6 +70,8 @@ export class AgendamentosComponent implements OnInit {
   pageSize: number = 10;
   totalElements: number = 0;
   totalPages: number = 0;
+
+  isLoading: boolean = true;
   
   // Para exposição no template
   Math = Math;
@@ -116,8 +120,18 @@ export class AgendamentosComponent implements OnInit {
     return userRole === UserRole.ADMIN || userRole === UserRole.BARBEIRO;
   }
 
+  isAgendamentoHoje(agendamento: Agendamento): boolean {
+    const dataAgendamento = new Date(agendamento.dataHoraInicio);
+    const hoje = new Date();
+
+    return dataAgendamento.getDate() === hoje.getDate() &&
+           dataAgendamento.getMonth() === hoje.getMonth() &&
+           dataAgendamento.getFullYear() === hoje.getFullYear();
+  }
+
 // Trocar o id pelo selecionado (Pelo ADMIN somente)
   loadAgendamentos() {
+
     const data = {
       id: "7", 
       page: (this.currentPage + 1).toString(), 
@@ -130,11 +144,41 @@ export class AgendamentosComponent implements OnInit {
         this.totalElements = response.totalElements;
         this.totalPages = response.totalPages;
         this.agendamentosFiltrados = [...this.agendamentos]; // Inicialmente sem filtro
+        this.isLoading = false;
       },
       error: (error) => {
         this.notification.error(error.error.message || "Erro ao carregar agendamentos.");
+        this.isLoading = false;
       }
     });
+  }
+
+  editarValorTotal(agendamentoId: number): void {
+
+    if (!this.hasPermissionToChangeStatus()) {
+      return;
+    }
+
+    const novoValor = prompt("Editar Valor do Agendamento " + agendamentoId + ":");
+    console.log('Novo valor digitado:', novoValor);
+    if (novoValor !== null) {
+      const valorNumerico = parseFloat(novoValor.replace(',', '.'));
+      if (isNaN(valorNumerico) || valorNumerico < 0) {
+        alert("Por favor, insira um valor válido.");
+        return;
+      }
+      
+      console.log('Novo valor digitado:', valorNumerico);
+      this.agendamentoService.editarValorTotal(agendamentoId, valorNumerico).subscribe({
+        next: (response) => {
+          this.notification.success("Valor do agendamento atualizado com sucesso!");
+          this.loadAgendamentos(); // Recarregar lista
+        },
+        error: (error) => {
+          this.notification.error(error.error.mensagem || "Erro ao atualizar valor do agendamento.");
+        }
+      });
+    }
   }
    
   // Calcular total do agendamento

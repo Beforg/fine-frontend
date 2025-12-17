@@ -4,27 +4,27 @@
             <a (click)="toggleTab(false, false, true, false)" *ngIf="isAdmin()"
                 [ngClass]="{'active-gerenciamento': showProdutos}">
                 <mat-icon>shopping_bag</mat-icon>
-                Produtos
+                <span>Produtos</span>
             </a>
             <a (click)="toggleTab(false, true, false, false)" *ngIf="isAdmin()"
                 [ngClass]="{'active-gerenciamento': showServicos}">
                 <mat-icon>content_cut</mat-icon>
-                Serviços
+                <span>Serviços</span>
             </a>
             <a (click)="toggleTab(true, false, false, false)" *ngIf="isAdmin()"
                 [ngClass]="{'active-gerenciamento': showBarbeiros}">
                 <mat-icon>person</mat-icon>
-                Barbeiros
+                <span>Barbeiros</span>
             </a>
             <a (click)="toggleTab(false, false, false, true)" *ngIf="isAdmin()"
                 [ngClass]="{'active-gerenciamento': showDisponibilidade}">
                 <mat-icon>event_available</mat-icon>
-                Disponibilidade
+                <span>Disponibilidade</span>
             </a>
             <a (click)="toggleTab(false, false, false, false, true)" *ngIf="isAdmin()"
                 [ngClass]="{'active-gerenciamento': showClientes}">
                 <mat-icon>people</mat-icon>
-                Clientes
+                <span>Clientes</span>
             </a>
             <!-- <a *ngIf="isAdmin()">Disponibilidade</a> -->
         </div>
