@@ -9,6 +9,7 @@ if (environment.production) {
   window.console.log = () => {};
   window.console.info = () => {};
   window.console.warn = () => {};
+  window.console.error = () => {};
 }
 
 bootstrapApplication(AppComponent, appConfig)
