@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   staging: true,
   apiUrl: 'https://www.barbeariafine.com/api/v1',
-  webSocketUrl: 'wss://www.barbeariafine.com/ws',
+  webSocketUrl: 'https://www.barbeariafine.com/ws',
   authEndpoint: '/auth',
   barbeirosEndpoint: '/barbeiros',
   produtosEndpoint: '/produtos',
