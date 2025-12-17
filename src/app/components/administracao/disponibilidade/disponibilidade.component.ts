@@ -12,6 +12,7 @@ import { IndisponibilidadeService } from '../../../services/indisponibilidade.se
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LoadingComponent } from '../../loading/loading.component';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-disponibilidade',
@@ -46,7 +47,10 @@ export class DisponibilidadeComponent implements OnInit {
     '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'
   ];
 
-  constructor(private fb: FormBuilder, private indisponibilidadeService: IndisponibilidadeService) {}
+  constructor(
+    private fb: FormBuilder, 
+    private indisponibilidadeService: IndisponibilidadeService,
+    private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.initializeForm();
@@ -140,6 +144,23 @@ export class DisponibilidadeComponent implements OnInit {
     this.bloqueioForm.reset();
   }
 
+  removerBloqueio(bloqueioId: number) {
+    if (confirm('Tem certeza que deseja remover este bloqueio?')) {
+      this.indisponibilidadeService.excluirIndisponibilidade(bloqueioId).subscribe({
+        next: (response) => {
+          console.log('Bloqueio removido com sucesso:', response);
+          // Remover da lista exibida
+          this.indisponibilidades = this.indisponibilidades.filter(item => item.id !== bloqueioId);
+          this.notificationService.success('Bloqueio removido com sucesso.');
+        },
+        error: (error) => {
+          console.error('Erro ao remover bloqueio:', error);
+          this.notificationService.error('Erro ao remover bloqueio.');
+        }
+      });
+  }
+}
+
   onSubmit() {
     if (this.bloqueioForm.valid) {
       const formData = this.bloqueioForm.value;
@@ -164,10 +185,12 @@ export class DisponibilidadeComponent implements OnInit {
             console.log('Indisponibilidade registrada com sucesso:', response);
             // Adiciona a nova indisponibilidade à lista exibida
             this.indisponibilidades.push(response);
-            this.closeModal();
+            this.bloqueioForm.reset();
+            this.notificationService.success(`Indisponibilidade registrada com sucesso para o barbeiro ${barbeiroNome}.`);
           },
           error: (error) => {
             console.error('Erro ao registrar indisponibilidade:', error);
+            this.notificationService.error(`Erro ao registrar indisponibilidade para o barbeiro ${barbeiroNome}.`);
             // Aqui você pode adicionar uma notificação de erro para o usuário
           }
         });
@@ -183,14 +206,17 @@ export class DisponibilidadeComponent implements OnInit {
           next: (response) => {
             console.log('Indisponibilidade registrada com sucesso:', response);
             this.indisponibilidades.push(...response);
-            this.closeModal();
+            this.bloqueioForm.reset();
+            this.notificationService.success('Feriado registrado com sucesso para todos os barbeiros.');
+            
           },
           error: (error) => {
             console.error('Erro ao registrar indisponibilidade:', error);
+            this.notificationService.error('Erro ao registrar feriado para todos os barbeiros.');
           }
         });
       }
-      this.closeModal();
+      
     }
   }
 }

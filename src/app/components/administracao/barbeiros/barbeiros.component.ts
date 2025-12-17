@@ -62,8 +62,11 @@ export class BarbeirosComponent implements OnInit {
   horariosDeTrabalho: string[] = [
       '09:00 - 19:00',
       '09:00 - 14:00',
+      '09:00 - 12:00',
       '14:00 - 19:00',
-      '09:30 - 19:00'
+      '09:30 - 19:00',
+      '09:30 - 14:00',
+      '09:30 - 12:00',
 
   ];
 

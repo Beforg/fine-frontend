@@ -147,6 +147,46 @@
     background: linear-gradient(90deg, transparent, #34495e, transparent);
     margin: 20px 0;
   }
+
+  // Links legais
+  .footer-legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+
+    .legal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 6px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        color: $verde_principal;
+        background: rgba(40, 167, 69, 0.1);
+        transform: translateY(-2px);
+      }
+    }
+
+    .separator {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 12px;
+    }
+  }
   
   // Seção inferior
   .footer-bottom {
@@ -193,6 +233,11 @@
         strong {
           color: #e4e4e4;
           font-weight: 600;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }

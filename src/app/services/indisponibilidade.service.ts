@@ -30,4 +30,8 @@ export class IndisponibilidadeService {
       map(response => response as Indisponibilidade[])
     );
   }
+
+  excluirIndisponibilidade(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/excluir/${id}`, { headers: this.authService.getHeaders()});
+  }
 }

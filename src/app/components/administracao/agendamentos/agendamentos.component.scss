@@ -173,16 +173,54 @@
                         .datetime-info {
                             display: flex;
                             flex-direction: column;
-                            gap: 0.25rem;
+                            gap: 0.3rem;
 
                             .data {
                                 font-weight: 500;
                                 color: #2c3e50;
                             }
 
-                            .hora {
-                                font-size: 0.8rem;
-                                color: #7f8c8d;
+                            .time-container {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.5rem;
+
+                                .hora {
+                                    font-size: 0.8rem;
+                                    color: #7f8c8d;
+                                    font-weight: 500;
+                                }
+
+                                .duracao {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 0.2rem;
+                                    font-size: 0.7rem;
+                                    color: $verde_principal;
+                                    background-color: rgba($verde_principal, 0.1);
+                                    padding: 0.15rem 0.4rem;
+                                    border-radius: 4px;
+                                    font-weight: 500;
+
+                                    mat-icon {
+                                        font-size: 12px;
+                                        width: 12px;
+                                        height: 12px;
+                                    }
+                                }
+                            }
+
+                            .isToday {
+                                font-size: 0.65rem;
+                                color: #fff;
+                                background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+                                padding: 0.15rem 0.45rem;
+                                border-radius: 4px;
+                                font-weight: 600;
+                                width: fit-content;
+                                text-transform: uppercase;
+                                letter-spacing: 0.3px;
+                                box-shadow: 0 2px 4px rgba(238, 90, 111, 0.3);
                             }
                         }
                     }

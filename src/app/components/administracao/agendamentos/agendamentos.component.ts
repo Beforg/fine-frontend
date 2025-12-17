@@ -120,6 +120,15 @@ export class AgendamentosComponent implements OnInit {
     return userRole === UserRole.ADMIN || userRole === UserRole.BARBEIRO;
   }
 
+  isAgendamentoHoje(agendamento: Agendamento): boolean {
+    const dataAgendamento = new Date(agendamento.dataHoraInicio);
+    const hoje = new Date();
+
+    return dataAgendamento.getDate() === hoje.getDate() &&
+           dataAgendamento.getMonth() === hoje.getMonth() &&
+           dataAgendamento.getFullYear() === hoje.getFullYear();
+  }
+
 // Trocar o id pelo selecionado (Pelo ADMIN somente)
   loadAgendamentos() {
 
@@ -142,6 +151,34 @@ export class AgendamentosComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  editarValorTotal(agendamentoId: number): void {
+
+    if (!this.hasPermissionToChangeStatus()) {
+      return;
+    }
+
+    const novoValor = prompt("Editar Valor do Agendamento " + agendamentoId + ":");
+    console.log('Novo valor digitado:', novoValor);
+    if (novoValor !== null) {
+      const valorNumerico = parseFloat(novoValor.replace(',', '.'));
+      if (isNaN(valorNumerico) || valorNumerico < 0) {
+        alert("Por favor, insira um valor válido.");
+        return;
+      }
+      
+      console.log('Novo valor digitado:', valorNumerico);
+      this.agendamentoService.editarValorTotal(agendamentoId, valorNumerico).subscribe({
+        next: (response) => {
+          this.notification.success("Valor do agendamento atualizado com sucesso!");
+          this.loadAgendamentos(); // Recarregar lista
+        },
+        error: (error) => {
+          this.notification.error(error.error.mensagem || "Erro ao atualizar valor do agendamento.");
+        }
+      });
+    }
   }
    
   // Calcular total do agendamento

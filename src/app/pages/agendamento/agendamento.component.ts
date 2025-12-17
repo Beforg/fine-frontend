@@ -302,10 +302,10 @@ export class AgendamentoComponent implements OnInit {
 
           },
           error: (error) => {
-            console.error('Erro ao criar agendamento:', error);
+
             this.isLoading = false;
             this.agendamentoFinalizado = false;
-            this.notificationService.error("Erro ao criar agendamento. Por favor, tente novamente mais tarde.");
+            this.notificationService.error("Erro ao criar agendamento: " + error.error.message);
           }
         });
       } else {
