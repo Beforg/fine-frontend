@@ -315,7 +315,7 @@ export class BarbeirosComponent implements OnInit {
 
       const novoBarbeiro: CadastroBarbeiro = {
         nome: this.currentBarbeiro.nome,
-        telefone: this.selectedCountry + ' ' + this.currentBarbeiro.telefone,
+        telefone: this.currentBarbeiro.telefone,
         email: this.cadastroEmail,
         senha: this.cadastroSenha,
         especialidade: this.cadastroEspecialidade,
@@ -328,8 +328,8 @@ export class BarbeirosComponent implements OnInit {
       console.log(novoBarbeiro);
       
       this.barbeiroService.cadastrarBarbeiro(novoBarbeiro).subscribe(response => {
-        if (response && (response.httpStatus === "CREATED" || response.httpStatus === "OK")) {
-          const barbeiroId = response.data?.barbeiroId;
+        if (response) {
+          const barbeiroId = response.barbeiroId;
           
           if (!barbeiroId) {
             this.notificationService.error('Erro: ID do barbeiro não retornado');
