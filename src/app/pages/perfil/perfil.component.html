@@ -27,10 +27,6 @@
     [userEmail]="getUserEmail()"
     [userRole]="getRoleName()">
     </app-perfil-form>
-    <app-barber-stats 
-    [userInfo]="userInfo" 
-    [isBarbeiro]="isBarbeiro()">
-  </app-barber-stats>
   </div>
   <div class="agendamentos-content" *ngIf="showAgendamentoContainer">
     <app-agendamentos-gerenciamento [showAgendamentoContainer]="true"></app-agendamentos-gerenciamento>

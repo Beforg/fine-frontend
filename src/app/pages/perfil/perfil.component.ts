@@ -12,7 +12,6 @@ import { FidelidadeDTO, UserInfo } from '../../interfaces/entities.interface';
 import { AuthService } from '../../services/auth.service';
 import { UserRole } from '../../enums/user-role.enum';
 import { PerfilFormComponent } from "../../components/perfil/perfil-form/perfil-form.component";
-import { BarberStatsComponent } from "../../components/perfil/barber-stats/barber-stats.component";
 import { AgendamentosComponent } from "../../components/administracao/agendamentos/agendamentos.component";
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
@@ -28,7 +27,6 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
     HeaderComponent,
     FooterComponent,
     PerfilFormComponent,
-    BarberStatsComponent,
     AgendamentosComponent,
     RouterModule
 ],

@@ -14,7 +14,7 @@
         <h2 class="user-name">{{ userInfo.nome }}</h2>
         <p class="user-role">{{ userRole }}</p>
         
-        <div class="user-fidelidade">
+        <div class="user-fidelidade" *ngIf="userRole == 'Cliente'">
           <div class="fidelidade-header">
             <mat-icon class="fidelidade-icon">card_membership</mat-icon>
             <h3 class="fidelidade-title">Programa de Fidelidade</h3>
