@@ -98,8 +98,8 @@ export class FormAgendamentoComponent implements OnInit {
   constructor() { }
 
     ngOnInit(): void {
-    // A validação agora é feita no setter do fidelidadeCliente
-    // quando os dados são recebidos do componente pai
+    // recarregar a fidelidade:
+
   }
 
   handleListarHorarios(): void {
