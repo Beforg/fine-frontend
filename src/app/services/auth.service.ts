@@ -8,6 +8,16 @@ import { RegisterFormData } from '../interfaces/register-form.interface';
 import { BackendResponse } from '../interfaces/response.interface';
 import { UserRole } from '../enums/user-role.enum';
 
+export interface ValidarCredenciais {
+  email: string;
+  telefone: string;
+}
+
+export interface RecuperarSenha {
+  email: string;
+  novaSenha: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -336,5 +346,36 @@ export class AuthService {
   isAdmin(): boolean {
     const user = this.getCurrentUser();
     return user && user.role === UserRole.ADMIN;
+  }
+
+  isBarbeiro(): boolean {
+    const user = this.getCurrentUser();
+    return user && user.role === UserRole.BARBEIRO;
+  }
+
+  validarCredenciais(data: ValidarCredenciais): Observable<any> { 
+    return this.http.post<any>(`${this.apiUrl}/validar-credenciais`, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('❌ Erro ao validar credenciais:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  recuperarSenha(data: RecuperarSenha): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/recuperar-senha`, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('❌ Erro ao recuperar senha:', error);
+          return throwError(() => error);
+        })
+      );
   }
 }

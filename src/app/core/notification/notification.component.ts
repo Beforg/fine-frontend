@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Optional } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { WebSocketService } from '../../services/web-socket.service';
@@ -52,6 +52,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   // Dados do usuário (pode ser injetado via AuthService depois)
   userRole: string = ''; // ou 'BARBEIRO'
   userToken: string = localStorage.getItem('authToken') || '';
+
+  handleRecarregarAgendamentos: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(private authService: AuthService, @Optional() private webSocketService?: WebSocketService) {
     // Cria o elemento de áudio para notificações

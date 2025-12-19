@@ -206,10 +206,10 @@
       </div>
 
       <!-- Ações -->
-      <!-- <div class="actions-section">
+      <div class="actions-section">
         <app-primary-button icon="edit" (buttonClick)="abrirModalEdicao()" [text]="'Alterar Dados'">
         </app-primary-button>
-      </div> -->
+      </div>
     </mat-card>
 
     <mat-card class="edit-container-overlay" *ngIf="showEditModal">
@@ -224,49 +224,84 @@
         </div>
         
         <div class="edit-inputs">
-          <form action="">
+          <form>
             <app-input-field
             label="Nome Completo"
             placeholder="Digite seu nome completo"
             type="text"
             prefixIcon="person"
-            formControlName="nome"
+            [(ngModel)]="editNome"
+            name="editNome"
             [required]="true">
           </app-input-field>
+          
+          <div class="checkbox-senha">
+            <mat-checkbox [(ngModel)]="alterarDados" name="alterarDados">Alterar E-mail e Telefone</mat-checkbox>
+          </div>
+
           <app-input-field
+            *ngIf="alterarDados"
             label="E-mail"
             placeholder="Digite seu e-mail"
             type="email"
             prefixIcon="email"
-            formControlName="email"
+            [(ngModel)]="editEmail"
+            name="editEmail"
             [required]="true">
           </app-input-field>
+
+          <mat-form-field *ngIf="alterarDados" appearance="outline" class="country-select-modal">
+            <mat-label>País</mat-label>
+            <mat-select [(ngModel)]="selectedCountryModal" name="selectedCountryModal" (selectionChange)="onCountryChangeModal()">
+              <mat-option *ngFor="let country of countries" [value]="country.code">
+                <span class="country-option">
+                  <span class="flag">{{ country.flag }}</span>
+                  <span class="code">{{ country.code }}</span>
+                </span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <app-input-field
+            *ngIf="alterarDados"
             label="Telefone"
-            placeholder="Digite seu telefone"
             type="tel"
             prefixIcon="phone"
-            formControlName="telefone"
+            [placeholder]="getPhonePlaceholderModal()"
+            [(ngModel)]="editTelefone"
+            (input)="onPhoneInputModal($event)"
+            (keypress)="onlyNumbersAndFormat($event)"
+            name="editTelefone"
+            maxlength="15"
             [required]="true">
           </app-input-field>
+
+          <div class="checkbox-senha">
+            <mat-checkbox [(ngModel)]="alterarSenha" name="alterarSenha">Alterar Senha</mat-checkbox>
+          </div>
+
           <app-input-field
+            *ngIf="alterarSenha"
             label="Trocar senha"
             placeholder="Digite sua nova senha"
             type="password"
             prefixIcon="lock"
-            formControlName="novaSenha"
-            [required]="true">
+            [(ngModel)]="editNovaSenha"
+            name="editNovaSenha"
+            [required]="false">
           </app-input-field>
           <app-input-field
+            *ngIf="alterarSenha"
             label="Confirmar senha"
             placeholder="Confirme sua nova senha"
             type="password"
             prefixIcon="lock"
-            formControlName="confirmarSenha"
-            [required]="true">
+            [(ngModel)]="editConfirmarSenha"
+            name="editConfirmarSenha"
+            [required]="false">
           </app-input-field>
           <div class="form-action">
-            <app-primary-button icon="'save'" (buttonClick)="onSaveChanges()" [text]="'Salvar Alterações'">
+            <app-primary-button icon="'save'" (buttonClick)="onEditProfile()" [text]="'Salvar Alterações'">
             </app-primary-button>
           </div>
           </form>

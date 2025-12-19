@@ -2,9 +2,21 @@
   <div class="content-wrapper">
     <div class="login-container">
       <div class="login-card">
-        <app-form-login (formSubmit)="onLoginSubmit($event)" (formCancel)="onLoginCancel()" #loginForm>
+        <app-form-login 
+        (formSubmit)="onLoginSubmit($event)" 
+        (formCancel)="onLoginCancel()"
+        (esqueciSenhaModalOpen)="abrirModalEsqueciSenha($event)" 
+        #loginForm>
         </app-form-login>
       </div>
     </div>
   </div>
   <app-footer></app-footer>
+  <app-esqueci-senha 
+    [showModalEsqueciSenha]="modalEsqueciSenhaVisible" 
+    [senhaValidada]="senhaValidada"
+    (modalClosed)="fecharModalEsqueciSenha()"
+    (validarCredenciaisEvent)="validarCredenciais($event)"
+    (alterarSenhaEvent)="alterarSenha($event)">
+    
+  </app-esqueci-senha>

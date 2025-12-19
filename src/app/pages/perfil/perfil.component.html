@@ -25,7 +25,8 @@
     <app-perfil-form 
     [userInfo]="userInfo" 
     [userEmail]="getUserEmail()"
-    [userRole]="getRoleName()">
+    [userRole]="getRoleName()"
+    (editProfile)="editProfile($event)">
     </app-perfil-form>
   </div>
   <div class="agendamentos-content" *ngIf="showAgendamentoContainer">

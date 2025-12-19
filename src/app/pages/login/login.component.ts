@@ -9,21 +9,25 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FormLoginComponent } from "../../components/form-login/form-login.component";
 import { LoginFormData } from '../../interfaces/login-form.interface';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, RecuperarSenha, ValidarCredenciais } from '../../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { EsqueciSenhaComponent } from "../../components/form-login/esqueci-senha/esqueci-senha.component";
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-login',
-  imports: [MatButtonModule, MatIconModule, FormsModule, FooterComponent, HeaderComponent, FormLoginComponent],
+  imports: [MatButtonModule, MatIconModule, FormsModule, FooterComponent, HeaderComponent, FormLoginComponent, EsqueciSenhaComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   // Referência ao componente FormLogin
   @ViewChild('loginForm') formLoginComponent!: FormLoginComponent;
-  
+    
 
-  constructor(private router: Router, private authService: AuthService) {}
+  modalEsqueciSenhaVisible: boolean = false;
+  senhaValidada: boolean = false;
+  constructor(private router: Router, private authService: AuthService, private notificationService: NotificationService) {}
 
   onLoginSubmit(formData: LoginFormData): void {
     console.log('🚀 Iniciando processo de login...', formData);
@@ -56,8 +60,53 @@ export class LoginComponent {
     });
   }
 
+  abrirModalEsqueciSenha(event: boolean): void {
+    this.modalEsqueciSenhaVisible = event;
+  }
+
+  fecharModalEsqueciSenha(): void {
+    this.modalEsqueciSenhaVisible = false;
+    this.senhaValidada = false;
+  }
+
   onLoginCancel(): void {
     // Ação de cancelamento
     this.router.navigate(['/home']);
   }
+
+  // Validar as credencias para poder recuperar a senha.
+  validarCredenciais(event: ValidarCredenciais): void {
+    this.authService.validarCredenciais(event).subscribe({
+      next: (response) => {
+        this.senhaValidada = response;
+        this.notificationService.success('Credenciais validadas com sucesso. Você pode alterar sua senha agora.');
+      },
+      error: (error) => {
+        this.notificationService.error('Falha ao validar credenciais: '+ error.error.message);
+        this.senhaValidada = false;
+        // Mostrar mensagem de erro no modal
+      }
+    });
+
+  }
+
+  alterarSenha(event: RecuperarSenha): void {
+
+    if (event.novaSenha.length < 6) {
+      this.notificationService.error('A nova senha deve ter pelo menos 6 caracteres.');
+      return;
+    }
+
+    this.authService.recuperarSenha(event).subscribe({
+      next: (response) => {
+        this.notificationService.success('Senha alterada com sucesso. Agora você pode fazer login com a nova senha.');
+        this.fecharModalEsqueciSenha();
+      },
+      error: (error) => {
+        this.notificationService.error('Falha ao alterar senha: '+ error.error.message);
+        // Mostrar mensagem de erro no modal
+      }
+    });
+  }
+  
 }

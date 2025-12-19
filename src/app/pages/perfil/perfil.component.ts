@@ -14,6 +14,18 @@ import { UserRole } from '../../enums/user-role.enum';
 import { PerfilFormComponent } from "../../components/perfil/perfil-form/perfil-form.component";
 import { AgendamentosComponent } from "../../components/administracao/agendamentos/agendamentos.component";
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
+
+export interface EditarPerfil {
+  emailAtual: string;
+  nome: string;
+  alterarDados: boolean;
+  novoEmail: string;
+  novoTelefone: string;
+  alterarSenha: boolean;
+  novaSenha: string;
+
+}
 
 @Component({
   selector: 'app-perfil',
@@ -43,7 +55,8 @@ export class PerfilComponent implements OnInit {
     private perfilService: PerfilService, 
     private authService: AuthService, 
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+  private notificationService: NotificationService) {
 
   }
 
@@ -142,4 +155,27 @@ export class PerfilComponent implements OnInit {
       replaceUrl: true
     });
   }
+
+  editProfile(event: EditarPerfil): void {
+    this.perfilService.editarPerfil(event).subscribe({
+      next: (response) => {
+        console.log('Perfil atualizado com sucesso:', response);
+        if (event.alterarDados) {
+          this.notificationService.success('Perfil atualizado com sucesso! Faça o login novamente para aplicar as mudanças de email ou telefone.'); 
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        } else {
+          this.notificationService.success('Perfil atualizado com sucesso!');
+          this.getUserInfos();
+        }
+        
+        
+      },
+      error: (error) => {
+        this.notificationService.error('Erro ao atualizar perfil: ' + (error.error?.message || 'Erro desconhecido'));  
+        console.error('Erro ao atualizar perfil:', error);
+      }
+    });
+  }
+  
 }
