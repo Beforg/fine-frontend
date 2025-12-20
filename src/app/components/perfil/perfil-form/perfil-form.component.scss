@@ -260,6 +260,8 @@
             border-radius: $border_radius_medium;
             border: 1px solid $cor_aviso;
             margin-top: 8px;
+            flex-direction: row;
+            flex-wrap: wrap;
 
             .validade-icon {
               font-size: 18px;
@@ -272,6 +274,28 @@
               font-size: 13px;
               color: #856404;
               font-weight: 500;
+            }
+
+            p {
+              margin: 0;
+              font-size: 12px;
+              font-weight: 600;
+              color: #d32f2f;
+              background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+              padding: 4px 12px;
+              border-radius: 12px;
+              border: 1px solid #ef5350;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              width: 100%;
+              justify-content: center;
+              margin-top: 6px;
+              
+              &::before {
+                content: '⚠️';
+                font-size: 14px;
+              }
             }
           }
         }

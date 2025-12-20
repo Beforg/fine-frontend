@@ -236,4 +236,10 @@ export class PerfilFormComponent {
     
     return true;
   }
+
+  isFidelidadeExpirada(data: string): boolean {
+    const hoje = new Date();
+    const dataFidelidade = new Date(data);
+    return dataFidelidade < hoje;
+  }
 }
