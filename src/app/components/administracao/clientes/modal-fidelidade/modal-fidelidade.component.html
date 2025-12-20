@@ -1,0 +1,108 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="fecharModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <div class="header-content">
+                <mat-icon class="header-icon">loyalty</mat-icon>
+                <h2>Fidelidade - {{clienteNome}}</h2>
+            </div>
+            <button class="btn-close" (click)="fecharModal()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        
+        <div class="modal-content">
+            <!-- Fidelidade Corte -->
+            <div class="fidelidade-card corte">
+                <div class="card-header">
+                    <mat-icon>content_cut</mat-icon>
+                    <h3>Fidelidade Corte</h3>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="label">Sequência:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width]="(fidelidadeCliente?.sequencia || 0) * 20 + '%'"></div>
+                            <span class="progress-text">{{fidelidadeCliente?.sequencia || 0}}/5</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Fidelidade Aplicada:</span>
+                        <span class="value" [class.aplicada]="fidelidadeCliente?.fidelidadeAplicada">
+                            <mat-icon>{{fidelidadeCliente?.fidelidadeAplicada ? 'check_circle' : 'cancel'}}</mat-icon>
+                            {{fidelidadeCliente?.fidelidadeAplicada ? 'Sim' : 'Não'}}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Validade:</span>
+                        <span class="value date">
+                            <mat-icon>event</mat-icon>
+                            {{isValidDate(fidelidadeCliente?.validade) ? (fidelidadeCliente?.validade | date: 'dd/MM/yyyy') : 'Sem registro'}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fidelidade Barba -->
+            <div class="fidelidade-card barba">
+                <div class="card-header">
+                    <mat-icon>face</mat-icon>
+                    <h3>Fidelidade Barba</h3>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="label">Sequência:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width]="(fidelidadeCliente?.sequenciaBarba || 0) * 20 + '%'"></div>
+                            <span class="progress-text">{{fidelidadeCliente?.sequenciaBarba || 0}}/5</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Fidelidade Aplicada:</span>
+                        <span class="value" [class.aplicada]="fidelidadeCliente?.fidelidadeBarbaAplicada">
+                            <mat-icon>{{fidelidadeCliente?.fidelidadeBarbaAplicada ? 'check_circle' : 'cancel'}}</mat-icon>
+                            {{fidelidadeCliente?.fidelidadeBarbaAplicada ? 'Sim' : 'Não'}}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Validade:</span>
+                        <span class="value date">
+                            <mat-icon>event</mat-icon>
+                            {{isValidDate(fidelidadeCliente?.validadeBarba) ? (fidelidadeCliente?.validadeBarba | date: 'dd/MM/yyyy') : 'Sem registro'}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fidelidade Sobrancelha -->
+            <div class="fidelidade-card sobrancelha">
+                <div class="card-header">
+                    <mat-icon>visibility</mat-icon>
+                    <h3>Fidelidade Sobrancelha</h3>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="label">Sequência:</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width]="(fidelidadeCliente?.sequenciaSobrancelha || 0) * 20 + '%'"></div>
+                            <span class="progress-text">{{fidelidadeCliente?.sequenciaSobrancelha || 0}}/5</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Fidelidade Aplicada:</span>
+                        <span class="value" [class.aplicada]="fidelidadeCliente?.fidelidadeSobrancelhaAplicada">
+                            <mat-icon>{{fidelidadeCliente?.fidelidadeSobrancelhaAplicada ? 'check_circle' : 'cancel'}}</mat-icon>
+                            {{fidelidadeCliente?.fidelidadeSobrancelhaAplicada ? 'Sim' : 'Não'}}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Validade:</span>
+                        <span class="value date">
+                            <mat-icon>event</mat-icon>
+                            {{isValidDate(fidelidadeCliente?.validadeSobrancelha) ? (fidelidadeCliente?.validadeSobrancelha | date: 'dd/MM/yyyy') : 'Sem registro'}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -56,4 +56,16 @@ export class PerfilService {
     );
   }
 
+  getClienteByNome(nomeCliente: string, page: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/clientes/${nomeCliente}?page=${page}&size=10&sort=nome,asc`, { headers: this.headers }).pipe(
+       tap(response => {
+         console.log("Cliente encontrado:", response);
+       }),
+       catchError(error => {
+         console.error('Erro ao buscar cliente por nome:', error);
+         return throwError(() => error);
+       })
+    );
+  }
+
 }
