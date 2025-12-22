@@ -27,7 +27,7 @@
     <div class="cards-container" *ngIf="servicos.length > 0">
       <div class="cards-carousel" #servicosCarousel>
         <app-card-ps *ngFor="let servico of servicos" [nome]="servico.nome" [descricao]="servico.descricao"
-          [preco]="servico.preco" [urlImagem]="'/assets/tmp/barbeiro1'" [tempoEstimado]="servico.duracaoMinutos"
+          [preco]="servico.preco" [urlImagem]="'/assets/servico-image.webp'" [tempoEstimado]="servico.duracaoMinutos"
           tipo="servico">
         </app-card-ps>
       </div>
