@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { map, Observable, tap, catchError, of, throwError } from 'rxjs';
 import { ClienteInfo, UserInfo } from '../interfaces/entities.interface';
 import { AuthService } from './auth.service';
+import { EditarPerfil } from '../pages/perfil/perfil.component';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,30 @@ export class PerfilService {
        }),
        catchError(error => {
          console.error('Erro ao buscar informações dos clientes:', error);
+         return throwError(() => error);
+       })
+    );
+  }
+
+  editarPerfil(data: EditarPerfil): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/editar-dados`, data, { headers: this.headers }).pipe(
+       tap(response => {
+         console.log("Perfil editado com sucesso:", response);
+       }),
+       catchError(error => {
+         console.error('Erro ao editar perfil:', error);
+         return throwError(() => error);
+       })
+    );
+  }
+
+  getClienteByNome(nomeCliente: string, page: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/clientes/${nomeCliente}?page=${page}&size=10&sort=nome,asc`, { headers: this.headers }).pipe(
+       tap(response => {
+         console.log("Cliente encontrado:", response);
+       }),
+       catchError(error => {
+         console.error('Erro ao buscar cliente por nome:', error);
          return throwError(() => error);
        })
     );

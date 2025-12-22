@@ -1,6 +1,28 @@
 <div class="clientes-container">
     <div class="header-container">
         <h1>Gerenciamento de Clientes</h1>
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input 
+                    type="text" 
+                    class="search-input"
+                    placeholder="Buscar cliente por nome..."
+                    [(ngModel)]="searchTerm"
+                    (keyup.enter)="onSearch()">
+                <button 
+                    *ngIf="searchTerm" 
+                    class="clear-btn" 
+                    (click)="clearSearch()"
+                    type="button">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            <button class="search-btn" (click)="onSearch()" type="button">
+                <mat-icon>search</mat-icon>
+                <span>Buscar</span>
+            </button>
+        </div>
     </div>
     
     <div class="table-container">
@@ -16,6 +38,7 @@
                     <th>Telefone</th>
                     <th>Data de Cadastro</th>
                     <th>Status</th>
+                    <th>Fidelidade</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,6 +66,12 @@
                             <mat-icon>{{ cliente.ativo ? 'check_circle' : 'cancel' }}</mat-icon>
                             {{ cliente.ativo ? 'Ativo' : 'Inativo' }}
                         </span>
+                    </td>
+                    <td class="td-fidelidade">
+                        <button class="btn-fidelidade" (click)="openFidelidadeModal(cliente)" title="Ver Fidelidade">
+                            <mat-icon>loyalty</mat-icon>
+                            <span>Ver Fidelidade</span>
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -78,3 +107,9 @@
         </div>
     </div>
 </div>
+<app-modal-fidelidade 
+    [isOpen]="isFidelidadeModalOpen" 
+    [clienteNome]="selectedClienteNome" 
+    [fidelidadeCliente]="selectedFidelidadeCliente"
+    (closeModal)="closeFidelidadeModal()">
+</app-modal-fidelidade>

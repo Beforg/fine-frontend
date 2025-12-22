@@ -11,7 +11,7 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router, private authService: AuthService, private notificationService: NotificationService) { }
 
   canActivate(): boolean {
-    if (this.authService.isAdmin()) {
+    if (this.authService.isAdmin() || this.authService.isBarbeiro()) {
       return true;
     } else {
       this.notificationService.error('Você não tem permissão para acessar esta área.');

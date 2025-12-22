@@ -1,0 +1,108 @@
+<!-- Modal de Recuperação de Senha -->
+<div class="modal-overlay" *ngIf="showModalEsqueciSenha" (click)="closeModalEsqueciSenha()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>
+        <mat-icon>lock_reset</mat-icon>
+        Recuperar Senha
+      </h2>
+      <button class="btn-close" (click)="closeModalEsqueciSenha()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form>
+      <!-- Etapa 1: Validação de Email e Senha Atual -->
+      <div class="step-validation" *ngIf="!senhaValidada">
+        <p class="step-description">
+          Digite seu e-mail e telefone cadastrados na sua conta para validar sua identidade
+        </p>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-mail</mat-label>
+            <mat-icon matPrefix>email</mat-icon>
+            <input 
+              matInput
+              type="email"
+              name="recuperarEmail"
+              placeholder="Digite seu e-mail"
+              [(ngModel)]="recuperarEmail">
+          </mat-form-field>
+        </div>
+
+        <div class="form-group phone-group">
+          <mat-form-field appearance="outline" class="country-select-modal">
+            <mat-label>País</mat-label>
+            <mat-select [(ngModel)]="selectedCountryModal" name="selectedCountryModal" (selectionChange)="onCountryChangeModal()">
+              <mat-option *ngFor="let country of countries" [value]="country.code">
+                <span class="country-option">
+                  <span class="flag">{{ country.flag }}</span>
+                  <span class="code">{{ country.code }}</span>
+                </span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="phone-input-modal">
+            <mat-label>Telefone</mat-label>
+            <mat-icon matPrefix>phone</mat-icon>
+            <input 
+              matInput
+              type="tel"
+              name="recuperarTelefone"
+              [placeholder]="getPhonePlaceholderModal()"
+              [(ngModel)]="recuperarTelefone"
+              (input)="onPhoneInputModal($event)">
+          </mat-form-field>
+        </div>
+
+        <button type="button" class="btn-validar" (click)="handleValidarCredenciais()">
+          <mat-icon>check_circle</mat-icon>
+          Validar
+        </button>
+      </div>
+
+      <!-- Etapa 2: Definir Nova Senha -->
+      <div class="step-new-password" *ngIf="senhaValidada">
+        <p class="step-description success">
+          <mat-icon>check_circle</mat-icon>
+          Credenciais validadas! Agora defina sua nova senha de no mínimo 6 caracteres.
+        </p>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nova Senha</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input 
+              matInput
+              type="password"
+              name="novaSenha"
+              placeholder="Digite sua nova senha"
+              [(ngModel)]="novaSenha">
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirmar Nova Senha</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input 
+              matInput
+              type="password"
+              name="confirmarNovaSenha"
+              placeholder="Confirme sua nova senha"
+              [(ngModel)]="confirmarNovaSenha">
+          </mat-form-field>
+        </div>
+
+        <button type="button" class="btn-confirmar" (click)="alterarSenha()">
+          <mat-icon>save</mat-icon>
+          Alterar Senha
+        </button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

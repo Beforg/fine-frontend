@@ -35,7 +35,7 @@
       </a>
     }
     @if (isLoggedIn()) {
-      @if (isAdmin()) {
+      @if (isAdmin() || isBarbeiro()) {
         <app-notification></app-notification>
       }
       

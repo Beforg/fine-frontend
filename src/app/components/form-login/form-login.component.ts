@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -27,7 +27,8 @@ import { FormUtils } from '../../utils/form-utils';
     MatProgressSpinnerModule,
     MatSelectModule,
     InputFieldComponent,
-    PrimaryButtonComponent
+    PrimaryButtonComponent,
+    FormsModule
   ],
   templateUrl: './form-login.component.html',
   styleUrl: './form-login.component.scss'
@@ -38,6 +39,8 @@ export class FormLoginComponent implements OnInit, OnDestroy {
   // Controle de estado
   isLoading:boolean = false;
   isSubmitted:boolean = false;
+
+  @Output() esqueciSenhaModalOpen: EventEmitter<boolean> = new EventEmitter<boolean>();
   
   // Erros de validação
   formErrors: LoginFormErrors = {};
@@ -304,5 +307,8 @@ export class FormLoginComponent implements OnInit, OnDestroy {
    */
   getLoginLabel(): string {
     return this.loginType === 'email' ? 'E-mail' : 'Telefone';
+  }
+  handleEsqueciSenha(): void {
+    this.esqueciSenhaModalOpen.emit(true);
   }
 }

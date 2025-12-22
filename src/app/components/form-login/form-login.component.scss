@@ -265,11 +265,12 @@ $verde_dark: #218838;
 
   // Links do formulário
   .form-links {
-    text-align: right;
+    text-align: center;
     margin-bottom: 24px;
 
     .forgot-password-link,
     .forgot-senha-link {
+      cursor: pointer;
       color: $verde_light;
       text-decoration: none;
       font-size: 14px;

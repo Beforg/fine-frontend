@@ -1,0 +1,329 @@
+@import '../../../../variables';
+
+// Variáveis de tema verde
+$verde_light: #2ecc71;
+$verde_dark: #218838;
+
+// Garantir que o overlay do mat-select apareça acima do modal
+::ng-deep .cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+// Modal de Recuperação de Senha
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  padding: 20px 0;
+
+  .modal-content {
+    background: linear-gradient(135deg, rgba(28, 23, 53, 0.98), rgba(18, 13, 43, 0.98));
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(40, 167, 69, 0.2),
+                0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    animation: slideUp 0.3s ease;
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      h2 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+
+        mat-icon {
+          color: $verde_principal;
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      .btn-close {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        mat-icon {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover {
+          background: rgba(220, 53, 69, 0.2);
+          transform: rotate(90deg);
+
+          mat-icon {
+            color: #ff6b6b;
+          }
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 32px 24px;
+
+      .step-description {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        margin-bottom: 24px;
+        text-align: center;
+        line-height: 1.5;
+
+        &.success {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          color: $verde_light;
+          font-weight: 600;
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+
+        &.phone-group {
+          display: flex;
+          gap: 12px;
+
+          .country-select-modal,
+          .phone-input-modal {
+            ::ng-deep {
+              .mat-mdc-text-field-wrapper {
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 12px;
+                transition: all 0.3s ease;
+
+                &:hover {
+                  background: rgba(255, 255, 255, 1);
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                }
+              }
+
+              .mat-mdc-form-field-label {
+                color: rgba(0, 0, 0, 0.6) !important;
+                font-weight: 500;
+              }
+
+              .mat-mdc-input-element,
+              .mat-mdc-select {
+                color: #1a1a1a !important;
+                font-weight: 500;
+                caret-color: $verde_principal;
+              }
+
+              .mat-mdc-form-field-icon-prefix mat-icon {
+                color: $verde_principal;
+                margin-right: 8px;
+              }
+
+              .mat-mdc-form-field.mat-focused {
+                .mat-mdc-form-field-label {
+                  color: $verde_principal !important;
+                }
+
+                .mat-mdc-text-field-wrapper {
+                  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.3);
+                }
+              }
+
+              .mat-mdc-select-arrow {
+                color: $verde_principal;
+              }
+            }
+          }
+
+          .country-select-modal {
+            width: 120px;
+            flex-shrink: 0;
+          }
+
+          .phone-input-modal {
+            flex: 1;
+          }
+        }
+
+        .full-width {
+          width: 100%;
+
+          ::ng-deep {
+            .mat-mdc-text-field-wrapper {
+              background: rgba(255, 255, 255, 0.95);
+              border-radius: 12px;
+              transition: all 0.3s ease;
+
+              &:hover {
+                background: rgba(255, 255, 255, 1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+              }
+            }
+
+            .mat-mdc-form-field-label {
+              color: rgba(0, 0, 0, 0.6) !important;
+              font-weight: 500;
+            }
+
+            .mat-mdc-input-element {
+              color: #1a1a1a !important;
+              font-weight: 500;
+              caret-color: $verde_principal;
+            }
+
+            .mat-mdc-form-field-icon-prefix mat-icon {
+              color: $verde_principal;
+              margin-right: 8px;
+            }
+
+            .mat-mdc-form-field.mat-focused {
+              .mat-mdc-form-field-label {
+                color: $verde_principal !important;
+              }
+
+              .mat-mdc-text-field-wrapper {
+                box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.3);
+              }
+            }
+
+            .mat-mdc-form-field-error {
+              color: #ff6b6b;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+
+      .btn-validar,
+      .btn-confirmar {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 8px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+      }
+
+      .btn-validar {
+        background: linear-gradient(135deg, $verde_principal, $verde_light);
+        color: white;
+      }
+
+      .btn-confirmar {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        color: white;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    .modal-content {
+      width: 95%;
+
+      .modal-header {
+        padding: 20px;
+
+        h2 {
+          font-size: 20px;
+
+          mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+
+      .modal-body {
+        padding: 24px 20px;
+
+        .step-description {
+          font-size: 13px;
+        }
+
+        .form-group.phone-group {
+          .country-select-modal {
+            width: 100px;
+          }
+        }
+      }
+    }
+  }
+}

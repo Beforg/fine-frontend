@@ -1,6 +1,16 @@
 <section class="form-section">
     <div class="form-container">
-      <h3 class="section-title">Progresso da Fidelidade</h3>
+      <div class="title-with-info">
+        <h3 class="section-title">Progresso da Fidelidade</h3>
+        <button 
+          class="info-button" 
+          type="button"
+          matTooltip="Realize 5 cortes, barbas ou sobrancelhas e ganhe 1 grátis! O desconto será aplicado automaticamente no próximo agendamento. *Cortes grátis não acumulam com outras promoções ou descontos."
+          matTooltipPosition="right"
+          matTooltipClass="custom-tooltip">
+          <mat-icon>info</mat-icon>
+        </button>
+      </div>
       
       @if (isLoggedIn && fidelidadeCliente) {
         <div class="fidelidade-container">
@@ -91,14 +101,16 @@
       } @else {
         <div class="fidelidade fidelidade-login">
           <mat-icon class="fidelidade-icon">login</mat-icon>
-          <h4 class="title-corte-gratis">Faça login para acompanhar sua fidelidade!</h4>
+          <h4 class="title-corte-gratis">Você precisa fazer login para marcar seu agendamento e acompanhar sua fidelidade!</h4>
         </div>
+        <p class="fidelidade fidelidade-aviso">Já entrou na sua conta? Tente recarregar a página!</p>
       }
       
       <div class="date-input-group">
         <label for="data-agendamento" class="input-label">Insira a data desejada para o Agendamento</label>
         <div class="date-input-wrapper">
           <input 
+            [disabled]="!isLoggedIn"
             type="date" 
             id="data-agendamento" 
             class="date-input"

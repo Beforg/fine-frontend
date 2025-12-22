@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FidelidadeDTO, ItemProduto, ProdutoAgendamento, ServicoAgendamento } from '../../../interfaces/entities.interface';
 import { HorariosComponent } from '../horarios/horarios.component';
 import { ModalComponent } from "../modal/modal.component";
@@ -22,6 +23,7 @@ import { ModalComponent } from "../modal/modal.component";
     MatSelectModule,
     MatButtonModule,
     MatInputModule,
+    MatTooltipModule,
     HorariosComponent
 ],
   templateUrl: './form-agendamento.component.html',
@@ -96,8 +98,8 @@ export class FormAgendamentoComponent implements OnInit {
   constructor() { }
 
     ngOnInit(): void {
-    // A validação agora é feita no setter do fidelidadeCliente
-    // quando os dados são recebidos do componente pai
+    // recarregar a fidelidade:
+
   }
 
   handleListarHorarios(): void {

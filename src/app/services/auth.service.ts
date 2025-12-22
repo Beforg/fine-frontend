@@ -8,6 +8,16 @@ import { RegisterFormData } from '../interfaces/register-form.interface';
 import { BackendResponse } from '../interfaces/response.interface';
 import { UserRole } from '../enums/user-role.enum';
 
+export interface ValidarCredenciais {
+  email: string;
+  telefone: string;
+}
+
+export interface RecuperarSenha {
+  email: string;
+  novaSenha: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -218,7 +228,11 @@ export class AuthService {
     if (!token) return true;
 
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const parts = token.split('.');
+      if (parts.length !== 3) return true;
+      
+      const decodedPayload = this.decodeBase64(parts[1]);
+      const payload = JSON.parse(decodedPayload);
       const exp = payload.exp * 1000; // Converter para milliseconds
       return Date.now() >= exp;
     } catch {
@@ -266,6 +280,32 @@ export class AuthService {
   }
 
   /**
+   * Decodifica base64 de forma segura, tratando caracteres especiais
+   */
+  private decodeBase64(str: string): string {
+    try {
+      // Substituir caracteres URL-safe por base64 padrão
+      str = str.replace(/-/g, '+').replace(/_/g, '/');
+      
+      // Adicionar padding se necessário
+      while (str.length % 4) {
+        str += '=';
+      }
+
+      // Decodificar e tratar caracteres UTF-8
+      const decoded = atob(str);
+      return decodeURIComponent(
+        decoded.split('').map(c => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join('')
+      );
+    } catch (e) {
+      console.error('Erro ao decodificar base64:', e);
+      throw e;
+    }
+  }
+
+  /**
    * Obtém informações do usuário atual (decodifica do token)
    */
   getCurrentUser(): any {
@@ -278,10 +318,13 @@ export class AuthService {
       const parts = token.split('.');
       
       if (parts.length !== 3) {
+        console.error('Token JWT inválido: formato incorreto');
         return null;
       }
 
-      const payload = JSON.parse(atob(parts[1]));
+      // Decodificar payload usando método seguro
+      const decodedPayload = this.decodeBase64(parts[1]);
+      const payload = JSON.parse(decodedPayload);
       
       const userData = {
         id: payload.userId,
@@ -294,6 +337,8 @@ export class AuthService {
       return userData;
     } catch (error) {
       console.error('Erro ao decodificar token:', error);
+      // Limpar token corrompido
+      this.removeToken();
       return null;
     }
   }
@@ -301,5 +346,36 @@ export class AuthService {
   isAdmin(): boolean {
     const user = this.getCurrentUser();
     return user && user.role === UserRole.ADMIN;
+  }
+
+  isBarbeiro(): boolean {
+    const user = this.getCurrentUser();
+    return user && user.role === UserRole.BARBEIRO;
+  }
+
+  validarCredenciais(data: ValidarCredenciais): Observable<any> { 
+    return this.http.post<any>(`${this.apiUrl}/validar-credenciais`, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('❌ Erro ao validar credenciais:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  recuperarSenha(data: RecuperarSenha): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/recuperar-senha`, data)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.error('❌ Erro ao recuperar senha:', error);
+          return throwError(() => error);
+        })
+      );
   }
 }
