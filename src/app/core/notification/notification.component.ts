@@ -1,15 +1,17 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Optional } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { WebSocketService } from '../../services/web-socket.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { UserRole } from '../../enums/user-role.enum';
+import { NotificacaoOfflineService } from '../../services/notificacao-offline.service';
 
 /**
  * Interface que corresponde ao NotificationDTO do backend
  */
 export interface NotificationDTO {
+  id: number;
   agendamentoId: number;
   clienteNome: string;
   barbeiroNome: string;
@@ -43,7 +45,7 @@ export interface Notification {
 export class NotificationComponent implements OnInit, OnDestroy {
   isOpen = false;
   notifications: Notification[] = [];
-  
+  @Input() barbeiroNome: string = '';
   audioPath: string = '/assets/sounds/notification.mp3';
   private topicSubscription: Subscription | undefined;
   private notificationIdCounter = 1;
@@ -55,7 +57,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   handleRecarregarAgendamentos: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private authService: AuthService, @Optional() private webSocketService?: WebSocketService) {
+  constructor(private notificationService: NotificacaoOfflineService,private authService: AuthService, @Optional() private webSocketService?: WebSocketService) {
     // Cria o elemento de áudio para notificações
     this.initializeNotificationSound();
 
@@ -67,8 +69,36 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.userRole = this.authService.getCurrentUser()?.role || '';
     console.log('WebSocketService:', this.webSocketService ? 'Disponível' : 'Indisponível');
     
-    // Carrega notificações mock iniciais
-    this.loadMockNotifications();
+    // Carrega notificações não lidas do backend
+    const userName = this.authService.getCurrentUser()?.name;
+    if (userName) {
+      this.notificationService.getNotificacoesNaoLidas(userName.trim())
+        .subscribe({
+          next: (notificacoes) => {
+            console.log('📬 Notificações não lidas carregadas:', notificacoes);
+            // Processa as notificações recebidas
+            if (Array.isArray(notificacoes)) {
+              notificacoes.forEach((notif: any) => {
+                const newNotification: Notification = {
+                  id: this.notificationIdCounter++,
+                  agendamentoId: notif.agendamentoId,
+                  clienteNome: notif.clienteNome,
+                  barbeiroNome: notif.barbeiroNome,
+                  dataHoraInicio: new Date(notif.dataHoraInicio),
+                  tipo: notif.tipo,
+                  mensagem: notif.mensagem,
+                  read: false,
+                  time: new Date(notif.dataHoraInicio)
+                };
+                this.notifications.push(newNotification);
+              });
+            }
+          },
+          error: (error) => {
+            console.error('❌ Erro ao carregar notificações:', error);
+          }
+        });
+    }
     
     // Inicia conexão WebSocket apenas se houver token válido e serviço disponível
     if (!this.userToken) {
@@ -228,10 +258,26 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   markAsRead(notification: Notification): void {
     notification.read = true;
+    this.notificationService.markAsRead(notification.id).subscribe({
+      next: () => {
+        console.log(`Notificação ${notification.id} marcada como lida no backend`);
+      },
+      error: (error) => {
+        console.error('❌ Erro ao marcar notificação como lida no backend:', error);
+      }
+    });
   }
 
   markAllAsRead(): void {
     this.notifications.forEach(n => n.read = true);
+    this.notificationService.markAllAsRead().subscribe({
+      next: () => {
+        console.log('Todas as notificações marcadas como lidas no backend');
+      },
+      error: (error) => {
+        console.error('❌ Erro ao marcar todas as notificações como lidas no backend:', error);
+      }
+    });
   }
 
   getIcon(type: string): string {
@@ -251,9 +297,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   // Mock data para testes
-  private loadMockNotifications(): void {
 
-  }
 
   ngOnDestroy(): void {
     // Desinscreve para evitar vazamento de memória
