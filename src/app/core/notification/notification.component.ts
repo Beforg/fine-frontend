@@ -80,7 +80,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             if (Array.isArray(notificacoes)) {
               notificacoes.forEach((notif: any) => {
                 const newNotification: Notification = {
-                  id: this.notificationIdCounter++,
+                  id: notif.id,
                   agendamentoId: notif.agendamentoId,
                   clienteNome: notif.clienteNome,
                   barbeiroNome: notif.barbeiroNome,
@@ -219,7 +219,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     console.log('➕ Adicionando notificação:', payload);
     
     const newNotification: Notification = {
-      id: this.notificationIdCounter++,
+      id: payload.id,
       agendamentoId: payload.agendamentoId,
       clienteNome: payload.clienteNome,
       barbeiroNome: payload.barbeiroNome,
@@ -236,12 +236,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
     // Toca o som de notificação
     this.playNotificationSound();
-
-    // Limita a 10 notificações
-    if (this.notifications.length > 10) {
-      this.notifications.pop();
-      console.log('🗑️ Notificação antiga removida');
-    }
   }
 
   get unreadCount(): number {
