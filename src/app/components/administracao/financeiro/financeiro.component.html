@@ -1,0 +1,142 @@
+<div class="financeiro-container">
+    <!-- Header -->
+    <div class="header-container">
+        <h1>Relatório Financeiro</h1>
+    </div>
+
+    <!-- Filtros de Período -->
+    <div class="filtros-container">
+        <form [formGroup]="periodoForm" class="periodo-form">
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Data Início</mat-label>
+                    <input matInput [matDatepicker]="pickerInicio" formControlName="dataInicio" [max]="maxDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerInicio></mat-datepicker>
+                    <mat-error *ngIf="f['dataInicio'].errors?.['required']">
+                        Data inicial é obrigatória
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Data Fim</mat-label>
+                    <input matInput [matDatepicker]="pickerFim" formControlName="dataFim" [max]="maxDate">
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerFim"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerFim></mat-datepicker>
+                    <mat-error *ngIf="f['dataFim'].errors?.['required']">
+                        Data final é obrigatória
+                    </mat-error>
+                </mat-form-field>
+
+                <button class="btn-buscar" (click)="buscarDadosPorPeriodo()" [disabled]="periodoForm.invalid">
+                    <mat-icon>search</mat-icon>
+                    Buscar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading) {
+        <div class="loading-wrapper">
+            <app-loading message="Carregando dados financeiros..."></app-loading>
+        </div>
+    }
+
+    <!-- Conteúdo -->
+    @if (!isLoading && dadosFinanceiros) {
+        <!-- Cards de Resumo -->
+        <div class="resumo-cards">
+            <div class="card card-receita">
+                <div class="card-icon">
+                    <mat-icon>attach_money</mat-icon>
+                </div>
+                <div class="card-content">
+                    <h3>Receita Total</h3>
+                    <p class="card-value">{{ formatCurrency(dadosFinanceiros.receitaTotal) }}</p>
+                </div>
+            </div>
+
+            <div class="card card-cortes">
+                <div class="card-icon">
+                    <mat-icon>content_cut</mat-icon>
+                </div>
+                <div class="card-content">
+                    <h3>Total de Cortes</h3>
+                    <p class="card-value">{{ dadosFinanceiros.cortesTotais }}</p>
+                </div>
+            </div>
+
+            <div class="card card-ticket">
+                <div class="card-icon">
+                    <mat-icon>receipt_long</mat-icon>
+                </div>
+                <div class="card-content">
+                    <h3>Ticket Médio</h3>
+                    <p class="card-value">
+                        {{ formatCurrency(dadosFinanceiros.cortesTotais > 0 ? dadosFinanceiros.receitaTotal / dadosFinanceiros.cortesTotais : 0) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Barbeiros -->
+        <div class="table-container">
+            <h2 class="table-title">
+                <mat-icon>people</mat-icon>
+                Desempenho por Barbeiro
+            </h2>
+            
+            <table class="financeiro-table">
+                <thead>
+                    <tr>
+                        <th>Barbeiro</th>
+                        <th>Agendamentos Realizados</th>
+                        <th>Receita Total</th>
+                        <th>Receita Média</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let barbeiroNome of getBarberNames()" class="table-row">
+                        <td class="td-barbeiro">
+                            <div class="barbeiro-info">
+                                <mat-icon>person</mat-icon>
+                                <span class="barbeiro-nome">{{ barbeiroNome }}</span>
+                            </div>
+                        </td>
+                        <td class="td-agendamentos">
+                            <span class="badge badge-agendamentos">
+                                {{ dadosFinanceiros.agendamentosRealizadosPorBarbeiro[barbeiroNome] }}
+                            </span>
+                        </td>
+                        <td class="td-receita">
+                            <span class="valor-receita">
+                                {{ formatCurrency(dadosFinanceiros.receitaTotalPorBarbeiro[barbeiroNome]) }}
+                            </span>
+                        </td>
+                        <td class="td-media">
+                            <span class="valor-media">
+                                {{ formatCurrency(dadosFinanceiros.receitaTotalPorBarbeiro[barbeiroNome] / dadosFinanceiros.agendamentosRealizadosPorBarbeiro[barbeiroNome]) }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Mensagem quando não há dados -->
+            <div *ngIf="getBarberNames().length === 0" class="no-data">
+                <mat-icon>info</mat-icon>
+                <p>Nenhum dado encontrado para o período selecionado</p>
+            </div>
+        </div>
+    }
+
+    <!-- Mensagem inicial -->
+    @if (!isLoading && !dadosFinanceiros) {
+        <div class="empty-state">
+            <mat-icon>assessment</mat-icon>
+            <h3>Selecione um período para visualizar os dados financeiros</h3>
+            <p>Escolha as datas de início e fim e clique em "Buscar"</p>
+        </div>
+    }
+</div>

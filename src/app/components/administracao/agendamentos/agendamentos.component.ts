@@ -246,6 +246,11 @@ export class AgendamentosComponent implements OnInit {
   }
 
   finalizarAgendamento(id: number): void {
+
+    if (!window.confirm('Tem certeza que deseja finalizar este agendamento?')) {
+      return;
+    }
+
     const currentUser = this.authService.getCurrentUser();
     console.log('🔄 Tentando finalizar agendamento:', {
       agendamentoId: id,
