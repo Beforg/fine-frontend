@@ -103,6 +103,11 @@
                                         'expand_more' }}</mat-icon>
                                 </button>
                                 <button *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
+                                    class="btn-action btn-edit-data" title="Editar"
+                                    (click)="openModalEditarAgendamento(agendamento)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
                                     class="btn-action btn-edit" title="Concluir"
                                     (click)="finalizarAgendamento(agendamento.id)">
                                     <mat-icon>check</mat-icon>
@@ -116,7 +121,7 @@
                     </tr>
 
                     <!-- Linha Expandida com Detalhes -->
-                    <tr class="expanded-row" *ngIf="agendamentoSelecionado?.id === agendamento.id">
+                    <tr class="expanded-row" *ngIf="agendamentoSelecionado?.id === agendamento.id && !showModalEditarAgendamento">
                         <td colspan="9" class="expanded-cell">
                             <div class="expanded-content">
                                 <div class="expanded-header">
@@ -378,3 +383,11 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Editar Agendamento -->
+ <agendamentos-modal-editar 
+ [showModal]="showModalEditarAgendamento" 
+ [agendamento]="agendamentoSelecionado"
+ (fecharModal)="fecharModalAgendarmento()"
+ (salvar)="salvarEdicaoDadosAgendamento($event)"
+ ></agendamentos-modal-editar>
