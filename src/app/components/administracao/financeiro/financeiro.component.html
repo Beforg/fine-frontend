@@ -62,7 +62,7 @@
                     <mat-icon>content_cut</mat-icon>
                 </div>
                 <div class="card-content">
-                    <h3>Total de Cortes</h3>
+                    <h3>Total de Agendamentos</h3>
                     <p class="card-value">{{ dadosFinanceiros.cortesTotais }}</p>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                     <mat-icon>receipt_long</mat-icon>
                 </div>
                 <div class="card-content">
-                    <h3>Ticket Médio</h3>
+                    <h3>Valor Médio do Serviço</h3>
                     <p class="card-value">
                         {{ formatCurrency(dadosFinanceiros.cortesTotais > 0 ? dadosFinanceiros.receitaTotal / dadosFinanceiros.cortesTotais : 0) }}
                     </p>
