@@ -16,6 +16,7 @@ export interface FinanceiroDTO {
   cortesTotais: number;
   agendamentosRealizadosPorBarbeiro: Record<string, number>;
   receitaTotalPorBarbeiro: Record<string, number>;
+  bonificacaoPorBarbeiro: Record<string, number>;
 }
 
 @Component({
@@ -84,7 +85,7 @@ export class FinanceiroComponent implements OnInit {
       next: (dados) => {
         this.dadosFinanceiros = dados;
         this.isLoading = false;
-        this.notificationService.success('Dados carregados com sucesso!');
+        this.notificationService.success('Dados carregados com sucesso!', dados);
       },
       error: (error) => {
         console.error('Erro ao buscar dados financeiros:', error);

@@ -94,6 +94,7 @@
                         <th>Agendamentos Realizados</th>
                         <th>Receita Total</th>
                         <th>Receita Média</th>
+                        <th>Bonificação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,6 +118,11 @@
                         <td class="td-media">
                             <span class="valor-media">
                                 {{ formatCurrency(dadosFinanceiros.receitaTotalPorBarbeiro[barbeiroNome] / dadosFinanceiros.agendamentosRealizadosPorBarbeiro[barbeiroNome]) }}
+                            </span>
+                        </td>
+                        <td class="td-bonificacao">
+                            <span class="valor-bonificacao">
+                                {{ formatCurrency(dadosFinanceiros.bonificacaoPorBarbeiro[barbeiroNome] || 0) }}
                             </span>
                         </td>
                     </tr>
