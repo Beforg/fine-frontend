@@ -1313,6 +1313,166 @@ $verde_dark: #218838;
 }
 
 // =============================================
+// HORÁRIOS DE TRABALHO
+// =============================================
+.horarios-trabalho-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+
+    .section-title {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+        font-weight: 400;
+    }
+
+    .horarios-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .horario-card {
+        background: white;
+        border-radius: 10px;
+        padding: 1.25rem;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        &:hover {
+            border-color: $verde_principal;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .dia-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f1f3f5;
+
+            .dia-icon {
+                color: $verde_principal;
+                font-size: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+
+            .dia-label {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #2c3e50;
+                margin: 0;
+            }
+        }
+
+        .horario-select {
+            width: 100%;
+            margin: 0;
+
+            ::ng-deep {
+                .mat-mdc-form-field-subscript-wrapper {
+                    display: none;
+                }
+
+                .mat-mdc-text-field-wrapper {
+                    padding: 0;
+                }
+
+                .mat-mdc-form-field-infix {
+                    padding: 0.75rem 0;
+                    display: flex;
+                    align-items: center;
+                }
+
+                .mdc-notched-outline__leading,
+                .mdc-notched-outline__trailing {
+                    border-color: #dee2e6 !important;
+                }
+
+                .mdc-notched-outline__notch {
+                    border-color: #dee2e6 !important;
+                }
+
+                &.mat-focused {
+                    .mdc-notched-outline__leading,
+                    .mdc-notched-outline__trailing,
+                    .mdc-notched-outline__notch {
+                        border-color: $verde_principal !important;
+                    }
+                }
+
+                .mat-mdc-select {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .mat-mdc-select-value {
+                    color: #2c3e50;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .mat-mdc-select-value-text {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+            }
+        }
+    }
+
+    // Ícones nas opções do select
+    ::ng-deep {
+        .mat-mdc-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            .option-icon {
+                font-size: 1.2rem;
+                width: 1.2rem;
+                height: 1.2rem;
+                color: $verde_principal;
+            }
+        }
+    }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+    .horarios-trabalho-section {
+        padding: 1rem;
+
+        .horarios-grid {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .horario-card {
+            padding: 1rem;
+        }
+    }
+}
+
+// =============================================
 // ANIMAÇÕES
 // =============================================
 @keyframes fadeInUp {

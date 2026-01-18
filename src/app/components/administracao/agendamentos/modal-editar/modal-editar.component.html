@@ -4,7 +4,7 @@
     <div class="modal-content">
         <!-- Cabeçalho do Modal -->
         <div class="modal-content__header">
-            <h2>Editar Agendamento</h2>
+            <h2>Editar Agendamento #{{agendamento?.id}}</h2>
             <button (click)="handleFecharModal()">
                 <mat-icon>close</mat-icon>
             </button>
@@ -13,14 +13,25 @@
         <div class="modal-content__body">
             <form class="modal-content__form">
                 <!-- Informações do Cliente -->
-                <div class="modal-content__group">
-                    <label class="group-label">Cliente</label>
-                    <p class="group-value">{{agendamento?.nomeCliente}}</p>
+                <div class="header-infos">
+                    <div class="modal-content__group">
+                        <label class="group-label">Cliente</label>
+                        <p class="group-value">{{agendamento?.nomeCliente}}</p>
+                    </div>
+                    <div class="modal-content__group">
+                        <label class="group-label">Barbeiro Responsável</label>
+                        <p class="group-value">{{agendamento?.nomeBarbeiro}}</p>
+                    </div>
+                    <div class="modal-content__group">
+                        <label class="group-label">Data do Agendamento</label>
+                        <p class="group-value">{{agendamento?.dataHoraInicio| date:'dd/MM/yyyy'}}</p>
+                    </div>
                 </div>
+
 
                 <!-- Trocar Barbeiro -->
                 <div class="modal-content__group">
-                    <label class="group-label">Barbeiro</label>
+                    <label class="group-label">Selecione o Barbeiro</label>
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>Selecione o barbeiro</mat-label>
                         <mat-select [(ngModel)]="barbeiroSelecionadoId" name="barbeiro">

@@ -39,7 +39,11 @@ export class ModalEditarComponent implements OnInit {
   produtosSelecionados: ProdutoAgendamento[] = [];
   barbeiroSelecionadoId: number | null = null;
 
-  constructor(private produtoService: ProdutoService, private barbeiroService: BarbeiroService, private notification: NotificationService) {}
+  constructor(
+    private produtoService: ProdutoService, 
+    private barbeiroService: BarbeiroService, 
+    private notification: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.carregarProdutos();
@@ -50,13 +54,13 @@ export class ModalEditarComponent implements OnInit {
     this.fecharModal.emit();
     this.produtosSelecionados = [];
     this.barbeiroSelecionadoId = null;
-
   }
 
   handleSalvar(): void {
 
     if (this.barbeiroSelecionadoId == null) {
       this.notification.error('Selecione um barbeiro para o agendamento.');
+      return;
     }
 
     const itemProdutos: ItemProduto[] = this.produtosSelecionados.map(p => ({
@@ -125,5 +129,7 @@ export class ModalEditarComponent implements OnInit {
       this.removerProduto(index);
     }
   }
+
+
 
 }
