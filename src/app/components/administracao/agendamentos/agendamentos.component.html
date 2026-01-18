@@ -109,7 +109,7 @@
                                 </button>
                                 <button *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
                                     class="btn-action btn-edit" title="Concluir"
-                                    (click)="finalizarAgendamento(agendamento.id)">
+                                    (click)="finalizarAgendamento(agendamento.id, agendamento.produtos.length)">
                                     <mat-icon>check</mat-icon>
                                 </button>
                                 <button *ngIf="agendamento.status == 'Agendado'" class="btn-action btn-delete"
@@ -324,7 +324,7 @@
                                 <div class="expanded-footer" *ngIf="agendamento.status == 'Agendado'">
                                     <button *ngIf="agendamento.status == 'Agendado' && hasPermissionToChangeStatus()"
                                         class="btn-action-expanded btn-edit-expanded"
-                                        (click)="finalizarAgendamento(agendamento.id)">
+                                        (click)="finalizarAgendamento(agendamento.id, agendamento.produtos.length)">
                                         <mat-icon>check</mat-icon>
                                         Concluir Agendamento
                                     </button>

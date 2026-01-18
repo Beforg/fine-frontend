@@ -270,7 +270,7 @@ export class AgendamentosComponent implements OnInit {
     }
   }
 
-  finalizarAgendamento(id: number): void {
+  finalizarAgendamento(id: number, produtosLength: number): void {
     if (!window.confirm('Tem certeza que deseja finalizar este agendamento?')) {
       return;
     }
@@ -288,12 +288,15 @@ export class AgendamentosComponent implements OnInit {
       alert('Você não tem permissão para realizar esta ação.');
       return;
     }
-    let comprouProdutos!: boolean;
-    if (window.confirm('O cliente comprou produtos junto com o serviço?')) {
+    let comprouProdutos: boolean = false;
+    
+    if (produtosLength !== 0) {
+    if (window.confirm('O cliente comprou produtos junto com o serviço? (OK - Sim, Cancelar - Não)')) {
       comprouProdutos = true;
     } else {
       comprouProdutos = false;
     }
+  }
 
     this.agendamentoService
       .alterarStatusAgendamento(
