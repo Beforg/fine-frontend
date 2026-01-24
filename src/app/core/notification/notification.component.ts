@@ -18,6 +18,7 @@ export interface NotificationDTO {
   dataHoraInicio: string; // LocalDateTime vem como string ISO do backend
   tipo: string;
   mensagem: string;
+  criadoEm: string;
 }
 
 /**
@@ -33,6 +34,7 @@ export interface Notification {
   mensagem: string;
   read: boolean;
   time: Date;
+  criadoEm: Date;
 }
 
 @Component({
@@ -88,7 +90,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
                   tipo: notif.tipo,
                   mensagem: notif.mensagem,
                   read: false,
-                  time: new Date(notif.dataHoraInicio)
+                  time: new Date(notif.dataHoraInicio),
+                  criadoEm: new Date(notif.criadoEm)
                 };
                 this.notifications.push(newNotification);
               });
@@ -227,7 +230,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
       tipo: payload.tipo,
       mensagem: payload.mensagem,
       read: false,
-      time: new Date()
+      time: new Date(),
+      criadoEm: new Date(payload.criadoEm)
     };
 
     // Adiciona no início do array
