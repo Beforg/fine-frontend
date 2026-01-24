@@ -95,7 +95,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
                 };
                 this.notifications.push(newNotification);
               });
-              this.notifications.sort(time => time.criadoEm.getTime())
             }
           },
           error: (error) => {
