@@ -24,6 +24,8 @@
   width: 90%;
   max-height: 90vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   animation: slideUp 0.3s ease-in-out;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
 }
@@ -75,6 +77,8 @@
 // =============================================
 .modal-content {
   padding: 1.5rem !important;
+  overflow: auto;
+  flex: 1 1 auto;
 }
 
 .info-list {
@@ -153,6 +157,7 @@
   margin: 0 !important;
   border-top: 1px solid #e0e0e0;
   background: #f9f9f9;
+  flex-shrink: 0;
 
   button {
     display: flex;
@@ -220,11 +225,6 @@
 // RESPONSIVE
 // =============================================
 @media (max-width: 768px) {
-  .modal-container {
-    width: 95%;
-    max-width: none;
-  }
-
   .modal-header {
     padding: 1rem;
 
@@ -239,31 +239,20 @@
     }
   }
 
-  .modal-body {
-    padding: 1.5rem;
+  .modal-card {
+    width: 95%;
+    max-width: none;
   }
 
-  .info-item {
-    padding: 0.875rem;
-
-    .info-icon {
-      font-size: 1.5rem;
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-
-    .info-content {
-      .info-value {
-        font-size: 1rem;
-      }
-    }
+  .modal-content {
+    padding: 1.25rem !important;
   }
 
-  .modal-footer {
-    padding: 1rem;
-    flex-direction: column-reverse;
+  .modal-actions {
+    padding: 0.75rem 1rem !important;
+    flex-direction: column-reverse !important;
 
-    .btn {
+    button {
       width: 100%;
       justify-content: center;
     }
