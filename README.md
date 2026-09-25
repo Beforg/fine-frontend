@@ -1,59 +1,65 @@
-# FineFrontend
+# Barbearia Fine
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+Plataforma web desenvolvida para digitalizar o agendamento e a gestão da Barbearia Fine.
 
-## Development server
+A aplicação oferece uma experiência responsiva para clientes, permitindo cadastro, autenticação e agendamento de serviços, enquanto o backend gerencia as regras de negócio e a disponibilidade de horários.
 
-To start a local development server, run:
+O backend encontra-se atualmente desativado. 
 
-```bash
-ng serve
+## Funcionalidades
+
+- Cadastro e autenticação de clientes
+- Gerenciamento de perfil
+- Agendamento de serviços
+- Consulta de disponibilidade de horários
+- Gerenciamento de serviços e profissionais
+- Interface responsiva para desktop e mobile
+- Sistema de notificações em tempo real
+- Armazenamento de imagens e mídias
+- Autenticação e autorização com JWT
+
+## Tecnologias
+
+### Frontend
+- Angular
+- TypeScript
+- Angular Material
+- SCSS
+- SPA (Single Page Application)
+
+### Backend
+- Java
+- Spring Boot
+- Spring Security
+- JWT
+- WebSocket
+
+### Banco de Dados
+- PostgreSQL (AWS RDS)
+
+### Infraestrutura
+- AWS Elastic Beanstalk
+- AWS S3
+- AWS CloudFront
+- AWS Route 53
+
+### Desenvolvimento da Interface
+
+A **UI (HTML e SCSS) do frontend foi delegada à Inteligência Artificial**, utilizada para geração e refinamento da interface visual, componentes e estilos responsivos.
+
+
+## Arquitetura
+
+```text
+Cliente
+   │
+   ▼
+Angular (SPA)
+   │
+   ▼
+Spring Boot API
+   │
+   ├── PostgreSQL (AWS RDS)
+   ├── AWS S3
+   └── WebSocket
 ```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
