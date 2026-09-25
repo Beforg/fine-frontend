@@ -10,5 +10,6 @@ export const environment = {
   perfilEndpoint: '/perfil',
   agendamentoEndpoint: '/agendamentos',
   IndisponibilidadeEndpoint: '/indisponibilidade',
-  notificacaoEndpoint: '/notificacoes'
+  notificacaoEndpoint: '/notificacoes',
+  financeiroEndpoint: '/financeiro'
 };

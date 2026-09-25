@@ -357,17 +357,29 @@
                             placeholder="0">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="horariosDeTrabalho">Horários de Trabalho</label>
-                    <div *ngFor="let dia of diasDaSemana">
-                        <label>{{ dia.label }}</label>
-                        <mat-label>Selecione o Horário</mat-label>
-                        <mat-select [(ngModel)]="horariosPorDia[dia.key]" [name]="dia.key">
-                            <mat-option value="">Não trabalha</mat-option>
-                            <mat-option *ngFor="let horario of horariosDeTrabalho" [value]="horario">
-                                {{ horario }}
-                            </mat-option>
-                        </mat-select>
+                <div class="form-group horarios-trabalho-section">
+                    <label class="section-title">Horários de Trabalho</label>
+                    <p class="section-subtitle">Configure os horários de atendimento para cada dia da semana. Dias sem horário selecionado são considerados como não trabalhados.</p>
+                    <div class="horarios-grid">
+                        <div *ngFor="let dia of diasDaSemana" class="horario-card">
+                            <div class="dia-header">
+                                <mat-icon class="dia-icon">schedule</mat-icon>
+                                <label class="dia-label">{{ dia.label }}</label>
+                            </div>
+                            <mat-form-field appearance="outline" class="horario-select">
+                                <mat-label>Selecione o Horário</mat-label>
+                                <mat-select [(ngModel)]="horariosPorDia[dia.key]" [name]="dia.key">
+                                    <mat-option value="">
+                                        <mat-icon class="option-icon">block</mat-icon>
+                                        Não trabalha
+                                    </mat-option>
+                                    <mat-option *ngFor="let horario of horariosDeTrabalho" [value]="horario">
+                                        <mat-icon class="option-icon">access_time</mat-icon>
+                                        {{ horario }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group-checkbox">

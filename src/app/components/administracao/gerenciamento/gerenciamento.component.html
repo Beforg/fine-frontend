@@ -26,7 +26,11 @@
                 <mat-icon>people</mat-icon>
                 <span>Clientes</span>
             </a>
-            <!-- <a *ngIf="isAdmin()">Disponibilidade</a> -->
+            <a (click)="toggleTab(false, false, false, false, false, true)" *ngIf="isAdmin()"
+                [ngClass]="{'active-gerenciamento': showFinanceiro}">
+                <mat-icon>attach_money</mat-icon>
+                <span>Financeiro</span>
+            </a>
         </div>
     </div>
     <div class="gerenciamento-body">
@@ -45,5 +49,8 @@
         </div>
         <div class="class-gerenciamento-clientes" *ngIf="showClientes && isAdmin()">
             <app-clientes></app-clientes>
+        </div>
+        <div *ngIf="showFinanceiro && isAdmin()">
+            <app-financeiro></app-financeiro>
         </div>
     </div>

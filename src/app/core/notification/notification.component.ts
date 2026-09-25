@@ -18,6 +18,7 @@ export interface NotificationDTO {
   dataHoraInicio: string; // LocalDateTime vem como string ISO do backend
   tipo: string;
   mensagem: string;
+  criadoEm: string;
 }
 
 /**
@@ -33,6 +34,7 @@ export interface Notification {
   mensagem: string;
   read: boolean;
   time: Date;
+  criadoEm: Date;
 }
 
 @Component({
@@ -80,7 +82,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             if (Array.isArray(notificacoes)) {
               notificacoes.forEach((notif: any) => {
                 const newNotification: Notification = {
-                  id: this.notificationIdCounter++,
+                  id: notif.id,
                   agendamentoId: notif.agendamentoId,
                   clienteNome: notif.clienteNome,
                   barbeiroNome: notif.barbeiroNome,
@@ -88,7 +90,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
                   tipo: notif.tipo,
                   mensagem: notif.mensagem,
                   read: false,
-                  time: new Date(notif.dataHoraInicio)
+                  time: new Date(notif.dataHoraInicio),
+                  criadoEm: new Date(notif.criadoEm)
                 };
                 this.notifications.push(newNotification);
               });
@@ -219,7 +222,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     console.log('➕ Adicionando notificação:', payload);
     
     const newNotification: Notification = {
-      id: this.notificationIdCounter++,
+      id: payload.id,
       agendamentoId: payload.agendamentoId,
       clienteNome: payload.clienteNome,
       barbeiroNome: payload.barbeiroNome,
@@ -227,7 +230,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
       tipo: payload.tipo,
       mensagem: payload.mensagem,
       read: false,
-      time: new Date()
+      time: new Date(),
+      criadoEm: new Date(payload.criadoEm)
     };
 
     // Adiciona no início do array
@@ -236,12 +240,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
     // Toca o som de notificação
     this.playNotificationSound();
-
-    // Limita a 10 notificações
-    if (this.notifications.length > 10) {
-      this.notifications.pop();
-      console.log('🗑️ Notificação antiga removida');
-    }
   }
 
   get unreadCount(): number {

@@ -61,6 +61,10 @@ export class PerfilFormComponent {
       return;
     }
 
+    if (!this.validarSeEmailOuTelefoneAlterados()) {
+      return;
+    }
+
     const perfilData: EditarPerfil = {
       emailAtual: this.userEmail,
       nome: this.editNome,
@@ -73,6 +77,15 @@ export class PerfilFormComponent {
 
     this.editProfile.emit(perfilData);
     this.fecharModalEdicao();
+  }
+
+  private validarSeEmailOuTelefoneAlterados(): boolean {
+    if (this.userEmail === this.editEmail && this.userInfo?.telefone === this.editTelefone) { 
+      alert('Nenhum dado de contato foi alterado.');
+      return false
+    }
+
+    return true;
   }
 
   validarCampos(): boolean {

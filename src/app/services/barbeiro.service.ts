@@ -74,7 +74,7 @@ export class BarbeiroService {
        }),
        catchError(error => {
          console.error('Erro ao editar barbeiro:', error);
-         return of({ message: 'Erro ao editar barbeiro.', httpStatus: 'ERROR' });
+         return of({ message: error.error?.message || 'Erro ao editar barbeiro.', httpStatus: 'ERROR' });
        })
      );
    }

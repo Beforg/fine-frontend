@@ -1,0 +1,442 @@
+@import '../../../../variables';
+
+$verde_light: #2ecc71;
+$verde_dark: #218838;
+$azul_primary: #3498db;
+$roxo_primary: #6366f1;
+
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+.financeiro-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+    gap: 1.5rem;
+    
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    }
+
+    // Filtros de Período
+    .filtros-container {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+        .periodo-form {
+            .form-row {
+                display: flex;
+                gap: 1rem;
+                align-items: flex-start;
+                flex-wrap: wrap;
+
+                .date-field {
+                    flex: 1;
+                    min-width: 200px;
+                }
+
+                .btn-buscar {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.875rem 1.75rem;
+                    background: linear-gradient(135deg, $azul_primary, #2980b9);
+                    color: white;
+                    border: none;
+                    border-radius: 50px;
+                    font-weight: 700;
+                    font-size: 0.95rem;
+                    letter-spacing: 0.5px;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+                    height: 56px;
+                    margin-top: 0;
+
+                    &:hover:not(:disabled) {
+                        transform: translateY(-3px);
+                        box-shadow: 0 8px 30px rgba(52, 152, 219, 0.6);
+                        background: linear-gradient(135deg, #2980b9, $azul_primary);
+                    }
+
+                    &:disabled {
+                        background: #d1d5db;
+                        color: #9ca3af;
+                        cursor: not-allowed;
+                        box-shadow: none;
+                        transform: none;
+                    }
+
+                    mat-icon {
+                        font-size: 22px;
+                        width: 22px;
+                        height: 22px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Cards de Resumo
+    .resumo-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            }
+
+            .card-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                
+                mat-icon {
+                    font-size: 32px;
+                    width: 32px;
+                    height: 32px;
+                    color: white;
+                }
+            }
+
+            .card-content {
+                flex: 1;
+
+                h3 {
+                    margin: 0 0 0.5rem 0;
+                    font-size: 0.9rem;
+                    color: #6b7280;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .card-value {
+                    margin: 0;
+                    font-size: 1.8rem;
+                    font-weight: 700;
+                    color: #2c3e50;
+                }
+            }
+
+            &.card-receita {
+                .card-icon {
+                    background: linear-gradient(135deg, #10b981, #059669);
+                }
+            }
+
+            &.card-cortes {
+                .card-icon {
+                    background: linear-gradient(135deg, $roxo_primary, #4f46e5);
+                }
+            }
+
+            &.card-ticket {
+                .card-icon {
+                    background: linear-gradient(135deg, #f59e0b, #d97706);
+                }
+            }
+        }
+    }
+
+    // Tabela
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+
+        .table-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 0 1.5rem 0;
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: 600;
+
+            mat-icon {
+                color: $roxo_primary;
+            }
+        }
+        
+        .financeiro-table {
+            width: 100%;
+            border-collapse: collapse;
+            
+            thead {
+                background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                
+                th {
+                    padding: 1rem 0.75rem;
+                    text-align: left;
+                    font-weight: 600;
+                    color: #2c3e50;
+                    border-bottom: 2px solid #dee2e6;
+                    font-size: 0.85rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+            }
+            
+            tbody {
+                .table-row {
+                    background: white;
+                    border-bottom: 1px solid #e5e7eb;
+                    transition: all 0.2s ease;
+                    
+                    &:hover {
+                        background: #f8fafc;
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                    }
+                    
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                    
+                    td {
+                        padding: 16px;
+                        vertical-align: middle;
+                        color: #374151;
+                        
+                        &.td-barbeiro {
+                            .barbeiro-info {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.75rem;
+
+                                mat-icon {
+                                    color: $roxo_primary;
+                                    font-size: 24px;
+                                    width: 24px;
+                                    height: 24px;
+                                }
+
+                                .barbeiro-nome {
+                                    font-weight: 600;
+                                    color: #2c3e50;
+                                    font-size: 0.95rem;
+                                }
+                            }
+                        }
+                        
+                        &.td-agendamentos {
+                            .badge-agendamentos {
+                                background: linear-gradient(135deg, $roxo_primary, #4f46e5);
+                                color: white;
+                                padding: 6px 16px;
+                                border-radius: 20px;
+                                font-size: 0.9rem;
+                                font-weight: 700;
+                                display: inline-block;
+                            }
+                        }
+                        
+                        &.td-receita {
+                            .valor-receita {
+                                color: #10b981;
+                                font-weight: 700;
+                                font-size: 1.1rem;
+                            }
+                        }
+
+                        &.td-media {
+                            .valor-media {
+                                color: #f59e0b;
+                                font-weight: 600;
+                                font-size: 1rem;
+                            }
+                        }
+
+                        &.td-bonificacao {
+                            .valor-bonificacao {
+                                color: #8b5cf6;
+                                font-weight: 700;
+                                font-size: 1rem;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            
+            mat-icon {
+                font-size: 48px;
+                width: 48px;
+                height: 48px;
+                color: #d1d5db;
+                margin-bottom: 16px;
+            }
+            
+            p {
+                font-size: 1.1rem;
+                margin: 0;
+                font-weight: 500;
+            }
+        }
+    }
+
+    // Estado vazio
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        text-align: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+        mat-icon {
+            font-size: 80px;
+            width: 80px;
+            height: 80px;
+            color: #d1d5db;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        p {
+            color: #6b7280;
+            font-size: 1rem;
+            margin: 0;
+        }
+    }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+    .financeiro-container {
+        padding: 16px;
+        
+        .header-container {
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .filtros-container {
+            padding: 1rem;
+
+            .periodo-form .form-row {
+                flex-direction: column;
+
+                .date-field {
+                    width: 100%;
+                }
+
+                .btn-buscar {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+        }
+
+        .resumo-cards {
+            grid-template-columns: 1fr;
+        }
+        
+        .table-container {
+            padding: 1rem;
+            overflow-x: auto;
+            
+            .financeiro-table {
+                min-width: 600px;
+                
+                thead th {
+                    padding: 12px 8px;
+                    font-size: 0.8rem;
+                }
+                
+                tbody td {
+                    padding: 12px 8px;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .financeiro-container {
+        padding: 12px;
+        
+        .header-container {
+            h1 {
+                font-size: 1.25rem;
+            }
+        }
+
+        .resumo-cards {
+            .card {
+                flex-direction: column;
+                text-align: center;
+
+                .card-content .card-value {
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+}
+
+// Sobrescrever estilos do Angular Material
+::ng-deep .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+        border-radius: 8px;
+    }
+    
+    .mat-mdc-form-field-error {
+        font-size: 0.75rem;
+    }
+}

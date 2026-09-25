@@ -31,7 +31,7 @@ export class CardPsComponent {
     if (tipo === 'produto') {
       event.target.src = 'assets/fine-logo.jpeg';
     } else if (tipo === 'servico') {
-      event.target.src = 'assets/servico-img.jpg';
+      event.target.src = 'assets/servico-image.webp';
     }
   }
 }

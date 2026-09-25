@@ -27,14 +27,14 @@
     <div class="cards-container" *ngIf="servicos.length > 0">
       <div class="cards-carousel" #servicosCarousel>
         <app-card-ps *ngFor="let servico of servicos" [nome]="servico.nome" [descricao]="servico.descricao"
-          [preco]="servico.preco" [urlImagem]="'/assets/tmp/barbeiro1'" [tempoEstimado]="servico.duracaoMinutos"
+          [preco]="servico.preco" [urlImagem]="'/assets/servico-image.webp'" [tempoEstimado]="servico.duracaoMinutos"
           tipo="servico">
         </app-card-ps>
       </div>
     </div>
     <div class="empty-message" *ngIf="servicos.length === 0">
       <mat-icon>content_cut</mat-icon>
-      <p>Nenhum serviço disponível no momento</p>
+      <p>Atualmente indisponível.</p>
     </div>
     } @else {
     <app-loading size="large" message="Carregando serviços..."></app-loading>
@@ -72,7 +72,7 @@
     </div>
     <div class="empty-message" *ngIf="produtos.length === 0">
       <mat-icon>inventory_2</mat-icon>
-      <p>Nenhum produto disponível no momento</p>
+      <p>Atualmente indisponível.</p>
     </div>
     } @else {
     <app-loading size="large" message="Carregando produtos..."></app-loading>

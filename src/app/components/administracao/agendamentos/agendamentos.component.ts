@@ -2,17 +2,18 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AgendamentoService } from '../../../services/agendamento.service';
+import { AgendamentoService, EditarDadosAgendamentoDTO } from '../../../services/agendamento.service';
 import { AuthService } from '../../../services/auth.service';
 import { AgendamentoStatus } from '../../../enums/agendamento-status.enum';
 import { UserRole } from '../../../enums/user-role.enum';
-import {MatRadioModule} from '@angular/material/radio'
+import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../../services/notification.service';
 import { LoadingComponent } from '../../loading/loading.component';
+import { ModalEditarComponent } from './modal-editar/modal-editar.component';
 
 // Interfaces para tipagem
-interface Servico {
+export interface Servico {
   id: number;
   nome: string;
   preco: number;
@@ -21,14 +22,14 @@ interface Servico {
   ativo: boolean;
 }
 
-interface Produto {
+export interface Produto {
   id: number;
   nome: string;
   preco: number;
   quantidade: number;
 }
 
-interface Agendamento {
+export interface Agendamento {
   id: number;
   nomeCliente: string;
   nomeBarbeiro: string;
@@ -43,7 +44,6 @@ interface Agendamento {
   valorTotal: number;
 }
 
-
 @Component({
   selector: 'app-agendamentos-gerenciamento',
   imports: [
@@ -52,19 +52,21 @@ interface Agendamento {
     MatButtonModule,
     MatRadioModule,
     FormsModule,
-    LoadingComponent
+    LoadingComponent,
+    ModalEditarComponent,
   ],
   templateUrl: './agendamentos.component.html',
-  styleUrl: './agendamentos.component.scss'
+  styleUrl: './agendamentos.component.scss',
 })
 export class AgendamentosComponent implements OnInit {
   @Input() showAgendamentoContainer: boolean = false;
   // Dados da tabela
   agendamentos: Agendamento[] = [];
   agendamentosFiltrados: Agendamento[] = [];
-  barbeiroId: string = "";
+  barbeiroId: string = '';
   showAgendamentoInfo: boolean = false;
   agendamentoSelecionado: Agendamento | null = null;
+  showModalEditarAgendamento: boolean = false;
   // Paginação
   currentPage: number = 0;
   pageSize: number = 10;
@@ -72,23 +74,24 @@ export class AgendamentosComponent implements OnInit {
   totalPages: number = 0;
 
   isLoading: boolean = true;
-  
+
   // Para exposição no template
   Math = Math;
   filtroSelecionado: string = 'Agendado';
 
   constructor(
-    private agendamentoService: AgendamentoService, 
+    private agendamentoService: AgendamentoService,
     private authService: AuthService,
-    private notification: NotificationService) { }
+    private notification: NotificationService
+  ) {}
 
   ngOnInit(): void {
     // Debug: informações do usuário
     const currentUser = this.authService.getCurrentUser();
-    
+
     this.loadAgendamentos();
     if (currentUser?.role === UserRole.BARBEIRO) {
-      this.barbeiroId = currentUser?.id || "";
+      this.barbeiroId = currentUser?.id || '';
     }
   }
 
@@ -124,19 +127,20 @@ export class AgendamentosComponent implements OnInit {
     const dataAgendamento = new Date(agendamento.dataHoraInicio);
     const hoje = new Date();
 
-    return dataAgendamento.getDate() === hoje.getDate() &&
-           dataAgendamento.getMonth() === hoje.getMonth() &&
-           dataAgendamento.getFullYear() === hoje.getFullYear();
+    return (
+      dataAgendamento.getDate() === hoje.getDate() &&
+      dataAgendamento.getMonth() === hoje.getMonth() &&
+      dataAgendamento.getFullYear() === hoje.getFullYear()
+    );
   }
 
-// Trocar o id pelo selecionado (Pelo ADMIN somente)
+  // Trocar o id pelo selecionado (Pelo ADMIN somente)
   loadAgendamentos() {
-
     const data = {
-      id: "7", 
-      page: (this.currentPage + 1).toString(), 
+      id: '7',
+      page: (this.currentPage + 1).toString(),
       size: this.pageSize.toString(),
-      filtro: this.filtroSelecionado
+      filtro: this.filtroSelecionado,
     };
     this.agendamentoService.listarAgendamentos(data).subscribe({
       next: (response) => {
@@ -147,73 +151,94 @@ export class AgendamentosComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error(error.error.message || "Erro ao carregar agendamentos.");
+        this.notification.error(
+          error.error.message || 'Erro ao carregar agendamentos.'
+        );
         this.isLoading = false;
-      }
+      },
     });
   }
 
   editarValorTotal(agendamentoId: number): void {
-
     if (!this.hasPermissionToChangeStatus()) {
       return;
     }
 
-    const novoValor = prompt("Editar Valor do Agendamento " + agendamentoId + ":");
+    const novoValor = prompt(
+      'Editar Valor do Agendamento ' + agendamentoId + ':'
+    );
     console.log('Novo valor digitado:', novoValor);
     if (novoValor !== null) {
       const valorNumerico = parseFloat(novoValor.replace(',', '.'));
       if (isNaN(valorNumerico) || valorNumerico < 0) {
-        alert("Por favor, insira um valor válido.");
+        alert('Por favor, insira um valor válido.');
         return;
       }
-      
+
       console.log('Novo valor digitado:', valorNumerico);
-      this.agendamentoService.editarValorTotal(agendamentoId, valorNumerico).subscribe({
-        next: (response) => {
-          this.notification.success("Valor do agendamento atualizado com sucesso!");
-          this.loadAgendamentos(); // Recarregar lista
-        },
-        error: (error) => {
-          this.notification.error(error.error.mensagem || "Erro ao atualizar valor do agendamento.");
-        }
-      });
+      this.agendamentoService
+        .editarValorTotal(agendamentoId, valorNumerico)
+        .subscribe({
+          next: (response) => {
+            this.notification.success(
+              'Valor do agendamento atualizado com sucesso!'
+            );
+            this.loadAgendamentos(); // Recarregar lista
+          },
+          error: (error) => {
+            this.notification.error(
+              error.error.mensagem || 'Erro ao atualizar valor do agendamento.'
+            );
+          },
+        });
     }
   }
-   
+
   // Calcular total do agendamento
   calculateTotal(agendamento: Agendamento): number {
-    const totalServicos = agendamento.servicos.reduce((sum, servico) => sum + servico.preco, 0);
-    const totalProdutos = agendamento.produtos.reduce((sum, produto) => sum + (produto.preco * produto.quantidade), 0);
+    const totalServicos = agendamento.servicos.reduce(
+      (sum, servico) => sum + servico.preco,
+      0
+    );
+    const totalProdutos = agendamento.produtos.reduce(
+      (sum, produto) => sum + produto.preco * produto.quantidade,
+      0
+    );
     return totalServicos + totalProdutos;
   }
 
   calculateServiceTime(agendamento: Agendamento): number {
-    return agendamento.servicos.reduce((total, servico) => total + servico.duracaoMinutos, 0);
+    return agendamento.servicos.reduce(
+      (total, servico) => total + servico.duracaoMinutos,
+      0
+    );
   }
 
   // Calcular total de descontos
   calculateTotalDiscount(agendamento: Agendamento): number {
     let totalDiscount = 0;
-    
+
     if (agendamento.foiGratis) {
       totalDiscount += 35; // Corte grátis
     }
-    
+
     if (agendamento.barbaGratis) {
       totalDiscount += 15; // Barba grátis
     }
-    
+
     if (agendamento.sobrancelhaGratis) {
       totalDiscount += 15; // Sobrancelha grátis
     }
-    
+
     return totalDiscount;
   }
 
   // Calcular subtotal dos serviços (sem desconto)
   calculateSubtotalServicos(agendamento: Agendamento): number {
-    return agendamento.servicos.reduce((sum, servico) => sum + servico.preco, 0);
+    return agendamento.servicos.reduce(
+      (sum, servico) => sum + servico.preco,
+      0
+    );
   }
 
   // Calcular total dos serviços com desconto
@@ -245,13 +270,17 @@ export class AgendamentosComponent implements OnInit {
     }
   }
 
-  finalizarAgendamento(id: number): void {
+  finalizarAgendamento(id: number, produtosLength: number): void {
+    if (!window.confirm('Tem certeza que deseja finalizar este agendamento?')) {
+      return;
+    }
+
     const currentUser = this.authService.getCurrentUser();
     console.log('🔄 Tentando finalizar agendamento:', {
       agendamentoId: id,
       usuario: currentUser?.name,
       role: currentUser?.role,
-      userId: currentUser?.id
+      userId: currentUser?.id,
     });
 
     // Verificar permissão primeiro
@@ -259,68 +288,111 @@ export class AgendamentosComponent implements OnInit {
       alert('Você não tem permissão para realizar esta ação.');
       return;
     }
-    let comprouProdutos!: boolean;
-    if (window.confirm('O cliente comprou produtos junto com o serviço?')) {
+    let comprouProdutos: boolean = false;
+    
+    if (produtosLength !== 0) {
+    if (window.confirm('O cliente comprou produtos junto com o serviço? (OK - Sim, Cancelar - Não)')) {
       comprouProdutos = true;
     } else {
       comprouProdutos = false;
     }
+  }
 
-    this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.REALIZADO, id.toString(), comprouProdutos).subscribe({
-      next: (response) => {
-        console.log('✅ Agendamento finalizado com sucesso:', response);
-        this.showAgendamentoInfo = false; // Fechar modal
-        this.notification.success("Agendamento finalizado com sucesso!");
-        this.loadAgendamentos();
-      },
-      error: (error) => {
-        this.notification.error(error.error.message || "Erro ao finalizar agendamento.");
-      }
-    });
+    this.agendamentoService
+      .alterarStatusAgendamento(
+        AgendamentoStatus.REALIZADO,
+        id.toString(),
+        comprouProdutos
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('✅ Agendamento finalizado com sucesso:', response);
+          this.showAgendamentoInfo = false; // Fechar modal
+          this.notification.success('Agendamento finalizado com sucesso!');
+          this.loadAgendamentos();
+        },
+        error: (error) => {
+          this.notification.error(
+            error.error.message || 'Erro ao finalizar agendamento.'
+          );
+        },
+      });
   }
 
   cancelarAgendamento(id: number): void {
     const currentUser = this.authService.getCurrentUser();
-    
+
     if (!window.confirm('Tem certeza que deseja cancelar este agendamento?')) {
       return;
     }
 
-    this.agendamentoService.alterarStatusAgendamento(AgendamentoStatus.CANCELADO, id.toString(), false).subscribe({
+    this.agendamentoService
+      .alterarStatusAgendamento(
+        AgendamentoStatus.CANCELADO,
+        id.toString(),
+        false
+      )
+      .subscribe({
+        next: (response) => {
+          this.notification.success('Agendamento cancelado com sucesso!');
+          this.showAgendamentoInfo = false; // Fechar modal
+          this.loadAgendamentos();
+        },
+        error: (error) => {
+          this.notification.error(
+            error.error.message || 'Erro ao cancelar agendamento.'
+          );
+        },
+      });
+  }
+  private politicaCancelamentoAgendamento(agendamento: Agendamento): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    const userRole = currentUser?.role;
+
+    // ADMIN e BARBEIRO podem cancelar a qualquer hora
+    if (userRole === UserRole.ADMIN || userRole === UserRole.BARBEIRO) {
+      return true;
+    }
+
+    // CLIENTE só pode cancelar até 1 hora antes do agendamento
+    if (userRole === UserRole.CLIENTE) {
+      const dataAgendamento = new Date(agendamento.dataHoraInicio);
+      const agora = new Date();
+
+      const diferencaMs = dataAgendamento.getTime() - agora.getTime();
+
+      const diferencaHoras = diferencaMs / (1000 * 60 * 60);
+
+      return diferencaHoras > 1;
+    }
+
+    // padrão, não permite cancelamento
+    return false;
+  }
+
+  openModalEditarAgendamento(agendamento: Agendamento): void {
+    this.agendamentoSelecionado = agendamento;
+    this.showModalEditarAgendamento = true;
+  }
+
+  fecharModalAgendarmento(): void {
+    this.showModalEditarAgendamento = false;
+    this.agendamentoSelecionado = null;
+  }
+
+  salvarEdicaoDadosAgendamento(event: EditarDadosAgendamentoDTO): void {
+    this.agendamentoService.editarDadosAgendamento(event).subscribe({
       next: (response) => {
-        this.notification.success("Agendamento cancelado com sucesso!");
-        this.showAgendamentoInfo = false; // Fechar modal
-        this.loadAgendamentos();
+        this.notification.success('Dados do agendamento atualizados com sucesso!');
+        this.showModalEditarAgendamento = false;
+        this.agendamentoSelecionado = null;
+        this.loadAgendamentos(); // Recarregar lista
       },
       error: (error) => {
-        this.notification.error(error.error.message || "Erro ao cancelar agendamento.");
-      }
+        this.notification.error(
+          error.error.message || 'Erro ao atualizar dados do agendamento.'
+        );
+      },
     });
   }
-private politicaCancelamentoAgendamento(agendamento: Agendamento): boolean {
-  const currentUser = this.authService.getCurrentUser();
-  const userRole = currentUser?.role;
-
-  // ADMIN e BARBEIRO podem cancelar a qualquer hora
-  if (userRole === UserRole.ADMIN || userRole === UserRole.BARBEIRO) {
-    return true;
-  }
-
-  // CLIENTE só pode cancelar até 1 hora antes do agendamento
-  if (userRole === UserRole.CLIENTE) {
-    const dataAgendamento = new Date(agendamento.dataHoraInicio);
-    const agora = new Date();
-    
-    const diferencaMs = dataAgendamento.getTime() - agora.getTime();
-    
-
-    const diferencaHoras = diferencaMs / (1000 * 60 * 60);
-    
-    return diferencaHoras > 1;
-  }
-
-  // padrão, não permite cancelamento
-  return false;
-}
-
 }

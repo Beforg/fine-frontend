@@ -1,12 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AgendamentoRequest, HorarioDisponivel } from '../interfaces/entities.interface';
+import { AgendamentoRequest, HorarioDisponivel, ItemProduto } from '../interfaces/entities.interface';
 import { Observable } from 'rxjs';
 import { BackendResponse } from '../interfaces/response.interface';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 import { catchError, tap } from 'rxjs';
 import { AgendamentoStatus } from '../enums/agendamento-status.enum';
+
+export interface EditarDadosAgendamentoDTO {
+  produtos: ItemProduto[];
+  barbeiroId: number;
+  agendamentoId: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -59,12 +65,24 @@ export class AgendamentoService {
 
   editarValorTotal(agendamentoId: number, novoValor: number): Observable<any> {
     const data: {id: number, valor: number} = { id: agendamentoId, valor: novoValor };
-    return this.http.put<any>(`${this.apiUrl}/editar`, data, { headers: this.authService.getHeaders() }).pipe(
+    return this.http.put<any>(`${this.apiUrl}/editar-valor`, data, { headers: this.authService.getHeaders() }).pipe(
       tap((response: any) => {
         console.log('Valor total do agendamento editado com sucesso:', response);
       }),
       catchError((erros: HttpErrorResponse) => {
         console.error('Erro ao editar valor total do agendamento:', erros);
+        throw erros;
+      })
+    );
+  }
+
+  editarDadosAgendamento(dados: EditarDadosAgendamentoDTO): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/editar-dados`, dados, { headers: this.authService.getHeaders() }).pipe(
+      tap((response: any) => {
+        console.log('Dados do agendamento editados com sucesso:', response);
+      }),
+      catchError((erros: HttpErrorResponse) => {
+        console.error('Erro ao editar dados do agendamento:', erros);
         throw erros;
       })
     );
